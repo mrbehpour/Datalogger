@@ -1,0 +1,30 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="abc_action_bar_default_height_material">100dip</dimen>
+    
+    
+    
+    <dimen name="login_radius">4dp</dimen>
+    <dimen name="login_logo_width_height">170dp</dimen>
+    
+    
+    <dimen name="menu_item_font_size">15dp</dimen>
+    <dimen name="menu_description_font_size">12dp</dimen>
+    <dimen name="menu_icon_width_height">15dp</dimen>
+    <dimen name="menu_header_height">50dp</dimen>
+    <dimen name="menu_icon_margin_top_bottom">10dp</dimen>
+    <dimen name="menu_icon_margin_left_right">7dp</dimen>
+    <dimen name="menu_red_circle_width_height">20dp</dimen>
+    <dimen name="menu_red_circle_text_size">10dp</dimen>
+    
+    <dimen name="voice_record_text_size">21dp</dimen>
+    
+    <dimen name="home_button_text_size">8dp</dimen>
+    <dimen name="home_title1_text_size">10dp</dimen>
+    <dimen name="home_title2_text_size">12dp</dimen>
+    
+
+</resources>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+
+    android:gravity="right|center_vertical"
+    android:orientation="vertical" >
+    <ScrollView
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="500dp">
+    <LinearLayout
+        android:id="@+id/llDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#222222"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="2dp" >
+
+        <ImageView
+            android:id="@+id/imgDialogLeftTitle"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/txtDialogLeftTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:textColor="#ffffff"
+            android:textSize="11dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtDialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="11dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtDialogRightTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:textColor="#ffffff"
+            android:textSize="11dp" />
+
+        <ImageView
+            android:id="@+id/imgDialogRightTitle"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="5dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="#ffcb13"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="2dp"
+        android:visibility="visible"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#dddddd"
+        android:gravity="right|center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="2dp" >
+
+        <LinearLayout
+            android:id="@+id/llBodyPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp" >
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/llButtonPanel"
+            android:layout_width="match_parent"
+            android:background="@drawable/listitem_background"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="right|center_vertical" >
+
+        </LinearLayout>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:id="@+id/lrButtonPanel"
+
+        android:layout_height="100dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:id="@+id/llButtonPanelL"
+            android:background="@drawable/listitem_background"
+            android:orientation="vertical"
+            android:gravity="left"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:orientation="vertical"
+            android:gravity="right"
+            android:background="@drawable/listitem_background"
+            android:id="@+id/llButtonPanelR"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+        </ScrollView>
+
+</LinearLayout>
+

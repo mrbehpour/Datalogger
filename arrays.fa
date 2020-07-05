@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="lstItemsOrderTexts">
+        <item>ردیف در محل - صعودی</item>
+        <item>ردیف در محل - نزولی</item>
+        <item>ردیف در لاگشیت - صعودی</item>
+        <item>ردیف در لاگشیت - نزولی</item>
+        <item>نام آیتم ها - صعودی</item>
+        <item>نام آیتم ها - نزولی</item>
+    </string-array>
+    <string-array name="lstItemsOrderValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+</resources>

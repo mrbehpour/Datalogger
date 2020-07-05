@@ -1,0 +1,86 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+  	android:descendantFocusability="beforeDescendants"
+  	android:focusableInTouchMode="true"  >
+
+    <LinearLayout
+        android:id="@+id/llDateTimeForItems"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#333333"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/txtDateTimeForItems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#ffffff" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#dddddd"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <Spinner
+            android:id="@+id/searchSpinnerItem"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/login_edittext" />
+
+        <EditText
+            android:id="@+id/edtSearchItem"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/edittext_light"
+            android:ems="10"
+            android:gravity="left"
+            android:hint="@string/Search"
+            android:inputType="text"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lstItem"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorPrimary"
+        tools:listitem="@layout/custom_item">
+
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/llSaveItem"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#444444"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/imgSaveItem"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_action_save" />
+    </LinearLayout>
+
+</LinearLayout>

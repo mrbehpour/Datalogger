@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <!--<PreferenceCategory android:title="ارتباط از طریق USB" android:key="pref_usb_category">-->
+            <!--<EditTextPreference android:key="pref_usb_port" android:title="پورت ارتباطی" android:dialogTitle="پورت ارتباطی USB" android:dialogMessage="لطفا پورت ارتباطی USB را وارد کنید" android:defaultValue="6000" android:selectable="true" android:positiveButtonText="ثبت" android:negativeButtonText="انصراف"/>-->
+        <!--</PreferenceCategory>-->
+        <PreferenceCategory android:key="pref_ws_category" android:title="@string/TypeConection">
+            <EditTextPreference android:key="pref_ws_address"
+                android:title="@string/pref_ws_address"
+                android:inputType="textNoSuggestions"
+                android:dialogMessage="@string/Msg_pref_ws_address"
+                android:dialogTitle="@string/pref_ws_address"
+                android:defaultValue="@string/ws_default_address"
+                android:positiveButtonText="@string/Register"
+                android:negativeButtonText="@string/Cancel"/>
+        </PreferenceCategory>
+
+
+
+    <ListPreference
+        android:title="@string/TitleSortType"
+        android:summary="@string/TitleSortType"
+        android:key="pref_items_order_type"
+        android:defaultValue="1"
+        android:negativeButtonText="@string/Close"
+        android:entries="@array/lstItemsOrderTexts"
+        android:entryValues="@array/lstItemsOrderValues" />
+
+
+    </PreferenceScreen>

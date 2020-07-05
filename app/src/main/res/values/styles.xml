@@ -1,0 +1,92 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+        <item name="actionBarSize">82dip</item>
+        <item name="android:actionBarSize">82dip</item> 
+        <item name="logo">@android:color/transparent</item>
+        <item name="android:logo">@android:color/transparent</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme50dp" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="actionBarSize">50dip</item>
+        <item name="android:actionBarSize">50dip</item> 
+        <item name="logo">@android:color/transparent</item>
+        <item name="android:logo">@android:color/transparent</item>
+    </style>
+    <style name="AppTheme55dp" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="actionBarSize">55dip</item>
+        <item name="android:actionBarSize">55dip</item> 
+        <item name="logo">@android:color/transparent</item>
+        <item name="android:logo">@android:color/transparent</item>
+    </style>
+    <style name="AppTheme82dp" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="actionBarSize">82dip</item>
+        <item name="android:actionBarSize">82dip</item> 
+        <item name="logo">@android:color/transparent</item>
+        <item name="android:logo">@android:color/transparent</item>
+    </style>
+    <style name="AppBaseTheme.NoTitleBar" parent="Theme.AppCompat.Light">
+        <item name="actionBarSize">0dip</item>
+        <item name="android:actionBarSize">0dip</item> 
+    </style>
+    
+    <style name="FullHeightDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+    
+    <style name="FullHeightDialogNotFloating" parent="android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:layout_width">fill_parent</item>
+    	<item name="android:layout_height">fill_parent</item>
+    	<item name="android:backgroundDimEnabled">true</item>
+    	<!-- No backgrounds, titles or window float -->
+    	<item name="android:windowIsFloating">false</item>
+		<item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+
+    <style name="MenuDialogTheme" parent="android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <style name="DialogAnimFromBottom" parent="android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:layout_width">wrap_content</item>
+    	<item name="android:layout_height">wrap_content</item>
+    	<item name="android:backgroundDimEnabled">true</item>
+    	<item name="android:windowIsFloating">false</item>
+    	<item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_bottom</item>
+    </style>
+
+    <style name="Theme.Transparent" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+</resources>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_gradient"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:id="@+id/llLogin"
+    android:orientation="vertical"
+    android:backgroundTint="#000000"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    >
+
+    <FrameLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_gravity="center"
+        android:background="#000000">
+
+        <WebView
+            android:id="@+id/myWebview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foregroundGravity="center"
+            android:background="@drawable/button_selector"
+            android:visibility="invisible">
+
+        </WebView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/login_edittext_alpha"
+            android:gravity="top|center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="30dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingTop="5dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.25"
+                >
+
+                <ImageView
+                    android:id="@+id/imgLoginLogo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:alpha="0.9"
+                    android:src="@drawable/title1_en" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="0dp"
+                android:layout_weight="0.6"
+                >
+
+                <Spinner
+                    android:id="@+id/spnUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_gravity="center"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/login_spinner_alpha"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/txtUserCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_gravity="center"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/login_edittext_alpha"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spnShift"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_gravity="center"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/login_spinner_alpha"
+                    android:gravity="center" />
+
+                <mycomponents.MyEditText
+                    android:id="@+id/edtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_gravity="center"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/login_edittext_alpha"
+                    android:ems="10"
+                    android:selectAllOnFocus="true"
+                    android:gravity="center"
+                    android:focusable="true"
+                    android:inputType="numberPassword"
+                    android:singleLine="true"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.35"
+                >
+                <Button
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.4"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/login_button_green"
+                    android:text="Login"
+                    android:textColor="#C7C5C5"
+                    android:textSize="15sp" />
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/saalogoen" />
+
+                <TextView
+                    android:id="@+id/txtVersionLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:layout_weight="0.2"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textColor="#333333"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>
+

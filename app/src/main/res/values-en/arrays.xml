@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="lstItemsOrderTexts">
+        <item>Row in place - Ascending</item>
+        <item>Row in place - Descending</item>
+        <item>Rows in Logsheet - Ascending</item>
+        <item>Rows in Logsheet - Descending</item>
+        <item>Name of the items - Ascending</item>
+        <item>Name of the items - Descending</item>
+    </string-array>
+    <string-array name="lstItemsOrderValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+</resources>

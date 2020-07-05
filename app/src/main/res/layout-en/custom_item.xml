@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="left"
+    android:clickable="true"
+    android:orientation="vertical"
+    >
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:clickable="true"
+        android:id="@+id/layoutRootItem"
+        android:focusable="true"
+        android:gravity="left|center_vertical"
+        android:orientation="horizontal" >
+        <LinearLayout
+            android:layout_width="match_parent"
+
+            android:clickable="true"
+            android:background="@drawable/listitem_background"
+            android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/imgItemInfo"
+            android:layout_width="45dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/listitem_background"
+            android:src="@drawable/info_icon" />
+
+
+
+        <ImageView
+            android:id="@+id/imgImage"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            android:src="@drawable/camera" />
+        <ImageView
+            android:id="@+id/imgVideo"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            android:src="@drawable/video" />
+        <ImageView
+            android:id="@+id/imgSound"
+            android:layout_width="45dp"
+            android:visibility="gone"
+            android:layout_height="45dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/microphone" />
+        <ImageView
+            android:id="@+id/imgTajhizNfcItem"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/nfc"
+            android:visibility="gone" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:id="@+id/layoutRootItem1"
+            android:gravity="left|center_vertical"
+            android:layout_gravity="left"
+            android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/txtItemName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginLeft="10dp"
+
+
+                    android:gravity="left"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginRight="10dp"
+                    android:text="Medium Text"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:id="@+id/txtItemDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="7dp"
+                    android:text="@string/custom_menu_item_tbxFullName"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#777777"
+                    android:textSize="10dp" />
+
+
+
+
+       </LinearLayout>-->
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

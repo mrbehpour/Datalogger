@@ -1,0 +1,1010 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:id="@+id/llMain"
+
+    android:layoutDirection="ltr"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v4.widget.DrawerLayout
+
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:layoutDirection="rtl"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layoutDirection="rtl"
+
+            android:id="@+id/frame_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layoutDirection="ltr"
+            android:id="@+id/llMenu"
+            android:gravity="left"
+            android:layout_gravity="left"
+            android:background="@drawable/listitem_background"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+
+            android:orientation="vertical">
+
+            <ScrollView
+                android:id="@+id/scrollView1"
+                android:layoutDirection="rtl"
+                android:background="#ffffff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layoutDirection="rtl"
+                    android:layout_width="match_parent"
+                    android:background="#ffffff"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/menu_header_height"
+                        android:clickable="true"
+                        android:background="#000000">
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/imgHeaderMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/header6" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="#ffffff"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuDate"
+                            android:background="#ffffff"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/menu_date"
+                            android:textSize="@dimen/menu_item_font_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#666666"></LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:id="@+id/llS"
+                        android:gravity="right|center_vertical">
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="228dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical"></LinearLayout>
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:background="@drawable/listitem_background"
+                            android:focusableInTouchMode="true"
+                            android:id="@+id/txtMenuItem1"
+                            android:text="@string/menu_item_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/imgMenuIcon1"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/bullet_black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:id="@+id/llR"
+                        android:gravity="right|center_vertical">
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="228dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical"></LinearLayout>
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:focusableInTouchMode="true"
+                            android:id="@+id/txtMenuItem2"
+                            android:background="@drawable/listitem_background"
+                            android:text="@string/menu_item_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/imgMenuIcon2"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/bullet_black" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="2dp"
+                        android:background="#666666"></LinearLayout>
+
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:id="@+id/menuLayout1"
+                        android:gravity="right|center_vertical">
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="228dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical"></LinearLayout>
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:focusableInTouchMode="true"
+                            android:id="@+id/txtMenu1"
+                            android:text="@string/menu_get_setting"
+                            android:background="@drawable/listitem_background"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/ImageView001"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/refresh_icon" />
+                    </LinearLayout>
+
+                    <ProgressBar
+
+                        android:id="@+id/pb01"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="horizontal|vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layoutDirection="ltr"
+                        android:max="100"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:id="@+id/menuUpdateLayout1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:gravity="right|center_vertical">
+
+                        <TextView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuLastUpdateDate01"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:text=""
+                            android:textSize="@dimen/menu_description_font_size" />
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"></LinearLayout>
+
+                        <TextView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuLastUpdate01"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="60dp"
+                            android:fontFamily="@fonts/byekan"
+                            android:layout_marginLeft="60dp"
+                            android:text="@string/menu_last_update"
+                            android:textSize="@dimen/menu_description_font_size" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:id="@+id/menuLayout2"
+                        android:gravity="right|center_vertical">
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="228dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical"></LinearLayout>
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:focusableInTouchMode="true"
+                            android:background="@drawable/listitem_background"
+                            android:id="@+id/txtMenu2"
+                            android:text="@string/menu_get_items"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/ImageView002"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/refresh_icon" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:layoutDirection="ltr"
+                        android:id="@+id/pb02"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="horizontal|vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:max="100"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:id="@+id/menuUpdateLayout2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:gravity="right|center_vertical">
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuLastUpdateDate02"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:text=""
+                            android:textSize="@dimen/menu_description_font_size" />
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"></LinearLayout>
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuLastUpdate02"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="60dp"
+                            android:layout_marginLeft="60dp"
+                            android:text="@string/menu_last_update"
+                            android:textSize="@dimen/menu_description_font_size" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:id="@+id/menuLayout3"
+                        android:gravity="right|center_vertical">
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="228dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical"></LinearLayout>
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:focusableInTouchMode="true"
+                            android:id="@+id/txtMenu3"
+                            android:text="@string/menu_get_users"
+                            android:background="@drawable/listitem_background"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/ImageView003"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/refresh_icon" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:layoutDirection="ltr"
+                        android:id="@+id/pb03"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="horizontal|vertical"
+                        android:max="100"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:id="@+id/menuUpdateLayout3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:gravity="right|center_vertical">
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuLastUpdateDate03"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:text=""
+                            android:textSize="@dimen/menu_description_font_size" />
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"></LinearLayout>
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuLastUpdate03"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="60dp"
+                            android:layout_marginLeft="60dp"
+                            android:text="@string/menu_last_update"
+                            android:textSize="@dimen/menu_description_font_size" />
+                    </LinearLayout>
+
+
+
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:id="@+id/menuLayout4"
+                        android:gravity="right|center_vertical">
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="228dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical"></LinearLayout>
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:focusableInTouchMode="true"
+                            android:id="@+id/txtMenu4"
+                            android:text="@string/menu_get_last_values"
+                            android:background="@drawable/listitem_background"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/ImageView004"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/home_icon" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/pb04"
+                        android:layoutDirection="ltr"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="horizontal|vertical"
+                        android:max="100"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/menuUpdateLayout4"
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:gravity="right|center_vertical">
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:id="@+id/txtMenuLastUpdateDate04"
+                            android:layoutDirection="rtl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:text=""
+                            android:textSize="@dimen/menu_description_font_size" />
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"></LinearLayout>
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuLastUpdate04"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="60dp"
+                            android:layout_marginLeft="60dp"
+                            android:text="@string/menu_last_update"
+                            android:textSize="@dimen/menu_description_font_size" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:gravity="right|center_vertical"
+                        android:visibility="gone">
+
+                        <RelativeLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"></RelativeLayout>
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"></LinearLayout>
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuGetViews"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/menu_update"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+                        <ImageView
+                            android:id="@+id/ImageView05"
+                            android:layoutDirection="rtl"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/refresh_icon" />
+
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:layoutDirection="ltr"
+                        android:id="@+id/pb1"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="horizontal|vertical"
+                        android:max="100"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:layoutDirection="rtl"
+                        android:gravity="right|center_vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:id="@+id/txtMenuLastUpdateDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layoutDirection="rtl"
+                            android:text=""
+                            android:textSize="@dimen/menu_description_font_size" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layoutDirection="rtl"
+                            android:orientation="vertical"></LinearLayout>
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:id="@+id/txtMenuLastUpdate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="60dp"
+                            android:layoutDirection="rtl"
+                            android:text="@string/menu_last_update"
+                            android:textSize="@dimen/menu_description_font_size" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:layoutDirection="rtl"
+                        android:gravity="left|center_vertical"
+                        android:visibility="gone">
+
+                        <RelativeLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"></RelativeLayout>
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"></LinearLayout>
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuGetBaseInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/menu_get_base_info"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/imgGetBaseInfo"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/refresh_icon" />
+
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:layoutDirection="ltr"
+                        android:id="@+id/pb2"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="horizontal|vertical"
+                        android:max="100"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:gravity="right|center_vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuLastGetBaseInfoDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="@string/menu_last_get_base_info_date"
+                            android:textSize="@dimen/menu_description_font_size" />
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"></LinearLayout>
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuLastGetBaseInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="60dp"
+                            android:text="@string/menu_last_get_base_info"
+                            android:background="@drawable/listitem_background"
+                            android:textSize="@dimen/menu_description_font_size" />
+                    </LinearLayout>
+
+                    <!-- **** -->
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:gravity="right|center_vertical">
+
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"></LinearLayout>
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuSend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/menu_send"
+                            android:background="@drawable/listitem_background"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/imgSend"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/refresh_icon" />
+
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:layoutDirection="ltr"
+                        android:id="@+id/pb05"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fadingEdge="horizontal|vertical"
+                        android:max="100"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+
+                        android:gravity="right|center_vertical">
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="228dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical"></LinearLayout>
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuLastSendDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="@dimen/menu_description_font_size" />
+
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:id="@+id/txtMenuLastSend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="60dp"
+                            android:layout_marginLeft="60dp"
+                            android:layoutDirection="rtl"
+                            android:text="@string/menu_last_send"
+                            android:textSize="@dimen/menu_description_font_size" />
+                    </LinearLayout>
+                    <!-- **** -->
+
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+
+                        android:gravity="right|center_vertical">
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="228dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical"></LinearLayout>
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:focusableInTouchMode="true"
+                            android:id="@+id/txtMenuHome"
+                            android:text="@string/menu_home"
+                            android:layout_width="wrap_content"
+                            android:background="@drawable/listitem_background"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+
+                        <ImageView
+                                                    android:layoutDirection="rtl"
+                                                    android:id="@+id/ImageView04"
+                                                    android:layout_width="@dimen/menu_icon_width_height"
+                                                    android:layout_height="@dimen/menu_icon_width_height"
+                                                    android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                                                    android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                                                    android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                                                    android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                                                    android:src="@drawable/home_icon" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:clickable="true"
+                        android:gravity="right|center_vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuSetting"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/menu_setting"
+                            android:background="@drawable/listitem_background"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/ImageView06"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/setting_black_icon" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:id="@+id/llMenuShowNfcContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:gravity="right|center_vertical">
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"></LinearLayout>
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMenuShowNfcContent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/menu_show_nfc_content"
+                            android:background="@drawable/listitem_background"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/imgMenuShowNfcContent"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/nfc" />
+
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:id="@+id/llA"
+                        android:gravity="right|center_vertical">
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="228dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical"></LinearLayout>
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:focusableInTouchMode="true"
+                            android:id="@+id/txtMenuAboutUs"
+                            android:text="@string/menu_about_us"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/listitem_background"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/ImageView07"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/info_icon" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layoutDirection="rtl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:id="@+id/llE"
+                        android:gravity="right|center_vertical">
+
+                        <LinearLayout
+                            android:layoutDirection="rtl"
+                            android:layout_width="228dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical"></LinearLayout>
+                        <TextView
+                            android:fontFamily="@fonts/byekan"
+                            android:layoutDirection="rtl"
+                            android:background="@drawable/listitem_background"
+                            android:focusableInTouchMode="true"
+                            android:id="@+id/txtMenuExit"
+                            android:text="@string/menu_exit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="@dimen/menu_item_font_size" />
+
+
+                        <ImageView
+                            android:layoutDirection="rtl"
+                            android:id="@+id/ImageView08"
+                            android:layout_width="@dimen/menu_icon_width_height"
+                            android:layout_height="@dimen/menu_icon_width_height"
+                            android:layout_marginBottom="@dimen/menu_icon_margin_top_bottom"
+                            android:layout_marginLeft="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginRight="@dimen/menu_icon_margin_left_right"
+                            android:layout_marginTop="@dimen/menu_icon_margin_top_bottom"
+                            android:src="@drawable/logout_icon" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="#ffffff">
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.DrawerLayout >
+</LinearLayout>

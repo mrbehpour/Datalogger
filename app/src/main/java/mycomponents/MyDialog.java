@@ -236,6 +236,7 @@ public class MyDialog {
 	}
 	public MyDialog setTitle(String title){
 		_txtDialogTitle.setTextSize(TextSizeE);
+		_txtDialogTitle.setTypeface(tf);
 		_txtDialogTitle.setText(title);
 		return this;
 	}

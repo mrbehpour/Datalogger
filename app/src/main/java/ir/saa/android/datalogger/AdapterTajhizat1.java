@@ -80,7 +80,7 @@ public class AdapterTajhizat1 extends ArrayAdapter<dtoTajhiz> {
 				}
 			});
 
-            if(G.Setting.ModTag ==2 && item.HasTag == true && G.Setting.LayerTag == 1) {
+            if(G.Setting.ModTag ==2 && item.HasTag == true && G.Setting.LayerTag == 1 && G.currentUser.NeedTag==0) {
 				imgTajhizNfc.setVisibility(View.VISIBLE);
 				imgTajhizNfc.setOnClickListener(new OnClickListener() {
 					@Override

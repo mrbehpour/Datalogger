@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -95,6 +97,7 @@ public class FragmentItemHistory extends FragmentEnhanced {
 		super.onDestroy();
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 	@SuppressLint("UseSparseArrays")
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -374,10 +377,15 @@ if(G.RTL) {
 				}else{
 					ItemValue=item.ItemVal;
 				}
-				DateRegister=Tarikh.getShamsiDate(item.PDate
-						.replace("/", "-")
-						.replace(" ","Z"));
-				TimeRegister=item.PDate.substring(11);
+				if(item.PDate!=null) {
+					DateRegister = Tarikh.getShamsiDate(item.PDate
+							.replace("/", "-")
+							);
+					TimeRegister = item.PDate.substring(11);
+				}else{
+					DateRegister = "";
+					TimeRegister = "";
+				}
 
 			}else{
 				ItemValue=item.ItemVal;

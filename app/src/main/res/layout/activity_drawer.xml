@@ -441,12 +441,15 @@
                     </LinearLayout>
 
                     <ProgressBar
-                        android:layoutDirection="ltr"
+
                         android:id="@+id/pb03"
                         style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fadingEdge="horizontal|vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layoutDirection="ltr"
                         android:max="100"
                         android:visibility="gone" />
 

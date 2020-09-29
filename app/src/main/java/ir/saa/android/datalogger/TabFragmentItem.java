@@ -1,12 +1,14 @@
 package ir.saa.android.datalogger;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,6 +20,8 @@ import mycomponents.MyToast;
 import database.adapters.AdapterItem;
 import database.structs.dtoItemValues;
 import database.structs.dtoItems;
+import mycomponents.MyUtilities;
+import mycomponents.Range;
 import saman.zamani.persiandate.PersianDate;
 
 import android.annotation.SuppressLint;
@@ -107,6 +111,7 @@ public class TabFragmentItem extends Fragment {
 		View v=inflater
 				.inflate(LayoutPageItem, container, false);
 		adapterItem = new AdapterItem(arrListItemFiltered,LayoutPageItem,v);
+
 		return rootView;
 	}
 	
@@ -125,7 +130,8 @@ public class TabFragmentItem extends Fragment {
 	    timerTask = new TimerTask() {
 	        public void run() {
 	            G.handler.post(new Runnable() {
-	                public void run() {
+	                @RequiresApi(api = Build.VERSION_CODES.N)
+					public void run() {
 	                	String DateAndTime="";
 	                	if(G.RTL){
 							DateAndTime=Tarikh.getCurrentShamsidatetime();
@@ -136,6 +142,8 @@ public class TabFragmentItem extends Fragment {
 						}
 
 	                	txtDateTimeForItems.setText(DateAndTime);
+
+
 	                }
 	            });
 	        }
@@ -244,6 +252,7 @@ public class TabFragmentItem extends Fragment {
                 boolean isExist = file.delete();
                 return isExist;
             }
+			@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 			@Override
 			public void onClick(View v) {
 
@@ -256,28 +265,21 @@ public class TabFragmentItem extends Fragment {
 								.setContentSplitter()
 								.setVerticalMargin(10)
 								.addContentXml(R.layout.body_one_textview)
-								.addButton((String) G.context.getText(R.string.no), new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-
-										mydialog.dismiss();
-									}
-								})
 								.addButton((String) G.context.getText(R.string.yes), new OnClickListener() {
 
 									@Override
 									public void onClick(View v) {
-									if(G.isSave==false) {
-										for (dtoItems item : arrListItem) {
-											if (!(dicItemValues.get(item.ItemInfID).ItemVal == null || dicItemValues.get(item.ItemInfID).ItemVal.replaceAll("/", "").replaceAll(":", "").replaceAll(",", "").trim().length() == 0))
-												G.DB.InsertItemValues(dicItemValues.get(item.ItemInfID));
-											deleteFileFromSdCard(OldVideoPath);
-											deleteFileFromSdCard(OldVoicePath);
-											deleteFileFromSdCard(OldImagePath);
+										if(G.isSave==false) {
+											for (dtoItems item : arrListItem) {
+												if (!(dicItemValues.get(item.ItemInfID).ItemVal == null || dicItemValues.get(item.ItemInfID).ItemVal.replaceAll("/", "").replaceAll(":", "").replaceAll(",", "").trim().length() == 0))
+													G.DB.InsertItemValues(dicItemValues.get(item.ItemInfID));
+												deleteFileFromSdCard(OldVideoPath);
+												deleteFileFromSdCard(OldVoicePath);
+												deleteFileFromSdCard(OldImagePath);
+											}
 										}
-									}
 										populateFromDatabase();
+										adapterItem.notifyDataSetChanged();
 										//MyToast.Show(G.context, "اطلاعات آیتم ها با موفقیت ذخیره شد", Toast.LENGTH_LONG);
 										edtSearch.setText("");
 										searchSpinner.setSelection(0);
@@ -296,6 +298,15 @@ public class TabFragmentItem extends Fragment {
 										//---------------------------------------------------------------------
 									}
 								})
+								.addButton((String) G.context.getText(R.string.no), new OnClickListener() {
+
+									@Override
+									public void onClick(View v) {
+
+										mydialog.dismiss();
+									}
+								})
+
 								.show();
 
 					} else {
@@ -327,6 +338,7 @@ public class TabFragmentItem extends Fragment {
 											}
 										}
 										populateFromDatabase();
+										adapterItem.notifyDataSetChanged();
 										//MyToast.Show(G.context, "اطلاعات آیتم ها با موفقیت ذخیره شد", Toast.LENGTH_LONG);
 										edtSearch.setText("");
 										searchSpinner.setSelection(0);
@@ -388,6 +400,7 @@ public class TabFragmentItem extends Fragment {
 
 		//if(G.selectedId == null)
 		populateFromDatabase();
+		adapterItem.notifyDataSetChanged();
 		listItem.requestFocus();
 //		populateFakeData();
 
@@ -405,10 +418,13 @@ public class TabFragmentItem extends Fragment {
 	}
 
 
-	private void populateFromDatabase() {
+	public void populateFromDatabase() {
 		arrListItem.clear();
 		arrListItemFiltered.clear();
-		dicItemValues.clear();
+		if(dicItemValues!=null) {
+			dicItemValues.clear();
+		}
+		dicItemValues=new HashMap<Integer, dtoItemValues>();
 		Integer selectedEquipId = -1 ;
 		Integer selectedSubEquipId = -1;
 		Integer selectedItemInfId = -1;
@@ -432,7 +448,8 @@ public class TabFragmentItem extends Fragment {
 		if(selectedItemInfId!=-1){
 			lstItems = G.DB.GetItemList(selectedEquipId, selectedSubEquipId,selectedItemInfId);
 		}else{
-			lstItems = G.DB.GetItemList(selectedEquipId, selectedSubEquipId);
+			//lstItems = G.DB.(selectedEquipId, selectedSubEquipId);
+			lstItems = G.DB.GetItemListWithValue(selectedEquipId, selectedSubEquipId);
 		}
 		//arrListItem.addAll(lstItems);
 		for(dtoItems item:lstItems){
@@ -592,19 +609,19 @@ public class TabFragmentItem extends Fragment {
 			rangeTime = rangeTime * 24 * 60;
 		}
 
-		String strDateTime =Tarikh.getCurrentShamsidatetimeWithoutSlash().substring(0,12);
+		String strDateTime =Tarikh.getCurrentMiladidatetimewithoutSlash();
 		Long longCurrentDateTime = Long.parseLong(strDateTime);
 		Long periodSum = 0l;
 
-		String levelDateTime = strDateTime.substring(0,8)+item.STTime;
+		String levelDateTime = strDateTime.substring(0,8)+item.STTime+"00";
 		do {
-			Long startRange = Tarikh.subMinutesFromDateTime(levelDateTime,rangeTime);
-			Long endRange = Tarikh.addMinutesToDateTime(levelDateTime,rangeTime);
+			Long startRange = Tarikh.subMinutesFromDateTimeMiladi(levelDateTime,rangeTime);
+			Long endRange = Tarikh.subMinutesFromDateTimeMiladi(levelDateTime,-rangeTime);
 			if(longCurrentDateTime >= startRange && longCurrentDateTime <= endRange){
 
 				dtoItemValues itemVal = G.DB.getLastItemValueByItemInfId(item.ItemInfID);
 				if(itemVal!=null){
-					Long longLastValueDateTime = Tarikh.getLongDateTime(itemVal.PDate+itemVal.PTime);
+					Long longLastValueDateTime = Tarikh.getLongDateTimeMiladi(itemVal.PDate);
 					if(longLastValueDateTime >= startRange && longLastValueDateTime <= endRange){
 						result = ValidForSubmitType.InRangeButHasOtherValue;
 					}else
@@ -618,12 +635,30 @@ public class TabFragmentItem extends Fragment {
 			}
 			if(longCurrentDateTime <= endRange) // don't check useless ranges and break
 				break;
-			levelDateTime = Tarikh.addMinutesToDateTime(levelDateTime,periodTime).toString();
+			levelDateTime = Tarikh.subMinutesFromDateTimeMiladi(levelDateTime,-periodTime).toString();
 			periodSum+= periodTime;
 		}while (periodSum<=1440);
 
 		return result;
 	}
+	public static String parseDateToddMMyyyy(String time) {
+		String inputPattern = "yyyy-MM-dd HH:mm:ss";
+		String outputPattern = "yyyy-MM-dd HH:mm:ss";
+		SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+		SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern , Locale.UK);
+
+		Date date = null;
+		String str = null;
+
+		try {
+			date = inputFormat.parse(time);
+			str=outputFormat.format(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return str;
+	}
+	@RequiresApi(api = Build.VERSION_CODES.N)
 	public static Integer IsValidForSubmitWitoutCheckSetting(dtoItems item){
 		Integer result = ValidForSubmitType.OutOfRange;
 //		if(G.Setting.ContorolTime.compareTo("0") == 0) // Do not check
@@ -648,41 +683,94 @@ public class TabFragmentItem extends Fragment {
 		}else if(item.RangeTypTime == 3){ // if day
 			rangeTime = rangeTime * 24 * 60;
 		}
+		String strDateTime="";
 
-		String strDateTime =G.convertToEnglishDigits(Tarikh.getCurrentMiladidatetime().replace(" ","").trim()
-				.replace("/","").trim().replace(":","").trim().substring(0,12),false);
+		strDateTime = MyUtilities.changeNumberLocale(Tarikh.getCurrentMiladidatetimewithoutSlash());
+
 		Long longCurrentDateTime = Long.parseLong(strDateTime);
 		Long periodSum = 0l;
+		Long startRange;
+		Long endRange;
+		String levelDateTime = strDateTime.substring(0,8)+item.STTime+"00";
 
-		String levelDateTime = strDateTime.substring(0,8)+item.STTime;
-		do {
-			Long startRange = Tarikh.subMinutesFromDateTime(levelDateTime,rangeTime);
-			Long endRange = Tarikh.addMinutesToDateTime(levelDateTime,rangeTime);
-			if(longCurrentDateTime >= startRange && longCurrentDateTime <= endRange){
+		if(item.RangeTypTime==3 && item.PeriodTypTime==3){
+			startRange = Tarikh.subMinutesFromDateTimeMiladi(levelDateTime, rangeTime);
+			endRange = Tarikh.subMinutesFromDateTimeMiladi(levelDateTime, -rangeTime);
 
-				dtoItemValues itemVal = G.DB.getLastItemValueByItemInfId(item.ItemInfID);
-				if(itemVal!=null){
-					Long longLastValueDateTime = Tarikh.getLongDateTime(itemVal.PDate+itemVal.PTime);
-					if(longLastValueDateTime >= startRange && longLastValueDateTime <= endRange){
-						result = ValidForSubmitType.InRangeButHasOtherValue;
-					}else
-					{
-						result = ValidForSubmitType.InRange;
+		}else {
+			do {
+
+				startRange = Tarikh.subMinutesFromDateTimeMiladi(levelDateTime, rangeTime);
+				endRange = Tarikh.subMinutesFromDateTimeMiladi(levelDateTime, -rangeTime);
+				String RangeFirst = "";
+				String RangeEnd = "";
+
+				if (startRange != null) {
+					if (startRange.toString().length() == 14) {
+						RangeFirst = startRange.toString().substring(0, 4) + "-"
+								+ startRange.toString().substring(4, 6) + "-"
+								+ startRange.toString().substring(6, 8) + " "
+								+ startRange.toString().substring(8, 10) + ":"
+								+ startRange.toString().substring(10, 12) + ":"
+								+ startRange.toString().substring(12, 14);
+
+
 					}
 				}
-//				else {
-//					result = ValidForSubmitType.InRange;
-//				}
-				break;
-			}
-			if(longCurrentDateTime <= endRange) // don't check useless ranges and break
-				break;
-			levelDateTime = Tarikh.addMinutesToDateTime(levelDateTime,periodTime).toString();
-			periodSum+= periodTime;
-		}while (periodSum<=1440);
+				if (endRange != null) {
+					if (endRange.toString().length() == 14) {
+						RangeEnd = endRange.toString().substring(0, 4) + "-"
+								+ endRange.toString().substring(4, 6) + "-"
+								+ endRange.toString().substring(6, 8) + " "
+								+ endRange.toString().substring(8, 10) + ":"
+								+ endRange.toString().substring(10, 12) + ":"
+								+ endRange.toString().substring(12, 14);
+					}
+				}
+
+				if (periodTime > (2 * rangeTime)) {
+					if (longCurrentDateTime >= startRange && longCurrentDateTime <= endRange) {
+
+						dtoItemValues itemVal = G.DB.getLastItemValueByItemInfIdforCheckPeriod(item.ItemInfID, RangeFirst, RangeEnd);
+						if (itemVal != null) {
+							Long longLastValueDateTime = Tarikh.getLongDateTimeMiladi(itemVal.PDate);
+							if (longLastValueDateTime >= startRange && longLastValueDateTime <= endRange) {
+								result = ValidForSubmitType.InRangeButHasOtherValue;
+							} else {
+								result = ValidForSubmitType.InRange;
+							}
+						} else {
+							result = ValidForSubmitType.InRange;
+						}
+						break;
+					}
+				} else {
+					if (longCurrentDateTime >= startRange && longCurrentDateTime < endRange) {
+
+						dtoItemValues itemVal = G.DB.getLastItemValueByItemInfIdforCheckPeriod(item.ItemInfID, RangeFirst, RangeEnd);
+						if (itemVal != null) {
+							Long longLastValueDateTime = Tarikh.getLongDateTimeMiladi(itemVal.PDate);
+							if (longLastValueDateTime >= startRange && longLastValueDateTime < endRange) {
+								result = ValidForSubmitType.InRangeButHasOtherValue;
+							} else {
+								result = ValidForSubmitType.InRange;
+							}
+						} else {
+							result = ValidForSubmitType.InRange;
+						}
+						break;
+					}
+				}
+//			if(longCurrentDateTime <= endRange) // don't check useless ranges and break
+//				break;
+				levelDateTime = Tarikh.subMinutesFromDateTimeMiladi(levelDateTime, -periodTime).toString();
+				periodSum += periodTime;
+			} while (periodSum <= 1440);
+		}
 
 		return result;
 	}
+
 
 	private static Long getElapsedMins(Date d1, Date d2){
 		Long diffMinutes = 0l;
@@ -723,5 +811,6 @@ public class TabFragmentItem extends Fragment {
 //        }
 //
 //    }
-	
+
+
 }

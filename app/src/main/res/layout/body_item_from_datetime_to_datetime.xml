@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:gravity="center"
+                android:textDirection="anyRtl"
                 android:textSize="18sp"
                 android:inputType="number"
                 app:mask="####/##/##" />
@@ -87,6 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:textDirection="anyRtl"
                 android:gravity="center"
                 android:textSize="18sp"
                 android:inputType="number"
@@ -134,6 +136,7 @@
                 android:ems="10"
                 android:gravity="center"
                 android:textSize="18sp"
+                android:textDirection="anyRtl"
                 android:inputType="number|date"
                 app:mask="####/##/##" />
 
@@ -177,7 +180,7 @@
                 android:id="@+id/edtItemToTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:textDirection="anyRtl"
                 android:ems="10"
                 android:gravity="center"
                 android:textSize="18sp"

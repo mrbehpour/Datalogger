@@ -5,7 +5,9 @@
 
 package database.helper;
 
+import database.fields.Tbl_ItemRanges;
 import database.fields.Tbl_UsrPost;
+import database.structs.dtoItemRanges;
 import database.structs.dtoUsrPost;
 import ir.saa.android.datalogger.G;
 
@@ -80,7 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //	SharedPreferences sharedpreferences;
     private static final String DB_NAME = "dl.db";
     private static final String DB_PATH = G.DIR_DATABASE;
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
     SQLiteDatabase myDB;
 
     public DatabaseHelper(Context context) {
@@ -136,6 +138,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CreateTable.Tbl_UserLogshit_Create());
 
         db.execSQL(CreateTable.Tbl_ItemValues_Create());
+        db.execSQL(CreateTable.Tbl_ItemRanges_Create());
         db.execSQL(CreateTable.Tbl_MaxItemVal_Create());
         db.execSQL(CreateTable.Tbl_CorsRems_Create());
         db.execSQL(CreateTable.Tbl_UsrPost_Create());
@@ -502,7 +505,107 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return lstLogshits;
     }
 
+    public ArrayList<dtoItems> getItemsByUserIdAndPostId(Integer UsrId,Integer Postid) { // for collecting itemvalues for send in ActivityDrawer TaskSend
+        ArrayList<dtoItems> lstItemValues = new ArrayList<dtoItems>();
 
+        SQLiteDatabase sd = getReadableDatabase();
+        Object[] args = new Object[]{
+                Tbl_Items.TableName,
+                Tbl_ItemValues.TableName,
+                Tbl_ItemValues.UsrID,
+                UsrId,
+                Tbl_Items.PostID,
+                Postid
+        };
+//        String PDate=Tarikh.getCurrentShamsidateWithoutSlash();
+//        String PTime=Tarikh.getTimeWithoutColon().substring(0,2);
+        String strQuery = String.format("select distinct Items.* from %s Items inner join %s  itemValues on " +
+                " itemValues.ItemInfID=Items.ItemInfID where itemValues.%s = %s  AND Items.%s = %s ", args);
+        if (G.currentUser.IsManager == 1 ) {
+            //strQuery = "select itemValues.* from tbl_ItemValues itemValues where itemValues.IsSend = 0 ";
+            strQuery = "select distinct Items.* from tbl_ItemValues itemValues inner join Tbl_Items Items on" +
+                    " itemValues.ItemInfID=Items.ItemInfID where itemValues.IsSend = 0 and items.PostID="+Postid.toString();
+            //+" and itemValues.PDate='"+PDate+"' and PTime like '"+PTime+"%'";
+        }
+        Cursor cur = sd.rawQuery(strQuery, null);
+
+        if (cur.getCount() > 0) {
+            cur.moveToFirst();
+            do {
+                dtoItems item = new dtoItems();
+                item.ItemInfID = cur.getInt(cur.getColumnIndex(Tbl_Items.ItemInfID));
+                item.ItemName = cur.getString(cur.getColumnIndex(Tbl_Items.ItemName));
+                item.SubEquipID = cur.getInt(cur.getColumnIndex(Tbl_Items.SubEquipID));
+                item.EquipInfID = cur.getInt(cur.getColumnIndex(Tbl_Items.EquipInfID));
+                item.LogshitInfID = cur.getInt(cur.getColumnIndex(Tbl_Items.LogshitInfID));
+                item.PostID = cur.getInt(cur.getColumnIndex(Tbl_Items.PostID));
+                item.RemGroupID = cur.getInt(cur.getColumnIndex(Tbl_Items.RemGroupID));
+                item.AmountTypID = cur.getInt(cur.getColumnIndex(Tbl_Items.AmountTypID));
+                item.MeasureUnitName = cur.getString(cur.getColumnIndex(Tbl_Items.MeasureUnitName));
+                item.Zarib = cur.getDouble((cur.getColumnIndex(Tbl_Items.Zarib)));
+                item.MaxSampleNo = cur.getInt(cur.getColumnIndex(Tbl_Items.MaxSampleNo));
+                item.MaxAmount1 = cur.getString(cur.getColumnIndex(Tbl_Items.MaxAmount1));
+                item.MinAmount1 = cur.getString(cur.getColumnIndex(Tbl_Items.MinAmount1));
+                item.MaxAmount2 = cur.getString(cur.getColumnIndex(Tbl_Items.MaxAmount2));
+                item.MinAmount2 = cur.getString(cur.getColumnIndex(Tbl_Items.MinAmount2));
+                item.MaxAmount3 = cur.getString(cur.getColumnIndex(Tbl_Items.MaxAmount3));
+                item.MinAmount3 = cur.getString(cur.getColumnIndex(Tbl_Items.MinAmount3));
+                item.TagID = cur.getString(cur.getColumnIndex(Tbl_Items.TagID));
+                item.RemTyp = cur.getInt(cur.getColumnIndex(Tbl_Items.RemTyp));
+                item.STTime = cur.getString(cur.getColumnIndex(Tbl_Items.STTime));
+                item.PeriodTime = cur.getInt(cur.getColumnIndex(Tbl_Items.PeriodTime));
+                item.PeriodTypTime = cur.getInt(cur.getColumnIndex(Tbl_Items.PeriodTypTime));
+                item.LogicTypID = cur.getInt(cur.getColumnIndex(Tbl_Items.LogicTypID));
+                item.Desc = cur.getString(cur.getColumnIndex(Tbl_Items.Desc));
+                item.LocateRowNo = cur.getInt(cur.getColumnIndex(Tbl_Items.LocateRowNo));
+                item.LogshitRowNo = cur.getInt(cur.getColumnIndex(Tbl_Items.LogshitRowNo));
+                item.RangeTime = cur.getInt(cur.getColumnIndex(Tbl_Items.RangeTime));
+                item.RangeTypTime = cur.getInt(cur.getColumnIndex(Tbl_Items.RangeTypTime));
+                lstItemValues.add(item);
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        return lstItemValues;
+    }
+    public ArrayList<dtoItemValues> getItemValuesByUserIdAndItemInfIdWithDate(Integer UsrId, Integer itemInfID) { // for collecting itemvalues for send in ActivityDrawer TaskSend
+        ArrayList<dtoItemValues> lstItemValues = new ArrayList<dtoItemValues>();
+
+        SQLiteDatabase sd = getReadableDatabase();
+        Object[] args = new Object[]{
+                Tbl_ItemValues.TableName,
+                Tbl_ItemValues.UsrID,
+                UsrId,
+                Tbl_ItemValues.ItemInfID,
+                itemInfID,
+        };
+        //String PDate=Tarikh.getCurrentShamsidateWithoutSlash();
+        //String PTime=Tarikh.getTimeWithoutColon().substring(0,2);
+        //String strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s AND itemValues.%s = %s  ", args);
+        String strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s  ", args);//+" and itemValues.PDate='"+PDate+"' and PTime like '"+PTime+"%'";;
+        if (G.currentUser.IsManager == 1 ) {
+            strQuery = "select itemValues.* from Tbl_ItemValues itemValues where itemValues.ItemInfID ="+itemInfID;///+" and itemValues.PDate='"+PDate+"' and PTime like '"+PTime+"%'";;
+        }
+        Cursor cur = sd.rawQuery(strQuery, null);
+
+        if (cur.getCount() > 0) {
+            cur.moveToFirst();
+            do {
+                dtoItemValues itemValue = new dtoItemValues();
+                itemValue.Id = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.Id));
+                itemValue.ItemInfID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ItemInfID));
+                itemValue.ItemVal = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemVal));
+                itemValue.ItemValTyp = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemValTyp));
+                itemValue.PDate = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PDate));
+                itemValue.PTime = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PTime));
+                itemValue.UsrID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.UsrID));
+                itemValue.ShiftID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ShiftID));
+                itemValue.IsSend = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.IsSend));
+                lstItemValues.add(itemValue);
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        return lstItemValues;
+    }
     public ArrayList<dtoEquipments> GetEquipmentListByLogshits(ArrayList<dtoLogShits> logshitList) { //Handling Which user should see which logshit is inside the method
         ArrayList<dtoEquipments> lstEquipments = new ArrayList<>();
         if (logshitList.size() == 0) {
@@ -545,6 +648,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return lstEquipments;
     }
 
+    public dtoItemValues getLastItemValueByItemInfIdforCheckPeriod(Integer itemInfID,String  startTime,String endTime) { // for collecting itemvalues for send in ActivityDrawer TaskSend
+        dtoItemValues itemValue = null;
+        try {
+
+
+            SQLiteDatabase sd = getReadableDatabase();
+            Object[] args = new Object[]{
+                    Tbl_ItemValues.TableName,
+                    Tbl_ItemValues.ItemInfID,
+                    itemInfID,
+                    Tbl_ItemValues.IsSend,
+                    0,
+                    Tbl_ItemValues.PDate,
+                    startTime,
+                    endTime,
+                    Tbl_ItemValues.Id
+
+
+            };
+            String strQuery="";
+            if(G.currentUser.IsManager==1) {
+                strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s And (itemValues.%s ) BETWEEN  '%s' And '%s'   ORDER BY %s DESC Limit 1; ", args);
+            }else{
+                strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s And (itemValues.%s ) BETWEEN  '%s' And '%s' and  itemValues.UsrID="+String.valueOf(G.currentUser.UsrID)+"  ORDER BY %s DESC Limit 1; ", args);
+            }
+            Cursor cur = sd.rawQuery(strQuery, null);
+
+            if (cur.getCount() > 0) {
+                cur.moveToFirst();
+                do {
+                    itemValue = new dtoItemValues();
+                    itemValue.Id = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.Id));
+                    itemValue.ItemInfID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ItemInfID));
+                    itemValue.ItemVal = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemVal));
+                    itemValue.ItemValTyp = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemValTyp));
+                    itemValue.PDate = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PDate));
+                    itemValue.PTime = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PTime));
+                    itemValue.UsrID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.UsrID));
+                    itemValue.ShiftID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ShiftID));
+                    itemValue.IsSend = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.IsSend));
+//                    itemValue.VideoPath=cur.getString(cur.getColumnIndex(Tbl_ItemValues.VideoPath));
+//                    itemValue.ImagePath=cur.getString(cur.getColumnIndex(Tbl_ItemValues.ImagePath));
+//                    itemValue.VoicePath=cur.getString(cur.getColumnIndex(Tbl_ItemValues.VoicePath));
+
+                    break;
+                } while (cur.moveToNext());
+            }
+            cur.close();
+        } catch (Exception ex) {
+            Log.i("tag", ex.getMessage());
+        }
+        return itemValue;
+    }
+
     public ArrayList<dtoEquipments> GetEquipmentListByLogshitInfId(Integer selectedLogshitId,Integer selectedPostId ) { //Handling Which user should see which logshit is inside the method
         ArrayList<dtoEquipments> lstEquipments = new ArrayList<dtoEquipments>();
          SQLiteDatabase sd = getReadableDatabase();
@@ -584,6 +741,152 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return lstEquipments;
     }
+
+    public ArrayList<dtoItemValues> getItemValuesByUserIdAndLogshit(Integer UsrId,Integer Logshit,Integer PostId) { // for collecting itemvalues for send in ActivityDrawer TaskSend
+        ArrayList<dtoItemValues> lstItemValues = new ArrayList<dtoItemValues>();
+
+        SQLiteDatabase sd = getReadableDatabase();
+        Object[] args = new Object[]{
+                Tbl_ItemValues.TableName,
+                Tbl_Items.TableName,
+                Tbl_ItemValues.UsrID,
+                UsrId,
+                Tbl_ItemValues.IsSend,
+                0,
+                Tbl_Items.LogshitInfID,
+                Logshit,
+                Tbl_Items.PostID,
+                PostId
+
+        };
+//        String PDate=Tarikh.getCurrentShamsidateWithoutSlash();
+//        String PTime=Tarikh.getTimeWithoutColon().substring(0,2);
+        String strQuery = String.format("select distinct itemValues.iteminfid from %s itemValues inner join %s Items  on " +
+                " itemValues.ItemInfID=Items.ItemInfID where itemValues.%s = %s AND itemValues.%s = %s AND Items.%s = %s and Items.%s = %s ", args);//+" and itemValues.PDate='"+PDate+"' and PTime like '"+PTime+"%'";;
+        if (G.currentUser.IsManager == 1 ) {
+            strQuery = "select distinct itemValues.iteminfid from tbl_ItemValues itemValues inner join Tbl_Items Items on "+
+                    "  itemValues.ItemInfID=Items.ItemInfID where itemValues.IsSend = 0 and Items.LogshitInfID=" +Logshit.toString() + " and Items.PostID=" + PostId.toString();
+            //+" and itemValues.PDate='"+PDate+"' and PTime like '"+PTime+"%'";
+        }
+        Cursor cur = sd.rawQuery(strQuery, null);
+
+        if (cur.getCount() > 0) {
+            cur.moveToFirst();
+            do {
+                dtoItemValues itemValue = new dtoItemValues();
+                //itemValue.Id = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.Id));
+                itemValue.ItemInfID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ItemInfID));
+//                itemValue.ItemVal = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemVal));
+//                itemValue.ItemValTyp = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemValTyp));
+//                itemValue.PDate = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PDate));
+//                itemValue.PTime = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PTime));
+//                itemValue.UsrID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.UsrID));
+//                itemValue.ShiftID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ShiftID));
+//                itemValue.IsSend = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.IsSend));
+                lstItemValues.add(itemValue);
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        return lstItemValues;
+    }
+
+    public ArrayList<dtoItemValues> getItemValuesByUserIdAndTajhizId(Integer UsrId,Integer TajhizId,Integer LogshitId) { // for collecting itemvalues for send in ActivityDrawer TaskSend
+        ArrayList<dtoItemValues> lstItemValues = new ArrayList<dtoItemValues>();
+
+        SQLiteDatabase sd = getReadableDatabase();
+        Object[] args = new Object[]{
+                Tbl_ItemValues.TableName,
+                Tbl_Items.TableName,
+                Tbl_ItemValues.UsrID,
+                UsrId,
+                Tbl_ItemValues.IsSend,
+                0,
+                Tbl_Items.EquipInfID,
+                TajhizId,
+                Tbl_Items.LogshitInfID,
+                LogshitId
+
+        };
+        String PDate=Tarikh.getCurrentShamsidateWithoutSlash();
+        String PTime=Tarikh.getTimeWithoutColon().substring(0,2);
+        String strQuery = String.format("select distinct itemValues.iteminfid from %s itemValues inner join %s Items  on " +
+                " itemValues.ItemInfID=Items.ItemInfID where itemValues.%s = %s AND itemValues.%s = %s AND Items.%s = %s AND Items.%s = %s  ", args);//+" and itemValues.PDate='"+PDate+"' and PTime like '"+PTime+"%'";;
+        if (G.currentUser.IsManager == 1 ) {
+            strQuery = "select distinct itemValues.iteminfid from tbl_ItemValues itemValues inner join Tbl_Items Items on "+
+                    "  itemValues.ItemInfID=Items.ItemInfID where itemValues.IsSend = 0 and Items.EquipInfID=" +TajhizId.toString() +" and Items.LogshitInfID="+LogshitId.toString();
+            //+" and itemValues.PDate='"+PDate+"' and PTime like '"+PTime+"%'";
+        }
+        Cursor cur = sd.rawQuery(strQuery, null);
+
+        if (cur.getCount() > 0) {
+            cur.moveToFirst();
+            do {
+                dtoItemValues itemValue = new dtoItemValues();
+                //itemValue.Id = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.Id));
+                itemValue.ItemInfID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ItemInfID));
+//                itemValue.ItemVal = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemVal));
+//                itemValue.ItemValTyp = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemValTyp));
+//                itemValue.PDate = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PDate));
+//                itemValue.PTime = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PTime));
+//                itemValue.UsrID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.UsrID));
+//                itemValue.ShiftID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ShiftID));
+//                itemValue.IsSend = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.IsSend));
+                lstItemValues.add(itemValue);
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        return lstItemValues;
+    }
+    public ArrayList<dtoItemValues> getItemValuesByUserIdAndZirTajhizId(Integer UsrId,Integer ZirTajhizId,Integer TajhizId,Integer LogshitId) { // for collecting itemvalues for send in ActivityDrawer TaskSend
+        ArrayList<dtoItemValues> lstItemValues = new ArrayList<dtoItemValues>();
+
+        SQLiteDatabase sd = getReadableDatabase();
+        Object[] args = new Object[]{
+                Tbl_ItemValues.TableName,
+                Tbl_Items.TableName,
+                Tbl_ItemValues.UsrID,
+                UsrId,
+                Tbl_ItemValues.IsSend,
+                0,
+                Tbl_Items.SubEquipID,
+                ZirTajhizId,
+                Tbl_Items.EquipInfID,
+                TajhizId,
+                Tbl_Items.LogshitInfID,
+                LogshitId
+        };
+        //String PDate=Tarikh.getCurrentShamsidateWithoutSlash();
+        //String PTime=Tarikh.getTimeWithoutColon().substring(0,2);
+        String strQuery = String.format("select distinct itemValues.iteminfid from %s itemValues inner join %s Items  on " +
+                " itemValues.ItemInfID=Items.ItemInfID where itemValues.%s = %s AND itemValues.%s = %s AND Items.%s = %s and Items.%s=%s And  Items.%s=%s ", args);//+" and itemValues.PDate='"+PDate+"' and PTime like '"+PTime+"%'";;
+        if (G.currentUser.IsManager == 1 ) {
+            strQuery = "select distinct itemValues.iteminfid from tbl_ItemValues itemValues inner join Tbl_Items Items on "+
+                    "  itemValues.ItemInfID=Items.ItemInfID where itemValues.IsSend = 0 and Items.SubEquipID=" +ZirTajhizId.toString() + " and  Items.EquipInfID=" + TajhizId.toString()
+                    +" and Items.LogshitInfID="+LogshitId.toString();
+            // +" and itemValues.PDate='"+PDate+"' and PTime like '"+PTime+"%'";
+        }
+        Cursor cur = sd.rawQuery(strQuery, null);
+
+        if (cur.getCount() > 0) {
+            cur.moveToFirst();
+            do {
+                dtoItemValues itemValue = new dtoItemValues();
+                //itemValue.Id = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.Id));
+                itemValue.ItemInfID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ItemInfID));
+//                itemValue.ItemVal = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemVal));
+//                itemValue.ItemValTyp = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemValTyp));
+//                itemValue.PDate = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PDate));
+//                itemValue.PTime = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PTime));
+//                itemValue.UsrID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.UsrID));
+//                itemValue.ShiftID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ShiftID));
+//                itemValue.IsSend = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.IsSend));
+                lstItemValues.add(itemValue);
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        return lstItemValues;
+    }
+
 
     public ArrayList<dtoSubEquipments> GetSubEquipmentListByEquipments(ArrayList<dtoEquipments> tajhizList) { //Handling Which user should see which logshit is inside the method
         ArrayList<dtoSubEquipments> lstSubEquips = new ArrayList<>();
@@ -650,6 +953,98 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return lstSubEquips;
     }
 
+    public ArrayList<dtoItems> GetItemListWithValue(Integer selectedEquipId, Integer selectedSubEquipId) { //Handling Which user should see which logshit is inside the method
+        ArrayList<dtoItems> lstItems = new ArrayList<dtoItems>();
+        SQLiteDatabase sd = getReadableDatabase();
+
+        Object[] args = new Object[]{
+                Tarikh.getCurrentDateToMinute(),
+                G.currentUser.UsrID,
+                G.selectedVahedId,
+                G.selectedLogshitId,
+                selectedEquipId,
+                selectedSubEquipId,
+                G.selectedVahedId,
+                G.selectedLogshitId,
+                selectedEquipId,
+                selectedSubEquipId,
+        };
+
+        String strQuery = String.format("SELECT tbl_Items.*,ItemCount FROM tbl_Items LEFT JOIN \n" +
+                "(\n" +
+                "SELECT tbl.ItemInfID,count(*) ItemCount FROM\n" +
+                "(\n" +
+                "SELECT \n" +
+                "tbl_ItemRanges.ItemInfID,\n" +
+                "tbl_ItemRanges.ItemBaseRangeMin,\n" +
+                "ABS(SaveDateTimeToMin - (BaseRange+ItemBaseRangeMin)) SaveRanges,\n" +
+                "ABS(%s - (BaseRange+ItemBaseRangeMin)) CurRanges,\n" +
+                "CASE RangeTypTime WHEN 1 THEN RangeTime*60 WHEN 3 THEN RangeTime*24*60 ELSE RangeTime END RangeTime\n" +
+                "from tbl_ItemValues \n" +
+                "inner join tbl_Items on tbl_ItemValues.ItemInfID = tbl_Items.ItemInfID  \n" +
+                "inner join tbl_ItemRanges on tbl_ItemRanges.ItemInfID = tbl_ItemValues.ItemInfID \n" +
+                "WHERE tbl_ItemValues.UsrID=%s AND tbl_Items.PostID=%s AND tbl_Items.LogshitInfID=%s AND tbl_Items.EquipInfID=%s AND tbl_Items.SubEquipID=%s \n" +
+                ") tbl where SaveRanges <= RangeTime AND CurRanges<=RangeTime GROUP BY tbl.ItemInfID\n" +
+                ") tbl2  \n" +
+                "ON tbl_Items.ItemInfID=tbl2.ItemInfID \n" +
+                "WHERE tbl_Items.PostID=%s AND tbl_Items.LogshitInfID=%s AND tbl_Items.EquipInfID=%s AND tbl_Items.SubEquipID=%s", args);
+
+        String strOrderBy="";
+        if(G.sharedPref.getString("pref_items_order_type","1").compareTo("1")==0){
+            strOrderBy = String.format(" ORDER BY %s ASC",Tbl_Items.LocateRowNo);
+        }else if(G.sharedPref.getString("pref_items_order_type","1").compareTo("2")==0){
+            strOrderBy = String.format(" ORDER BY %s DESC",Tbl_Items.LocateRowNo);
+        }else if(G.sharedPref.getString("pref_items_order_type","1").compareTo("3")==0){
+            strOrderBy = String.format(" ORDER BY %s ASC",Tbl_Items.LogshitRowNo);
+        }else if(G.sharedPref.getString("pref_items_order_type","1").compareTo("4")==0){
+            strOrderBy = String.format(" ORDER BY %s DESC",Tbl_Items.LogshitRowNo);
+        }else if(G.sharedPref.getString("pref_items_order_type","1").compareTo("5")==0){
+            strOrderBy = String.format(" ORDER BY %s ASC",Tbl_Items.ItemName);
+        }else if(G.sharedPref.getString("pref_items_order_type","1").compareTo("6")==0){
+            strOrderBy = String.format(" ORDER BY %s DESC",Tbl_Items.ItemName);
+        }
+
+        Cursor cur = sd.rawQuery(strQuery + strOrderBy, null);
+
+        if (cur.getCount() > 0) {
+            cur.moveToFirst();
+            do {
+                dtoItems item = new dtoItems();
+                item.ItemInfID = cur.getInt(cur.getColumnIndex(Tbl_Items.ItemInfID));
+                item.ItemName = cur.getString(cur.getColumnIndex(Tbl_Items.ItemName));
+                item.SubEquipID = cur.getInt(cur.getColumnIndex(Tbl_Items.SubEquipID));
+                item.EquipInfID = cur.getInt(cur.getColumnIndex(Tbl_Items.EquipInfID));
+                item.LogshitInfID = cur.getInt(cur.getColumnIndex(Tbl_Items.LogshitInfID));
+                item.PostID = cur.getInt(cur.getColumnIndex(Tbl_Items.PostID));
+                item.RemGroupID = cur.getInt(cur.getColumnIndex(Tbl_Items.RemGroupID));
+                item.AmountTypID = cur.getInt(cur.getColumnIndex(Tbl_Items.AmountTypID));
+                item.MeasureUnitName = cur.getString(cur.getColumnIndex(Tbl_Items.MeasureUnitName));
+                item.Zarib = cur.getDouble((cur.getColumnIndex(Tbl_Items.Zarib)));
+                item.MaxSampleNo = cur.getInt(cur.getColumnIndex(Tbl_Items.MaxSampleNo));
+                item.MaxAmount1 = cur.getString(cur.getColumnIndex(Tbl_Items.MaxAmount1));
+                item.MinAmount1 = cur.getString(cur.getColumnIndex(Tbl_Items.MinAmount1));
+                item.MaxAmount2 = cur.getString(cur.getColumnIndex(Tbl_Items.MaxAmount2));
+                item.MinAmount2 = cur.getString(cur.getColumnIndex(Tbl_Items.MinAmount2));
+                item.MaxAmount3 = cur.getString(cur.getColumnIndex(Tbl_Items.MaxAmount3));
+                item.MinAmount3 = cur.getString(cur.getColumnIndex(Tbl_Items.MinAmount3));
+                item.TagID = cur.getString(cur.getColumnIndex(Tbl_Items.TagID));
+                item.RemTyp = cur.getInt(cur.getColumnIndex(Tbl_Items.RemTyp));
+                item.STTime = cur.getString(cur.getColumnIndex(Tbl_Items.STTime));
+                item.PeriodTime = cur.getInt(cur.getColumnIndex(Tbl_Items.PeriodTime));
+                item.PeriodTypTime = cur.getInt(cur.getColumnIndex(Tbl_Items.PeriodTypTime));
+                item.RangeTime = cur.getInt(cur.getColumnIndex(Tbl_Items.RangeTime));
+                item.RangeTypTime = cur.getInt(cur.getColumnIndex(Tbl_Items.RangeTypTime));
+                item.LogicTypID = cur.getInt(cur.getColumnIndex(Tbl_Items.LogicTypID));
+                item.Desc = cur.getString(cur.getColumnIndex(Tbl_Items.Desc));
+                item.LocateRowNo = cur.getInt(cur.getColumnIndex(Tbl_Items.LocateRowNo));
+                item.LogshitRowNo = cur.getInt(cur.getColumnIndex(Tbl_Items.LogshitRowNo));
+                item.HasValueInRange = cur.getString(cur.getColumnIndex("ItemCount"))!=null ? true : false;
+
+                lstItems.add(item);
+            } while (cur.moveToNext());
+        }
+        return lstItems;
+    }
 
     public ArrayList<dtoItems> GetItemListByEquipmentsAndSubEquipments(ArrayList<dtoEquipments> equipments, ArrayList<dtoSubEquipments> subEquipments) {
         ArrayList<dtoItems> lstItems = new ArrayList<>();
@@ -1234,7 +1629,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 topNum
         };
         String strQuery="";
-        if (G.currentUser.IsManager == 1) {
+        if (G.currentUser.IsManager == 1 || G.currentUser.UserGroupId==2) {
             strQuery = String.format("SELECT itemvals.PDate, COUNT(*) AS ItemCount FROM tbl_ItemValues itemvals    GROUP BY substr(itemvals.PDate,0,11) ORDER BY CAST(itemvals.PDate as INTEGER)  DESC  LIMIT 7;");
         }else {
              strQuery = String.format("SELECT itemvals.%s, COUNT(*) AS ItemCount FROM %s itemvals WHERE itemvals.%s=%s GROUP BY  substr(itemvals.%s,0,11) ORDER BY CAST(itemvals.%s as INTEGER)  DESC  LIMIT %s;", args);
@@ -1526,10 +1921,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     itemInfID,
                     Tbl_ItemValues.IsSend,
                     0,
+                    Tbl_ItemValues.UsrID,
+                    G.currentUser.UsrID,
                     Tbl_ItemValues.Id
+
             };
 
-            String strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s ORDER BY %s DESC LIMIT 1; ", args);
+            String strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s AND itemValues.%s = %s ORDER BY %s DESC LIMIT 1; ", args);
+            if(G.currentUser.UserGroupId==2 || G.currentUser.IsManager ==1) {
+                strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s ORDER BY %s DESC LIMIT 1; ", args);
+            }
             Cursor cur = sd.rawQuery(strQuery, null);
 
             if (cur.getCount() > 0) {
@@ -1689,6 +2090,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
+    public int GetSavedItemCount(int postID,int logshitID,int equipID,int subEquipID,int itemInfID){
+
+        String query = String.format("SELECT \n" +
+                "tbl_ItemRanges.ItemInfID,\n" +
+                "tbl_ItemRanges.ItemBaseRangeMin,\n" +
+                "ABS(SaveDateTimeToMin - (BaseRange+ItemBaseRangeMin)) SaveRanges,\n" +
+                "ABS(%s - (BaseRange+ItemBaseRangeMin)) CurRanges,\n" +
+                "CASE RangeTypTime WHEN 1 THEN RangeTime*60 WHEN 3 THEN RangeTime*24*60 ELSE RangeTime END RangeTime\n" +
+                "from tbl_ItemValues \n" +
+                "inner join tbl_Items on tbl_ItemValues.ItemInfID = tbl_Items.ItemInfID  \n" +
+                "inner join tbl_ItemRanges on tbl_ItemRanges.ItemInfID = tbl_ItemValues.ItemInfID \n" +
+                "WHERE tbl_ItemValues.UsrID=%s ",Tarikh.getCurrentDateToMinute(),G.currentUser.UsrID);
+
+        if(postID>-1) query += String.format( " AND tbl_Items.PostID=%s",String.valueOf(postID));
+        if(logshitID>-1) query += String.format( " AND tbl_Items.LogshitInfID=%s",String.valueOf(logshitID));
+        if(equipID>-1) query += String.format( " AND tbl_Items.EquipInfID=%s",String.valueOf(equipID));
+        if(subEquipID>-1) query += String.format( " AND tbl_Items.SubEquipID=%s",String.valueOf(subEquipID));
+        if(itemInfID>-1) query += String.format( " AND tbl_Items.ItemInfID=%s",String.valueOf(itemInfID));
+
+        SQLiteDatabase sd = getWritableDatabase();
+        Cursor cursor = sd.rawQuery(String.format("SELECT tbl.ItemInfID,count(tbl.ItemInfID) ItemCount FROM (%s) tbl where SaveRanges <= RangeTime AND CurRanges<=RangeTime", query),null);
+
+        int itemCount = 0;
+        if(cursor.moveToFirst()){
+            itemCount = cursor.getInt(cursor.getColumnIndex("ItemCount"));
+        }
+
+        return itemCount;
+    }
+    public boolean InsertItemRanges(dtoItemRanges itemRange) {
+        boolean res = false;
+
+        SQLiteDatabase sd = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(Tbl_ItemRanges.ItemInfID, itemRange.ItemInfID);
+        cv.put(Tbl_ItemRanges.ItemBaseRangeMin, itemRange.ItemBaseRangesMin);
+
+
+        int count = (int) sd.insert(Tbl_ItemRanges.TableName, null, cv);
+        //sd.close();
+        if (count > 0) {
+            res = true;
+        }
+        return res;
+    }
     public boolean HasItemValuesAnyRecords() {
         boolean res = false;
 
@@ -1752,14 +2198,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase sd = getWritableDatabase();
 
-        if(G.RTL){
+        if(G.RTL) {
             if(G.currentUser.UserGroupId==2 || G.currentUser.IsManager==1){
                 sd.execSQL("delete from " + Tbl_ItemValues.TableName  + " ;vacuum;");
                 return;
+            }else{
+                sd.execSQL("delete from " + Tbl_ItemValues.TableName + " where UsrID="+  G.currentUser.UsrID.toString() + " ;vacuum;");
+            }
+        }else {
+
+            if(G.currentUser.UserGroupId==2 || G.currentUser.IsManager==1){
+                sd.execSQL("delete from " + Tbl_ItemValues.TableName  + " ;vacuum;");
+                return;
+            }else{
+                sd.execSQL("delete from " + Tbl_ItemValues.TableName + " where UsrID="+  G.currentUser.UsrID.toString() + " ;vacuum;");
             }
         }
-
-        sd.execSQL("delete from " + Tbl_ItemValues.TableName + " ;vacuum;");
 
         Log.i("tag", "db TruncateItemValues");
         //sd.close();
@@ -1826,6 +2280,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(Tbl_Users.shiftName, user.shiftName);
         cv.put(Tbl_Users.IsManager, user.IsManager);
         cv.put(Tbl_Users.NeedTag, user.NeedTag);
+        cv.put(Tbl_Users.UserGroupId,user.UserGroupId);
 
         int count = (int) sd.insert(Tbl_Users.TableName, null, cv);
         //sd.close();
@@ -1916,7 +2371,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cv.put(Tbl_ItemValues.ImagePath, itemValues.ImagePath);
             cv.put(Tbl_ItemValues.VoicePath, itemValues.VoicePath);
         }
-
+        cv.put(Tbl_ItemValues.BaseRange, Tarikh.persianStartDayToMinute(itemValues.PDate.substring(0,10)));
+        cv.put(Tbl_ItemValues.SaveDateTimeToMin, Tarikh.persianDateTimeToMinute(itemValues.PDate,itemValues.PTime));
         int count = (int) sd.insert(Tbl_ItemValues.TableName, null, cv);
         //sd.close();
         if (count > 0) {

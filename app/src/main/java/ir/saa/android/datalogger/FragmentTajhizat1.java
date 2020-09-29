@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import database.structs.dtoEquipments;
 import database.structs.dtoItemValues;
@@ -17,8 +20,10 @@ import enums.ValidForSubmitType;
 
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -78,6 +83,7 @@ public class FragmentTajhizat1 extends FragmentEnhanced {
 		populateFromDatabase();
 
 		list.setOnKeyListener(new View.OnKeyListener() {
+			@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 
@@ -134,6 +140,7 @@ public class FragmentTajhizat1 extends FragmentEnhanced {
 		}
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.N)
 	private void populateFromDatabase() {
 		arrayTajhiz1.clear();
 
@@ -157,106 +164,148 @@ public class FragmentTajhizat1 extends FragmentEnhanced {
 //			 }
 //		}
 
-		if (G.selectedMenuItemType == G.MenuItemTypes.VAHED) {
+		if(G.selectedMenuItemType == G.MenuItemTypes.VAHED){
+
 			for (dtoPosts post : G.DB.GetVAHEDList()) {
 				dtoTajhiz tajhiz = new dtoTajhiz();
 				tajhiz.ID = post.PostID;
 				tajhiz.Name = post.PostName;
 				tajhiz.Description = post.Des;
-				dtoItems items = G.DB.GetItemByPostId(post.PostID, G.currentUser.UsrID);
-				if (items.PostID != null) {
-					tajhiz.IsFillItem = true;
-					if(G.RTL) {
-						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmitWitoutCheckSetting(items);
-						if (IsValidForSubmit == ValidForSubmitType.InRange) {
-							tajhiz.IsFillItem = false;
-						}
-					}
+//				ArrayList<dtoItems> items = G.DB.getItemsByUserIdAndPostId(G.currentUser.UsrID, post.PostID);
+//				for (dtoItems item : items) {
+//					//dtoItems items=G.DB.GetItemByItemInfId(itemval.ItemInfID);
+//					if (item.PostID != null) {
+//						tajhiz.IsFillItem = true;
+//						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmitWitoutCheckSetting(item);
+//						if (IsValidForSubmit == ValidForSubmitType.InRange || IsValidForSubmit == ValidForSubmitType.OutOfRange) {
+//							tajhiz.IsFillItem = false;
+//						} else {
+//							tajhiz.IsFillItem = true;
+//							break;
+//						}
+//
+//					} else {
+//						if (!tajhiz.IsFillItem) {
+//							tajhiz.IsFillItem = false;
+//						}
+//					}
+//				}
 
-				} else {
-					if (!tajhiz.IsFillItem) {
-						tajhiz.IsFillItem = false;
-					}
-				}
+				int c = G.DB.GetSavedItemCount(post.PostID,-1,-1,-1,-1);
+				if(c>0) tajhiz.IsFillItem=true;
+
 
 				arrayTajhiz1.add(tajhiz);
 
 			}
-		} else if (G.selectedMenuItemType == G.MenuItemTypes.LOGSHIT) {
-			for (dtoLogShits logshit : G.DB.GetLogshitListByPostId(selectedId)) {
+		}
+		else if(G.selectedMenuItemType == G.MenuItemTypes.LOGSHIT){
+			for (dtoLogShits logshit : G.DB.GetLogshitListByPostId(selectedId)){
 				dtoTajhiz tajhiz = new dtoTajhiz();
 				tajhiz.ID = logshit.LogshitInfID;
 				tajhiz.Name = logshit.LogshitName;
 				tajhiz.Description = logshit.Des;
-				G.PostId = selectedId;
-				if (G.currentUser.IsManager != 1 && logshit.TagID.trim().compareTo(getString(R.string.None)) != 0 && logshit.TagID != null && logshit.TagID.trim().compareTo("null") != 0 && logshit.TagID.trim().length() > 0 && G.selectedMenuItemMode == G.MenuItemMode.Sabt) {
+				G.PostId=selectedId;
+				if(G.currentUser.IsManager!=1 && logshit.TagID.trim().compareTo("ندارد")!=0 && logshit.TagID !=null && logshit.TagID.trim().compareTo("null")!=0 && logshit.TagID.trim().length()>0 && G.selectedMenuItemMode == G.MenuItemMode.Sabt){
 					tajhiz.HasTag = true;
 					tajhiz.TagId = logshit.TagID;
 				}
+				//				ArrayList<dtoItemValues> itemsValue=G.DB.getItemValuesByUserIdAndLogshit(G.currentUser.UsrID,logshit.LogshitInfID,selectedId);
+//				//dtoItems items=G.DB.GetItemBylogsheetId(logshit.PostID,logshit.LogshitInfID,G.currentUser.UsrID);
+//				for (dtoItemValues itemval:itemsValue) {
+//					dtoItems items=G.DB.GetItemByItemInfId(itemval.ItemInfID);
+//					if(items.LogshitInfID!=null) {
+//
+//						tajhiz.IsFillItem=true;
+//						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmitWitoutCheckSetting(items);
+//						if (IsValidForSubmit == ValidForSubmitType.InRange || IsValidForSubmit == ValidForSubmitType.OutOfRange) {
+//							tajhiz.IsFillItem = false;
+//						}else{
+//							tajhiz.IsFillItem = true;
+//							break;
+//						}
+//
+//					}else {
+//						if(!tajhiz.IsFillItem){
+//							tajhiz.IsFillItem=false;
+//						}
+//					}
+//				}
+				int c = G.DB.GetSavedItemCount(logshit.PostID,logshit.LogshitInfID,-1,-1,-1);
+				if(c>0) tajhiz.IsFillItem=true;
 
-				dtoItems items = G.DB.GetItemBylogsheetId(logshit.PostID, logshit.LogshitInfID, G.currentUser.UsrID);
-				if (items.LogshitInfID != null) {
-					tajhiz.IsFillItem = true;
-					if(G.RTL) {
-						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmitWitoutCheckSetting(items);
-						if (IsValidForSubmit == ValidForSubmitType.InRange) {
-							tajhiz.IsFillItem = false;
-						}
-					}
-				} else {
-					if (!tajhiz.IsFillItem) {
-						tajhiz.IsFillItem = false;
-					}
-				}
+
 				arrayTajhiz1.add(tajhiz);
+
 			}
-		} else if (G.selectedMenuItemType == G.MenuItemTypes.TAJHIZ) {
-			for (dtoEquipments equip : G.DB.GetEquipmentListByLogshitInfId(selectedId, G.PostId)) {
+		}
+		else if(G.selectedMenuItemType == G.MenuItemTypes.TAJHIZ){
+			for (dtoEquipments equip : G.DB.GetEquipmentListByLogshitInfId(selectedId,G.PostId)){
 				dtoTajhiz tajhiz = new dtoTajhiz();
 				tajhiz.ID = equip.EquipInfoID;
 				tajhiz.Name = equip.EquipName;
 				tajhiz.Description = equip.Des;
-				dtoItems items = G.DB.GetItemByTajhiz(equip.LogshitInfID, equip.EquipInfoID, G.currentUser.UsrID);
-				if (items.EquipInfID != null) {
-					tajhiz.IsFillItem = true;
-					if(G.RTL) {
-						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmitWitoutCheckSetting(items);
-						if (IsValidForSubmit == ValidForSubmitType.InRange) {
-							tajhiz.IsFillItem = false;
-						}
-					}
-				} else {
-					if (!tajhiz.IsFillItem) {
-						tajhiz.IsFillItem = false;
-					}
-				}
+				//				ArrayList<dtoItemValues> itemsValue=G.DB.getItemValuesByUserIdAndTajhizId(G.currentUser.UsrID,equip.EquipInfoID,selectedId);
+//				for (dtoItemValues itemval:itemsValue) {
+//					dtoItems items=G.DB.GetItemByItemInfId(itemval.ItemInfID);
+//					if(items.EquipInfID!=null){
+//
+//						tajhiz.IsFillItem=true;
+//						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmitWitoutCheckSetting(items);
+//						if (IsValidForSubmit == ValidForSubmitType.InRange || IsValidForSubmit == ValidForSubmitType.OutOfRange) {
+//							tajhiz.IsFillItem = false;
+//						}else{
+//							tajhiz.IsFillItem = true;
+//							break;
+//						}
+//
+//
+//					}else {
+//						if(!tajhiz.IsFillItem){
+//							tajhiz.IsFillItem=false;
+//						}
+//					}
+//				}
+				int c = G.DB.GetSavedItemCount(-1,-1,equip.EquipInfoID,-1,-1);
+				if(c>0) tajhiz.IsFillItem=true;
 				arrayTajhiz1.add(tajhiz);
 			}
-		} else if (G.selectedMenuItemType == G.MenuItemTypes.ZIRTAJHIZ) {
-			for (dtoSubEquipments subEquip : G.DB.GetSubEquipmentList(selectedId)) {
+		}
+		else if(G.selectedMenuItemType == G.MenuItemTypes.ZIRTAJHIZ){
+			for (dtoSubEquipments subEquip : G.DB.GetSubEquipmentList(selectedId)){
 				dtoTajhiz tajhiz = new dtoTajhiz();
 				tajhiz.ID = subEquip.SubEquipID;
 				tajhiz.Name = subEquip.SubEquipName;
 				tajhiz.Description = subEquip.Des;
-				dtoItems items = G.DB.GetItemByZirTajhiz(subEquip.EquipInfID, subEquip.SubEquipID, G.currentUser.UsrID);
-				if (items.SubEquipID != null) {
-					tajhiz.IsFillItem = true;
+				//				ArrayList<dtoItemValues> itemsValue=G.DB.getItemValuesByUserIdAndZirTajhizId(G.currentUser.UsrID,subEquip.SubEquipID,selectedId,G.selectedLogshitId);
+//
+//				for (dtoItemValues itemval:itemsValue) {
+//					dtoItems items=G.DB.GetItemByItemInfId(itemval.ItemInfID);
+//					if(items.SubEquipID!=null){
+//
+//						tajhiz.IsFillItem=true;
+//						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmitWitoutCheckSetting(items);
+//						if (IsValidForSubmit == ValidForSubmitType.InRange || IsValidForSubmit == ValidForSubmitType.OutOfRange) {
+//							tajhiz.IsFillItem = false;
+//						}else{
+//							tajhiz.IsFillItem = true;
+//							break;
+//						}
+//
+//					}else {
+//						if(!tajhiz.IsFillItem){
+//							tajhiz.IsFillItem=false;
+//						}
+//					}
+//				}
 
-					if(G.RTL) {
-						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmitWitoutCheckSetting(items);
-						if (IsValidForSubmit == ValidForSubmitType.InRange) {
-							tajhiz.IsFillItem = false;
-						}
-					}
+				int c = G.DB.GetSavedItemCount(-1,-1,subEquip.EquipInfID,subEquip.SubEquipID,-1);
+				if(c>0) tajhiz.IsFillItem=true;
 
-				} else {
-					if (!tajhiz.IsFillItem) {
-						tajhiz.IsFillItem = false;
-					}
-				}
 				arrayTajhiz1.add(tajhiz);
 			}
 		}
+
 
 
 //		Cursor cur = null;

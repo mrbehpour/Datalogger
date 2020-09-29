@@ -1,6 +1,7 @@
 package ir.saa.android.datalogger;
 
 import database.adapters.AdapterItem;
+import database.structs.dtoItemRanges;
 import database.structs.dtoItemValuesForSend;
 import database.structs.dtoTajhiz;
 import database.structs.dtoUsrPost;
@@ -503,7 +504,9 @@ public class ActivityDrawer extends NfcReaderActivity implements
             strDate = df.format(today);
 
         }
+        txtMenuDate.setTypeface(tf);
         txtMenuDate.setText(strDate);
+
         // todo --- remove and change later
         //String strDate1 = Tarikh.getCurrentShamsidate();
 //		txtMenuLastGetBaseInfoDate.setText(strDate1);
@@ -584,26 +587,51 @@ public class ActivityDrawer extends NfcReaderActivity implements
 //                            alert.show();
 
                             MyDialog myDialog=new MyDialog(ActivityDrawer.this);
-                            myDialog.addBodyText(getString(R.string.overwrite_packitems),10);
-                            myDialog.addButtonL((String) G.context.getResources().getText(string.yes), new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    UpdateUiViews();
-                                    MyToast.Show(G.context, String.format("%s\n%s", G.context.getResources().getText(string.UpdateItem)
-                                            , G.context.getResources().getText(string.PleaseWait)), 500);
-                                    pb02.setProgress(0);
-                                    pb02.setVisibility(View.VISIBLE);
-                                    threadGetItems = new Thread(new TaskGetItems());
-                                    threadGetItems.start();
-                                    myDialog.dismiss();
-                                }
-                            });
-                            myDialog.addButtonR((String) G.context.getResources().getText(string.no), new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    myDialog.dismiss();
-                                }
-                            }).show();
+
+                            if(G.RTL){
+                                myDialog.addBodyText(getString(R.string.overwrite_packitems),15);
+                                myDialog.addButton((String) G.context.getResources().getText(string.yes), new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        UpdateUiViews();
+                                        MyToast.Show(G.context, String.format("%s\n%s", G.context.getResources().getText(string.UpdateItem)
+                                                , G.context.getResources().getText(string.PleaseWait)), 500);
+                                        pb02.setProgress(0);
+                                        pb02.setVisibility(View.VISIBLE);
+                                        threadGetItems = new Thread(new TaskGetItems());
+                                        threadGetItems.start();
+                                        myDialog.dismiss();
+                                    }
+                                });
+                                myDialog.addButton((String) G.context.getResources().getText(string.no), new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        myDialog.dismiss();
+                                    }
+                                }).show();
+
+                            }else {
+                                myDialog.addBodyText(getString(R.string.overwrite_packitems),10);
+                                myDialog.addButtonL((String) G.context.getResources().getText(string.yes), new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        UpdateUiViews();
+                                        MyToast.Show(G.context, String.format("%s\n%s", G.context.getResources().getText(string.UpdateItem)
+                                                , G.context.getResources().getText(string.PleaseWait)), 500);
+                                        pb02.setProgress(0);
+                                        pb02.setVisibility(View.VISIBLE);
+                                        threadGetItems = new Thread(new TaskGetItems());
+                                        threadGetItems.start();
+                                        myDialog.dismiss();
+                                    }
+                                });
+                                myDialog.addButtonR((String) G.context.getResources().getText(string.no), new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        myDialog.dismiss();
+                                    }
+                                }).show();
+                            }
                         } else {
                             //TODO-check if itemValues isSend == 0 has items show error
                             int notSendedItemValuesCount = G.DB.getNotSendedItemValuesCount();
@@ -1252,6 +1280,12 @@ public class ActivityDrawer extends NfcReaderActivity implements
 
                     for (dtoItems item : packItems.tbl_Items) {
                         G.DB.InsertItem(item);
+                        List<Integer> itemRanges = CalItemRanges(item);
+                        for (int i: itemRanges
+                        ) {
+                            G.DB.InsertItemRanges(new dtoItemRanges(item.ItemInfID,i));
+                        }
+
                         final int counter = ++counterValue;
                         handler.post(new Runnable() {
                             @Override
@@ -1651,20 +1685,20 @@ public class ActivityDrawer extends NfcReaderActivity implements
                 ArrayList<dtoItemValuesForSend> itemValues = new ArrayList<>();
                 for (dtoItemValues values : itemValues1) {
                     if (G.RTL) {
-                        DateEng = Tarikh.setTextValueDate(values.PDate
-                                .replace("/", " ")
-                                .replace(":", " ")
-                                .replace(" ", " ")
-                                .split(" "), 0);
+                        if(values.PDate!=null) {
+                            DateEng = values.PDate
+                                    .replace("-", "/");
+                        }else{
+                            continue;
+                        }
+
+
                     } else {
                         DateEng = values.PDate;
 
                     }
                     dtoItemValuesForSend valuesForSend = new dtoItemValuesForSend();
-                    if(values.ItemInfID==933){
-                        String s="1";
-                        s=s+"2";
-                    }
+
                     valuesForSend.Id = values.Id;
                     valuesForSend.IsSend = values.IsSend;
                     valuesForSend.ItemInfID = values.ItemInfID;
@@ -1674,6 +1708,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
                     valuesForSend.ShiftID = values.ShiftID;
                     valuesForSend.UsrID = values.UsrID;
                     itemValues.add(valuesForSend);
+
                 }
                 if (itemValues.size() == 0) {
                     G.handler.post(new Runnable() {
@@ -2379,5 +2414,21 @@ public class ActivityDrawer extends NfcReaderActivity implements
             menuUpdateLayout4.setVisibility(View.GONE);
 
         }
+    }
+    private List<Integer> CalItemRanges(dtoItems item){
+        List<Integer> lstRanges = new ArrayList<>();
+        int base = Integer.valueOf(item.STTime.substring(0,2))*60 + Integer.valueOf(item.STTime.substring(2,4));
+
+        if(item.PeriodTypTime == 1){ // if hour
+
+            while(base<1440) {
+                lstRanges.add(base);
+                base += item.PeriodTime * 60;
+            }
+        }else{
+            lstRanges.add(base);
+        }
+
+        return lstRanges;
     }
 }

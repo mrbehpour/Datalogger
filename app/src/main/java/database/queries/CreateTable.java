@@ -321,6 +321,20 @@ public class CreateTable {
 		return query;
 	}
 
+	public static String Tbl_ItemRanges_Create(){
+		String query =
+				String.format(	"	CREATE TABLE IF NOT EXISTS '%s' " +
+								"	('%s' INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE ," +
+								"	'%s' INTEGER," +
+								" 	'%s' INTEGER)"
+						,Tbl_ItemRanges.TableName
+						,Tbl_ItemRanges.Id
+						,Tbl_ItemRanges.ItemInfID
+						,Tbl_ItemRanges.ItemBaseRangeMin
+				);
+		Log.i("db", "onCreate TableItemsRangesCreate");
+		return query;
+	}
 	public static String Tbl_Formulas_Create(){
 		String query =
 				String.format(	"	CREATE TABLE IF NOT EXISTS '%s' " +
@@ -373,7 +387,9 @@ public class CreateTable {
 								"	'%s' INTEGER,"+
 								"	'%s' TEXT," +
 								"	'%s' TEXT," +
-								"	'%s' TEXT)"
+								"	'%s' TEXT," +
+								"   '%s' INTEGER," +
+								"   '%s' NUMERIC)"
 								,Tbl_ItemValues.TableName
 								,Tbl_ItemValues.Id
 								,Tbl_ItemValues.ItemInfID
@@ -387,7 +403,8 @@ public class CreateTable {
 								,Tbl_ItemValues.VideoPath
 								,Tbl_ItemValues.ImagePath
 								,Tbl_ItemValues.VoicePath
-
+								,Tbl_ItemValues.BaseRange
+								,Tbl_ItemValues.SaveDateTimeToMin
 								);
 		Log.i("db", "onCreate TableItemValuesCreate");
 		return query;

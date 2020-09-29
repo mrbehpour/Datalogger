@@ -15,26 +15,6 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
         android:gravity="right|center_vertical" >
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.7"
-            android:gravity="right|center_vertical"
-            android:orientation="vertical" >
-
-            <mycomponents.MaskedEditText
-                android:id="@+id/edtItemDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:gravity="center"
-                android:textSize="24sp"
-                android:inputType="number|date"
-                app:mask="####/##/##" />
-
-        </LinearLayout>
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -50,6 +30,27 @@
                 android:textColor="#111111"
                 android:textSize="22sp" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:gravity="right|center_vertical"
+            android:orientation="vertical" >
+
+            <mycomponents.MaskedEditText
+                android:id="@+id/edtItemDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textDirection="anyRtl"
+                android:gravity="center"
+                android:textSize="24sp"
+                android:inputType="number|date"
+                app:mask="####/##/##" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
 </LinearLayout>

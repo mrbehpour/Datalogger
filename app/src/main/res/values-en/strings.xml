@@ -112,6 +112,7 @@
     <!--اضافه کردن برای بازیان-->
     <string name="RegisterPreviuse">Previous And Submit</string>
     <string name="MessageForSettingTime">Outside the specified time interval</string>
+    <string name="MessageForValidText">Please Enter Value.</string>
     <string name="MessageForSettingCount">In this period the measurements for this item are recorded</string>
     <string name="Cancel">Cancel</string>
     <string name="RegisterNext">Next And Submit</string>

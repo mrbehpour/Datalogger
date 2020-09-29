@@ -1,6 +1,8 @@
 package database.adapters;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -17,11 +19,14 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import database.structs.dtoItemValues;
 import database.structs.dtoItems;
+import enums.ValidForSubmitType;
 import ir.saa.android.datalogger.FragmentItemHistory;
 import ir.saa.android.datalogger.G;
 import ir.saa.android.datalogger.R;
 import ir.saa.android.datalogger.FragmentItemReport;
+import ir.saa.android.datalogger.TabFragmentItem;
 import mycomponents.MyDialog;
 import mycomponents.MyToast;
 import mycomponents.MyUtilities;
@@ -40,9 +45,9 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
         public ImageView imgItemInfo;
 		public   ViewGroup layoutRoot1;
     	Typeface tf;
-//    	Drawable drwGreen;
-//    	Drawable drwWhite;
-//    	Drawable drwGray;
+    	Drawable drwGreen;
+    	Drawable drwWhite;
+    	Drawable drwGray;
 
         public ViewHolder(View view) {
             layoutRoot = (ViewGroup) view.findViewById(R.id.layoutRootItem);
@@ -55,14 +60,15 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
 			}else{
 				tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/bfd.ttf");
 			}
-//            drwGreen = G.context.getResources().getDrawable(drawable.list_item_green_gradient);
-//            drwWhite = G.context.getResources().getDrawable(drawable.list_item_eyb_gradient);
-//            drwGray =  G.context.getResources().getDrawable(drawable.list_item_gray_gradient);
+			drwGreen = G.context.getResources().getDrawable(R.drawable.list_item_green_gradient);
+			drwWhite = G.context.getResources().getDrawable(R.drawable.list_item_gradient);
+			drwGray =  G.context.getResources().getDrawable(R.drawable.list_item_gray_gradient);
         	txtItem.setTypeface(tf);
         	txtItemDesc.setTypeface(tf);
         }
 
-        public void fill(final ArrayAdapter<dtoItems> adapter, final dtoItems item, final int position) {
+        @RequiresApi(api = Build.VERSION_CODES.N)
+		public void fill(final ArrayAdapter<dtoItems> adapter, final dtoItems item, final int position) {
             txtItem.setText(item.ItemName);
             txtItemDesc.setOnClickListener(new OnClickListener() {
 
@@ -86,7 +92,7 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
 //            }
 
             //setBackgroundColorDependsOnItemVal(item);
-
+			setBackgroundColorDependsOnItemVal(item);
 
             layoutRoot.setOnClickListener(new OnClickListener() {
 				@Override
@@ -151,13 +157,50 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
 					android.support.v4.app.Fragment fragment =  new FragmentItemHistory();
 					fragment.setArguments(bundle);
 					G.fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-
+					setBackgroundColorDependsOnItemVal(item);
 					//G.selectedId = item.EquipInfID;
 				}
 			});
 
         }
 
+		@RequiresApi(api = Build.VERSION_CODES.N)
+		private void setBackgroundColorDependsOnItemVal(dtoItems item)
+		{
+			dtoItemValues values=G.DB.getLastItemValueByItemInfId(item.ItemInfID);
+			if(values!=null) {
+				if (values.ItemVal == null
+						|| values.ItemVal.
+						replaceAll("/", "").replaceAll(":", "").
+						replaceAll(",", "").trim().length() == 0) {
+					layoutRoot.setBackgroundColor(Color.WHITE);
+					if (G.DB.getItemValuesByUserIdAndItemInfId(G.currentUser.UsrID, item.ItemInfID).size() > 0) {
+						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmitWitoutCheckSetting(item);
+						layoutRoot.setBackgroundColor(Color.parseColor("#ceedd6"));
+						if (IsValidForSubmit == ValidForSubmitType.InRange || IsValidForSubmit == ValidForSubmitType.OutOfRange) {
+							layoutRoot.setBackgroundColor(Color.WHITE);
+						}
+
+					}
+
+				} else {
+					layoutRoot.setBackgroundColor(Color.parseColor("#ceedd6"));
+					ArrayList<dtoItemValues> listdtoItemValues = G.DB.getItemValuesByUserIdAndItemInfId(G.currentUser.UsrID, item.ItemInfID);
+					if (listdtoItemValues.size() > 0) {
+						layoutRoot.setBackgroundColor(Color.parseColor("#ceedd6"));
+						for (dtoItemValues itemValues : listdtoItemValues) {
+							if (TabFragmentItem.IsValidForSubmitWitoutCheckSetting(G.DB.GetItemByItemInfId(itemValues.ItemInfID)) == ValidForSubmitType.InRange ||
+									TabFragmentItem.IsValidForSubmitWitoutCheckSetting(G.DB.GetItemByItemInfId(itemValues.ItemInfID)) == ValidForSubmitType.OutOfRange) {
+								layoutRoot.setBackgroundColor(Color.WHITE);
+
+							}
+						}
+					}
+
+				}
+			}
+
+		}
 //        private void setBackgroundColorDependsOnItemVal(dtoItems item)
 //        {
 //        	if(FragmentItemReport.dicItemValues.get(item.ItemInfID).ItemVal == null || FragmentItemReport.dicItemValues.get(item.ItemInfID).ItemVal.replaceAll("/", "").replaceAll(":", "").replaceAll(",", "").trim().length()==0){

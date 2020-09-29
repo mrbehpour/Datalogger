@@ -14,39 +14,21 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginRight="1dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.1"
             android:gravity="center"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtValueTextHistory"
+                android:id="@+id/txtRowNumberTextHistory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="#"
+                android:textSize="22dp"
                 android:gravity="center"
-                android:text="-"
                 android:textColor="#111111"
-                android:textSize="22dp" />
+                />
+
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="1dp"
-            android:layout_weight="0.2"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txtTimeTextHistory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="--:--"
-                android:textColor="#111111"
-                android:textSize="22dp" />
-        </LinearLayout>
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -64,24 +46,40 @@
                 android:textColor="#111111"
                 android:textSize="22dp" />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.1"
+            android:layout_marginRight="1dp"
+            android:layout_weight="0.2"
             android:gravity="center"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtRowNumberTextHistory"
+                android:id="@+id/txtTimeTextHistory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="#"
-                android:textSize="22dp"
                 android:gravity="center"
+                android:text="--:--"
                 android:textColor="#111111"
-                />
+                android:textSize="22dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="1dp"
+            android:layout_weight="0.3"
+            android:gravity="center"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/txtValueTextHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="-"
+                android:textDirection="anyRtl"
+                android:textColor="#111111"
+                android:textSize="22dp" />
         </LinearLayout>
     </LinearLayout>
 

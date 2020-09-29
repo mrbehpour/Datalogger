@@ -113,6 +113,7 @@
     <string name="RegisterPreviuse">ثبت و قبلی</string>
     <string name="MessageForSettingTime">خارج از بازه ساعتی تعیین شده</string>
     <string name="MessageForSettingCount">در این دوره اندازه گیری برای این آیتم داده ثبت شده</string>
+    <string name="MessageForValidText">لطفا اطلاعات را وارد کنید.</string>
     <string name="Cancel">انصراف</string>
     <string name="RegisterNext">ثبت و بعدی</string>
     <string name="Msg_CheckDate">لطفا تاریخ را بدرستی وارد کنید</string>
@@ -290,7 +291,7 @@
     <string name="Copy">Copy</string>
     <string name="Multiplication">Multiplication</string>
     <string name="Division">Division</string>
-    <string name="VersionTitle">Version</string>
+    <string name="VersionTitle">نسخه</string>
     <string name="DivisionOnConstantNumber">Divide by a constant number</string>
 
 </resources>

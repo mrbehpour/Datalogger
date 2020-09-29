@@ -39,7 +39,7 @@ public class dtoItems  implements Cloneable{
 	public Boolean 		IsFullOfMaxData = false;
 	public Boolean 		IsInTimeRange = true;
 	public Boolean		HasTag = false;
-	
+	public Boolean		HasValueInRange = false;
 	@Override
 	public dtoItems clone() throws CloneNotSupportedException {
 		return (dtoItems)super.clone();

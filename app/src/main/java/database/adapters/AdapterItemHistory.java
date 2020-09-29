@@ -2,6 +2,8 @@ package database.adapters;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -61,7 +63,8 @@ public class AdapterItemHistory extends ArrayAdapter<dtoItemValues> {
 			txtValueTextHistory.setTypeface(tf);
         }
 
-        public void fill(final ArrayAdapter<dtoItemValues> adapter, final dtoItemValues item, final int position) {
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+		public void fill(final ArrayAdapter<dtoItemValues> adapter, final dtoItemValues item, final int position) {
 			txtRowNumberTextHistory.setText(String.valueOf(position+1));
 			txtDateTextHistory.setText(item.PDate);
 			txtTimeTextHistory.setText(item.PTime);
@@ -89,7 +92,13 @@ public class AdapterItemHistory extends ArrayAdapter<dtoItemValues> {
 							.setCheckListOrientation(LinearLayout.VERTICAL)
 							.setSelectionMode(MyCheckListMode.MultiSelection)
 							.setCheckItemsHeight(60);
-					dialog.setTitle(item.PDate+" "+item.PTime).addContentView(myRemarkcheckList);
+					String strDateTimeTitle="";
+					if(G.RTL){
+						strDateTimeTitle=item.PTime+ " "+item.PDate+" ";
+					}else{
+						strDateTimeTitle=item.PDate+" "+item.PTime;
+					}
+					dialog.setTitle(strDateTimeTitle).addContentView(myRemarkcheckList);
 
 					OnClickListener ocl = new OnClickListener() {
 						@Override

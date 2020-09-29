@@ -50,10 +50,10 @@ public class MyCheckList extends LinearLayout {
 		_context =context;
 		if(G.RTL){
 			tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/byekan.ttf");
-			 DEFAULT_TEXT_SIZE = 15;
+			DEFAULT_TEXT_SIZE = 15;
 		}else{
 			tf= Typeface.createFromAsset(G.context.getAssets(), "fonts/bfd.ttf");
-			 DEFAULT_TEXT_SIZE = 14;
+			DEFAULT_TEXT_SIZE = 14;
 		}
 		//_checkListItemArray = new ArrayList<MyCheckListItem>();
 		//_checkListItemArray.add(myCheckListItem1);
@@ -78,12 +78,12 @@ public class MyCheckList extends LinearLayout {
 		_mode = mode;
 		return this;
 	}
-	
+
 	public MyCheckList setOnCheckListItemClickListener(OnCheckListItemClickListener onCheckListItemClickListener) {
 		_onCheckListItemClickListener = onCheckListItemClickListener;
 		return this;
 	}
-	
+
 	public MyCheckList setCheckedTextColor(int color){
 		_checkedTextColor = color;
 		return this;
@@ -100,40 +100,40 @@ public class MyCheckList extends LinearLayout {
 		_uncheckedBackgroundColor = color;
 		return this;
 	}
-	
+
 	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void setSelectionByValue(Object value) {
+	public void setSelectionByValue(Object value) {
 		final int childCount = _llMain.getChildCount();
 
-        uncheckListIfInSingleSelection();
+		uncheckListIfInSingleSelection();
 		for (int i = 0; i < childCount; i++) {
 
-            if(value instanceof ArrayList) {
+			if(value instanceof ArrayList) {
 				ArrayList<Object> valueList = (ArrayList<Object>) value;
-                _llMain.getChildAt(i).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
+				_llMain.getChildAt(i).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
 
-                //if(valueList.contains(((MyCheckListItem)_llMain.getChildAt(i).getTag()).Value)){
+				//if(valueList.contains(((MyCheckListItem)_llMain.getChildAt(i).getTag()).Value)){
 				if(valueList.contains(((MyCheckListItem)_llMain.getChildAt(i).getTag()).Value)) {
-					 _llMain.getChildAt(i).setBackgroundColor(_checkedBackgroundColor);
+					_llMain.getChildAt(i).setBackgroundColor(_checkedBackgroundColor);
 					((MyCheckListItem)_llMain.getChildAt(i).getTag()).isSelected=true;
-                    ((TextView)((LinearLayout) _llMain.getChildAt(i)).getChildAt(0)).setTextColor(_checkedTextColor);
+					((TextView)((LinearLayout) _llMain.getChildAt(i)).getChildAt(0)).setTextColor(_checkedTextColor);
 				}else{
 					((MyCheckListItem)_llMain.getChildAt(i).getTag()).isSelected=false;
-                    _llMain.getChildAt(i).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
-                }
+					_llMain.getChildAt(i).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
+				}
 			}else if(((MyCheckListItem)_llMain.getChildAt(i).getTag()).Value.equals(value)){
 				_llMain.getChildAt(i).setBackgroundColor(_checkedBackgroundColor);
 				((MyCheckListItem)_llMain.getChildAt(i).getTag()).isSelected=true;
-                ((TextView)((LinearLayout) _llMain.getChildAt(i)).getChildAt(0)).setTextColor(_checkedTextColor);
+				((TextView)((LinearLayout) _llMain.getChildAt(i)).getChildAt(0)).setTextColor(_checkedTextColor);
 			}else{
 				((MyCheckListItem)_llMain.getChildAt(i).getTag()).isSelected=false;
-                _llMain.getChildAt(i).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
+				_llMain.getChildAt(i).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
 
-            }
+			}
 		}
 	}
-	
-	
+
+
 //	public void setSelectionByValue(ArrayList<Object> value) {
 //		final int childCount = this.getChildCount();
 //		uncheckListIfInSingleSelection();
@@ -193,7 +193,7 @@ public class MyCheckList extends LinearLayout {
 		}
 		return this;
 	}
-	
+
 	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 	public MyCheckList addCheckItem(MyCheckListItem myCheckListItem) {
 
@@ -216,7 +216,7 @@ public class MyCheckList extends LinearLayout {
 		_llMain.removeAllViews();
 		//_checkListItemArray.clear();
 	}
-//	public MyCheckList setCheckItemWidth(int width){
+	//	public MyCheckList setCheckItemWidth(int width){
 //		return this;
 //	}
 	public MyCheckList setCheckItemsHeight(int height){
@@ -238,28 +238,28 @@ public class MyCheckList extends LinearLayout {
 	}
 
 	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public ArrayList<MyCheckListItem> getSelectedCheckListItems() {
+	public ArrayList<MyCheckListItem> getSelectedCheckListItems() {
 		ArrayList<MyCheckListItem> lst = new ArrayList<MyCheckListItem>();
 		final int childCount = _llMain.getChildCount();
 		for (int i = 0; i < childCount; i++) {
 //	       if(((ColorDrawable) ((LinearLayout)_llMain.getChildAt(i)).getBackground()).getColor()==_checkedBackgroundColor){
 //	    	   lst.add((MyCheckListItem)_llMain.getChildAt(i).getTag());
 //	       }
-            _llMain.getChildAt(i).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
+			_llMain.getChildAt(i).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
 			if(((MyCheckListItem)_llMain.getChildAt(i).getTag()).isSelected==true){
-	    	   lst.add((MyCheckListItem)_llMain.getChildAt(i).getTag());
-	       }
+				lst.add((MyCheckListItem)_llMain.getChildAt(i).getTag());
+			}
 		}
 		return lst;
 	}
-	
+
 	public ArrayList<String> getSelectedItemsText() {
 		ArrayList<String> lst = new ArrayList<String>();
 		final int childCount = _llMain.getChildCount();
 		for (int i = 0; i < childCount; i++) {
 			if(((MyCheckListItem)_llMain.getChildAt(i).getTag()).isSelected==true){
-	    	   lst.add(((MyCheckListItem)_llMain.getChildAt(i).getTag()).Text);
-	       }
+				lst.add(((MyCheckListItem)_llMain.getChildAt(i).getTag()).Text);
+			}
 		}
 		return lst;
 	}
@@ -269,12 +269,12 @@ public class MyCheckList extends LinearLayout {
 		final int childCount = _llMain.getChildCount();
 		for (int i = 0; i < childCount; i++) {
 			if(((MyCheckListItem)_llMain.getChildAt(i).getTag()).isSelected==true){
-	    	   lst.add(((MyCheckListItem)_llMain.getChildAt(i).getTag()).Value);
-	       }
+				lst.add(((MyCheckListItem)_llMain.getChildAt(i).getTag()).Value);
+			}
 		}
 		return lst;
 	}
-	
+
 	private void setBackgroundColorOnDrawable(Drawable drw,int color){
 		StateListDrawable stateListDrawable= ((StateListDrawable)drw);
 		DrawableContainerState drawableContainerState = (DrawableContainerState) stateListDrawable.getConstantState();
@@ -319,7 +319,7 @@ public class MyCheckList extends LinearLayout {
 		//tv.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
 		LayoutParams tvLp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		tv.setLayoutParams(tvLp);
-		
+
 		View.OnClickListener onclicklistener = new OnClickListener() {
 			@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 			@Override
@@ -328,8 +328,9 @@ public class MyCheckList extends LinearLayout {
 					return;
 
 				if (v instanceof LinearLayout) {
+
 					//myCheckListItem.isSelected=!myCheckListItem.isSelected;
-				         //Hamid Comment
+					//Hamid Comment
 //						if ((((ColorDrawable) v.getBackground())).getColor() == _uncheckedBackgroundColor) {
 //							uncheckListIfInSingleSelection();
 //							v.setBackgroundColor(_checkedBackgroundColor);
@@ -342,70 +343,94 @@ public class MyCheckList extends LinearLayout {
 //							if (_onCheckListItemClickListener != null)
 //								_onCheckListItemClickListener.onCheckListItemClick(((MyCheckListItem) v.getTag()), false);
 //						}
-					if (myCheckListItem.isSelected==false) {
-							uncheckListIfInSingleSelection();
-							v.setBackgroundColor(_checkedBackgroundColor);
-						myCheckListItem.isSelected=true;
-							//v.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
-							((TextView) ((LinearLayout) v).getChildAt(0)).setTextColor(_checkedTextColor);
+					if (myCheckListItem.isSelected == false) {
+						uncheckListIfInSingleSelection();
+						//v.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
+						 v.setBackgroundColor(_checkedBackgroundColor);
+						 v.setBackgroundColor(Color.RED);
+						myCheckListItem.isSelected = true;
+						//v.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
+						((TextView) ((LinearLayout) v).getChildAt(0)).setTextColor(_checkedTextColor);
 
-							if (_onCheckListItemClickListener != null)
-								_onCheckListItemClickListener.onCheckListItemClick(((MyCheckListItem) v.getTag()), true);
-						} else {
-							//v.setBackgroundColor(_uncheckedBackgroundColor);
-						myCheckListItem.isSelected=false;
-                            v.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
-							((TextView) ((LinearLayout) v).getChildAt(0)).setTextColor(_uncheckedTextColor);
-							if (_onCheckListItemClickListener != null)
-								_onCheckListItemClickListener.onCheckListItemClick(((MyCheckListItem) v.getTag()), false);
+						if (_onCheckListItemClickListener != null)
+							_onCheckListItemClickListener.onCheckListItemClick(((MyCheckListItem) v.getTag()), true);
+						if(G.RTL) {
+							((LinearLayout) v).setBackgroundColor(_checkedBackgroundColor);
 						}
 					} else {
-						if (myCheckListItem.isSelected==false) {
-							uncheckListIfInSingleSelection();
-							((View) v.getParent()).setBackgroundColor(_checkedBackgroundColor);
-							myCheckListItem.isSelected=true;
-							//((View) v.getParent()).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
-							((TextView) v).setTextColor(_checkedTextColor);
-
-							if (_onCheckListItemClickListener != null)
-								_onCheckListItemClickListener.onCheckListItemClick(((MyCheckListItem) ((View) v.getParent()).getTag()), true);
-						} else {
-							//((View) v.getParent()).setBackgroundColor(_uncheckedBackgroundColor);
-							((View) v.getParent()).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
-							myCheckListItem.isSelected=false;
-							((TextView) v).setTextColor(_uncheckedTextColor);
-							if (_onCheckListItemClickListener != null)
-								_onCheckListItemClickListener.onCheckListItemClick(((MyCheckListItem) ((View) v.getParent()).getTag()), false);
+						//v.setBackgroundColor(_uncheckedBackgroundColor);
+						myCheckListItem.isSelected = false;
+						v.setBackgroundColor(_uncheckedBackgroundColor);
+						((TextView) ((LinearLayout) v).getChildAt(0)).setTextColor(_uncheckedTextColor);
+						if (G.RTL == false) {
+							((LinearLayout) v).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.checklist_selector));
 						}
+						if (_onCheckListItemClickListener != null)
+							_onCheckListItemClickListener.onCheckListItemClick(((MyCheckListItem) v.getTag()), false);
+
 					}
+				}
+				else {
+
+					if (myCheckListItem.isSelected == false) {
+						uncheckListIfInSingleSelection();
+						((LinearLayout) v.getParent()).setBackgroundColor(_checkedBackgroundColor);
+
+						myCheckListItem.isSelected = true;
+						//((View) v.getParent()).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
+						((TextView) v).setTextColor(_checkedTextColor);
+
+						if (_onCheckListItemClickListener != null)
+							_onCheckListItemClickListener.onCheckListItemClick(((MyCheckListItem) ((View) v.getParent()).getTag()), true);
+						if(G.RTL) {
+							((LinearLayout) v.getParent()).setBackgroundColor(_checkedBackgroundColor);
+						}
+
+					} else {
+						((View) v.getParent()).setBackgroundColor(_uncheckedBackgroundColor);
+
+						//((View) v.getParent()).setBackgroundColor(_uncheckedBackgroundColor);
+						if (G.RTL == false) {
+							((View) v.getParent()).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.checklist_selector));
+						}
+						myCheckListItem.isSelected = false;
+						((TextView) v).setTextColor(_uncheckedTextColor);
+						if (_onCheckListItemClickListener != null)
+							_onCheckListItemClickListener.onCheckListItemClick(((MyCheckListItem) ((View) v.getParent()).getTag()), false);
+
+
+					}
+				}
+
 
 			}
 
 		};
-		
+
 		tv.setOnClickListener(onclicklistener);
 		ll.setOnClickListener(onclicklistener);
 
 		ll.addView(tv);
 		ll.setLayoutParams(lp);
-		
+
 		return ll;
 	}
 
 	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    private void uncheckListIfInSingleSelection() {
+	private void uncheckListIfInSingleSelection() {
 		if(_mode == MyCheckListMode.SingleSelection){
 			final int childCount = _llMain.getChildCount();
 			for (int i = 0; i < childCount; i++) {
 				//_llMain.getChildAt(i).setBackgroundColor(_uncheckedBackgroundColor);
 				((MyCheckListItem)_llMain.getChildAt(i).getTag()).isSelected=false;
-                _llMain.getChildAt(i).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
+				_llMain.getChildAt(i).setBackground(ContextCompat.getDrawable(getContext(),R.drawable.checklist_selector));
+
 				((TextView)((LinearLayout) _llMain.getChildAt(i)).getChildAt(0)).setTextColor(_uncheckedTextColor);
 			}
 		}
 	}
-	 public interface OnCheckListItemClickListener {
-	        void onCheckListItemClick(MyCheckListItem selectedCheckListItem,Boolean isChecked);
-	 }
+	public interface OnCheckListItemClickListener {
+		void onCheckListItemClick(MyCheckListItem selectedCheckListItem,Boolean isChecked);
+	}
 }
 

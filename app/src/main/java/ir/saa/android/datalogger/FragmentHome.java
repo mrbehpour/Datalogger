@@ -536,10 +536,11 @@ public class FragmentHome extends FragmentEnhanced {
 
 			YAxis leftAxis = chart.getAxisLeft();
 			leftAxis.setTypeface(tfByekan);
+
 			leftAxis.setTextSize(lineChartTextSize);
 			leftAxis.setTextColor(Color.parseColor("#333333"));
 			leftAxis.setDrawGridLines(true);
-			leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+			leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
 			leftAxis.setLabelCount(mapDateCount.size(), false);
 			leftAxis.setGranularity(1);
 			leftAxis.setGranularityEnabled(true);
@@ -551,7 +552,10 @@ public class FragmentHome extends FragmentEnhanced {
 			rightAxis.setTextSize(lineChartTextSize);
 			rightAxis.setTextColor(Color.parseColor("#333333"));
 			rightAxis.setDrawGridLines(false);
-			rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+			rightAxis.setAxisMinimum(0f);
+			rightAxis.setMaxWidth(10);
+
+			// this replaces setStartAtZero(true)
 
 			String[] strArray = new String[7];
 

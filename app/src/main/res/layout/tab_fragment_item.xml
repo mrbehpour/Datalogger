@@ -20,6 +20,7 @@
             android:id="@+id/txtDateTimeForItems"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textDirection="anyRtl"
             android:text="Large Text"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#ffffff" />
@@ -63,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/colorPrimary"
+        android:background="@color/cardview_light_background"
         tools:listitem="@layout/custom_item">
 
     </ListView>

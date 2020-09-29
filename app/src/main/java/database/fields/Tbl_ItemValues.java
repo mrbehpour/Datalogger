@@ -14,6 +14,8 @@ public class Tbl_ItemValues {
     public static String VoicePath		= 	"VoicePath";
     public static String ImagePath		= 	"ImagePath";
     public static String VideoPath		= 	"VideoPath";
+    public static String BaseRange		= 	"BaseRange";
+    public static String SaveDateTimeToMin		= 	"SaveDateTimeToMin";
 
     public static String TableName		=	"tbl_ItemValues";
 }

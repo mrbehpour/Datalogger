@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="datalogger - far/app" />
-      <module fileurl="file://$PROJECT_DIR$/datalogger - far.iml" filepath="$PROJECT_DIR$/datalogger - far.iml" group="datalogger - far" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="datalogger - far/app" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/datalogger_-_far.iml" filepath="$PROJECT_DIR$/.idea/modules/datalogger_-_far.iml" group="datalogger_-_far" />
     </modules>
   </component>

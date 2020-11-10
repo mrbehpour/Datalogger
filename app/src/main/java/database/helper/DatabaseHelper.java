@@ -1880,11 +1880,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Object[] args = new Object[]{
                 Tbl_ItemValues.TableName,
                 Tbl_ItemValues.ItemInfID,
-                itemInfID,
+                itemInfID
         };
-
+        String strQuery=String.format("select itemValues.* from %s itemValues where itemValues.%s = %s ", args)+" and itemValues.UsrID="+G.currentUser.UsrID.toString();
+        if(G.currentUser.UserGroupId==2 || G.currentUser.IsManager==1 ){
+             strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s ", args);
+        }
         //String strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s AND itemValues.%s = %s  ", args);
-        String strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s ", args);
+
+
         Cursor cur = sd.rawQuery(strQuery, null);
 
         if (cur.getCount() > 0) {
@@ -2101,7 +2105,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "from tbl_ItemValues \n" +
                 "inner join tbl_Items on tbl_ItemValues.ItemInfID = tbl_Items.ItemInfID  \n" +
                 "inner join tbl_ItemRanges on tbl_ItemRanges.ItemInfID = tbl_ItemValues.ItemInfID \n" +
-                "WHERE tbl_ItemValues.UsrID=%s ",Tarikh.getCurrentDateToMinute(),G.currentUser.UsrID);
+                "WHERE 1=1   ",Tarikh.getCurrentDateToMinute());
+        if(G.currentUser.IsManager!=1 && G.currentUser.UserGroupId!=2 ){
+            query+=String.format(" and tbl_ItemValues.UsrID=%s",G.currentUser.UsrID.toString());
+        }
 
         if(postID>-1) query += String.format( " AND tbl_Items.PostID=%s",String.valueOf(postID));
         if(logshitID>-1) query += String.format( " AND tbl_Items.LogshitInfID=%s",String.valueOf(logshitID));

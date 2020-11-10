@@ -65,7 +65,7 @@ public class AdapterTajhizat1 extends ArrayAdapter<dtoTajhiz> {
 
             if(item.IsFillItem){
             	txtNameTajhiz.setTextColor(Color.argb(255, 63, 103, 255));
-            	txtNameTajhiz.setTypeface(null, Typeface.BOLD_ITALIC);
+            	txtNameTajhiz.setTypeface(null, Typeface.BOLD);
 
             }else{
 				txtNameTajhiz.setTextColor(Color.BLACK);

@@ -78,7 +78,7 @@ public class G extends Application {
 
 	public static boolean RTL=true;
 	public static String appLang="fa_IR";
-	public static boolean isMultiMedia=true;
+	public static boolean isMultiMedia=false;
 	public static Handler handler;
 	Thread threadCheckVersion = null;
 //usb key connection

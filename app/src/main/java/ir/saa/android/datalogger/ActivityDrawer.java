@@ -10,8 +10,11 @@ import ir.saa.android.datalogger.R.string;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -73,6 +76,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
@@ -667,26 +671,51 @@ public class ActivityDrawer extends NfcReaderActivity implements
 
                                 MyDialog myDialog=new MyDialog(ActivityDrawer.this);
                                 myDialog.addBodyText(getString(R.string.overwrite_packitems),12);
-                                myDialog.addButtonL((String) G.context.getResources().getText(string.yes), new OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        gotoHomeFragment();
-                                        UpdateUiViews();
-                                        MyToast.Show(G.context, String.format("%s\n%s", G.context.getResources().getText(string.UpdateItem),
-                                                G.context.getResources().getText(string.PleaseWait)), 500);
-                                        pb02.setProgress(0);
-                                        pb02.setVisibility(View.VISIBLE);
-                                        threadGetItems = new Thread(new TaskGetItems());
-                                        threadGetItems.start();
-                                        myDialog.dismiss();
-                                    }
-                                });
-                                myDialog.addButtonR((String) G.context.getResources().getText(string.no), new OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        myDialog.dismiss();
-                                    }
-                                }).show();
+                                if(G.RTL){
+                                    myDialog.addButton((String) G.context.getResources().getText(string.yes), new OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            gotoHomeFragment();
+                                            UpdateUiViews();
+                                            MyToast.Show(G.context, String.format("%s\n%s", G.context.getResources().getText(string.UpdateItem),
+                                                    G.context.getResources().getText(string.PleaseWait)), 500);
+                                            pb02.setProgress(0);
+                                            pb02.setVisibility(View.VISIBLE);
+                                            threadGetItems = new Thread(new TaskGetItems());
+                                            threadGetItems.start();
+                                            myDialog.dismiss();
+                                        }
+                                    });
+                                    myDialog.addButton((String) G.context.getResources().getText(string.no), new OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            myDialog.dismiss();
+                                        }
+                                    }).show();
+                                }else{
+                                    myDialog.addButtonL((String) G.context.getResources().getText(string.yes), new OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            gotoHomeFragment();
+                                            UpdateUiViews();
+                                            MyToast.Show(G.context, String.format("%s\n%s", G.context.getResources().getText(string.UpdateItem),
+                                                    G.context.getResources().getText(string.PleaseWait)), 500);
+                                            pb02.setProgress(0);
+                                            pb02.setVisibility(View.VISIBLE);
+                                            threadGetItems = new Thread(new TaskGetItems());
+                                            threadGetItems.start();
+                                            myDialog.dismiss();
+                                        }
+                                    });
+                                    myDialog.addButtonR((String) G.context.getResources().getText(string.no), new OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            myDialog.dismiss();
+                                        }
+                                    }).show();
+                                }
+
+
                             }
                         }
                     } else {
@@ -1147,6 +1176,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
                             G.Setting = objSetting;
                         }
                         handler.post(new Runnable() {
+                            @RequiresApi(api = Build.VERSION_CODES.N)
                             @Override
                             public void run() {
                                 pb01.setProgress(1);
@@ -1742,7 +1772,37 @@ public class ActivityDrawer extends NfcReaderActivity implements
                         //-------WIFI: Step 1 : send post to webservice method directly from android-----------
                         response = sendByHttpPost(strJson, G.currentUser.UsrID.toString());
                     }
+                    if(strJson!=""){
+                        File sd = Environment.getExternalStorageDirectory();
+                        String directory="/dataLogger";
+                        String directory1="/dataLogger/jsonFile";
+                        String FileJson="/dataLogger/jsonFile/jsonFile_"
+                                +G.currentUser.UserName+".json";
+                        if (sd.canWrite()) {
+                            File bcdirectory=new File(sd,directory);
+                            File dir1=new File(sd,directory1);
+                            File jsonFile=new File(sd,FileJson);
+                            if(!bcdirectory.exists()){
+                                bcdirectory.mkdir();
 
+                            }
+                            if(!dir1.exists()){
+                                dir1.mkdir();
+                            }
+                            if(jsonFile.exists()){
+                                jsonFile.delete();
+                            }
+                                if(jsonFile.createNewFile()){
+                                    OutputStream fo = new FileOutputStream(jsonFile);
+                                    fo.write(strJson.getBytes());
+                                    fo.close();
+                                    System.out.println("file created: "+jsonFile);
+                                }
+
+
+
+                        }
+                    }
                     if (response == "FAIL") {
                         G.handler.post(new Runnable() {
                             @Override
@@ -1765,8 +1825,9 @@ public class ActivityDrawer extends NfcReaderActivity implements
                         pb05.setMax(itemValues.size());
                         int counterValue = 0;
                         if (lstItemValuesIds.length == 0) {
+                            //hamid Update
                             for (dtoItemValues itemVal : itemValues1) {
-                                itemVal.IsSend = 0;
+                                itemVal.IsSend = 1;
                                 G.DB.UpdateItemValueById(itemVal.Id, itemVal);
                                 final int counter = ++counterValue;
                                 handler.post(new Runnable() {

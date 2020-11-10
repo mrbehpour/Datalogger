@@ -206,7 +206,7 @@ public class FragmentTajhizat1 extends FragmentEnhanced {
 				tajhiz.Name = logshit.LogshitName;
 				tajhiz.Description = logshit.Des;
 				G.PostId=selectedId;
-				if(G.currentUser.IsManager!=1 && logshit.TagID.trim().compareTo("ندارد")!=0 && logshit.TagID !=null && logshit.TagID.trim().compareTo("null")!=0 && logshit.TagID.trim().length()>0 && G.selectedMenuItemMode == G.MenuItemMode.Sabt){
+				if(G.currentUser.IsManager!=1 && (logshit.TagID.trim().compareTo("NONE")!=0) && logshit.TagID !=null && logshit.TagID.trim().compareTo("null")!=0 && logshit.TagID.trim().length()>0 && G.selectedMenuItemMode == G.MenuItemMode.Sabt){
 					tajhiz.HasTag = true;
 					tajhiz.TagId = logshit.TagID;
 				}

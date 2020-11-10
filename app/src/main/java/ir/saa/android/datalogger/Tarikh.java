@@ -423,7 +423,7 @@ public class Tarikh {
         //pdformater.format(pdate);
         if(ShamsiDateStr.length()==10) {
             int Ye = Integer.valueOf(ShamsiDateStr.substring(0, 4));
-            int Mo = Integer.valueOf(ShamsiDateStr.substring(6, 7));
+            int Mo = Integer.valueOf(ShamsiDateStr.substring(5, 7));
             int Da = Integer.valueOf(ShamsiDateStr.substring(8, 10));
             int[] g=new int[3];
             g= pdate.toGregorian(Ye,Mo,Da);
@@ -498,7 +498,9 @@ public class Tarikh {
         SolarCalendar sc;
         try {
             //MiladiDate = MiladiDate.substring(0,4)+"/"+MiladiDate.substring(4,6)+"/"+MiladiDate.substring(6,8);
-            sc = util.new SolarCalendar(s.parse(MiladiDate));
+            sc = util.new SolarCalendar(s.parse(MiladiDate
+                    .replace("/","-").replace("/","-")
+                    .replace("/","-")));
             String.format("%2s", Integer.valueOf(1)).replace(' ', '0');
             return String.valueOf(sc.year) + "/" + String.format( "%2s",
                     Integer.valueOf(sc.month)).replace(' ', '0') + "/" + String.format( "%2s",

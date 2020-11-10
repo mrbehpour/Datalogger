@@ -3904,8 +3904,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						lastval=lastValueFromServer.ItemVal.trim();
 					}
 					if(lastValueFromServer.ItemValTyp.equals("3")){
-						lastval=lastValueFromServer.ItemVal.trim()
-								.substring(0,lastValueFromServer.ItemVal.trim().length()-1);
+						if(lastValueFromServer.ItemVal.contains(",")) {
+							lastval = lastValueFromServer.ItemVal.trim()
+									.substring(0, lastValueFromServer.ItemVal.trim().length() - 1);
+						}else{
+							lastval = lastValueFromServer.ItemVal.trim();
+						}
 					}
 					if(lastval.equals("")){
 						lastval=lastValueFromServer.ItemVal.trim();

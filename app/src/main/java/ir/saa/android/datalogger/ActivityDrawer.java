@@ -33,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.ndeftools.Message;
 
+import mycomponents.MyUtilities;
 import nfc.ActivityNfcTest;
 import nfc.NfcReaderActivity;
 import socket.structs.DataRef;
@@ -1732,7 +1733,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
                     valuesForSend.Id = values.Id;
                     valuesForSend.IsSend = values.IsSend;
                     valuesForSend.ItemInfID = values.ItemInfID;
-                    valuesForSend.ItemVal =  values.ItemVal;
+                    valuesForSend.ItemVal = MyUtilities.changeNumberLocaleString(values.ItemVal);
                     valuesForSend.ItemValTyp = values.ItemValTyp;
                     valuesForSend.RegisterDateTime = DateEng;
                     valuesForSend.ShiftID = values.ShiftID;

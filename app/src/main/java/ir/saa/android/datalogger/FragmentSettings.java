@@ -69,7 +69,7 @@ public class FragmentSettings extends PreferenceFragment implements OnSharedPref
 		}
 		switch (key) {
 		case G.PREF_KEY_WEB_SERVICE:
-			G.WEB_SERVICE = G.sharedPref.getString(key, "");
+			G.WEB_SERVICE = G.sharedPref.getString(key, "")+"/PDLWeb.svc";
 			
 			if(threadCheckWs==null){
 				threadCheckWs = new Thread(new TaskCheckWs(),"thread_getUsersInfoFromServer");
@@ -115,6 +115,7 @@ public class FragmentSettings extends PreferenceFragment implements OnSharedPref
 		            	Log.i("wsss","resCode : "+resCode);
 		                if (resCode == HttpURLConnection.HTTP_OK) {
 		                	IsConnectionOk = true;
+							G.WEB_SERVICE=G.WEB_SERVICE;
 		                }else{
 		                	IsConnectionOk = false;
 		                }
@@ -141,7 +142,7 @@ public class FragmentSettings extends PreferenceFragment implements OnSharedPref
             });
         	}catch(Exception ex){
         		Log.i("wsss", "eeeerr : "+ex.getMessage());
-        		if(ex.getMessage().contains("failed to connect")){
+        		if(ex.getMessage().toLowerCase().contains("failed to connect")){
 					G.handler.post(new Runnable() {
 						@Override
 						public void run() {

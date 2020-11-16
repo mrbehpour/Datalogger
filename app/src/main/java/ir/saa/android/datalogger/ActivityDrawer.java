@@ -1732,7 +1732,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
                     valuesForSend.Id = values.Id;
                     valuesForSend.IsSend = values.IsSend;
                     valuesForSend.ItemInfID = values.ItemInfID;
-                    valuesForSend.ItemVal = values.ItemVal;
+                    valuesForSend.ItemVal =  values.ItemVal;
                     valuesForSend.ItemValTyp = values.ItemValTyp;
                     valuesForSend.RegisterDateTime = DateEng;
                     valuesForSend.ShiftID = values.ShiftID;

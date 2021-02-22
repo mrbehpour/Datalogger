@@ -209,7 +209,7 @@
     <string name="ItemRegisterNotRegister">Registrable and Unrecognizable Items</string>
     <string name="DeleteFilter">Remove filter</string>
     <string name="Filter">Filter</string>
-    <string name="Msg_ForceFilterField">For registration, both date and time values must be entered correctly</string>
+    <string name="Msg_ForceFilterField">The Date and Time Format must be entered correctly for the search</string>
     <string name="MinValue">Minimum Value</string>
     <string name="MaxValue">Maximum Value</string>
     <string name="CheckAddressConnect">The link address checking process is in progress</string>

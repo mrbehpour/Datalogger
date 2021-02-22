@@ -812,21 +812,22 @@
                         android:background="#ffffff"
                         android:gravity="right|center_vertical">
 
-                        <LinearLayout
-                            android:layoutDirection="ltr"
-                            android:layout_width="228dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.5"
-                            android:orientation="vertical"></LinearLayout>
+
                         <TextView
                             android:fontFamily="@fonts/byekan"
                             android:layoutDirection="ltr"
                             android:id="@+id/txtMenuLastSendDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="30dp"
+                            android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:textSize="@dimen/menu_description_font_size" />
+                        <LinearLayout
+                            android:layoutDirection="ltr"
+                            android:layout_width="228dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical"></LinearLayout>
 
 
                         <TextView

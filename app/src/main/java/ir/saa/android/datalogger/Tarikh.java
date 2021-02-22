@@ -320,7 +320,7 @@ public class Tarikh {
         String DateAndTime="";
         Date today = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        DateAndTime=MyUtilities.changeNumberLocale ((df.format(today).replace("-","").trim()
+        DateAndTime=MyUtilities.changeNumberLocaleString ((df.format(today).replace("-","").trim()
                 .replace(":","")
                 .replace(" ","").trim()));
         return  DateAndTime.substring(0,4)+"-"
@@ -454,8 +454,8 @@ public class Tarikh {
         Tarikh util = new Tarikh();
         SolarCalendar sc = util.new SolarCalendar(MiladiDate);
         String.format("%2s", Integer.valueOf(1)).replace(' ', '0');
-        return MyUtilities.changeNumberLocale( String.valueOf(sc.year)) + "/" + String.format("%2s",MyUtilities.changeNumberLocale(
-                 Integer.valueOf(sc.month))).replace(' ', '0') + "/" + String.format("%2s",MyUtilities.changeNumberLocale( Integer.valueOf(sc.date))).replace(' ', '0');
+        return MyUtilities.changeNumberLocaleString( String.valueOf(sc.year)) + "/" + String.format("%2s",MyUtilities.changeNumberLocaleString(
+                 Integer.valueOf(sc.month).toString())).replace(' ', '0') + "/" + String.format("%2s",MyUtilities.changeNumberLocaleString(Integer.valueOf(sc.date).toString())).replace(' ', '0');
     }
     public static long getCurrentDateToMinute(){
 

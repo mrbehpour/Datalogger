@@ -631,8 +631,8 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 				dialog.show();
 			}
 
-			txtMeghdariMin.setText(MyUtilities.getValidDigit(item.MinAmount1));
-			txtMeghdariMax.setText(MyUtilities.getValidDigit(item.MaxAmount1));
+			txtMeghdariMin.setText(MyUtilities.changeNumberLocaleString(item.MinAmount1));
+			txtMeghdariMax.setText(MyUtilities.changeNumberLocaleString(item.MaxAmount1));
 			txtMeghdariUnit.setText(item.MeasureUnitName.toString());
 
 			//--------Load if has value--------
@@ -2718,8 +2718,8 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 				dialog.show();
 			}
 
-			txtMamooliMin.setText(MyUtilities.getValidDigit(item.MinAmount1));
-			txtMamooliMax.setText(MyUtilities.getValidDigit(item.MaxAmount1));
+			txtMamooliMin.setText(MyUtilities.changeNumberLocaleString(item.MinAmount1));
+			txtMamooliMax.setText(MyUtilities.changeNumberLocaleString(item.MaxAmount1));
 			txtMamooliUnit.setText(item.MeasureUnitName.toString());
 
 			//Load if has value
@@ -2845,9 +2845,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								}
 							}
 						}
-						if (count > 0)
-							txtFormulaUnit.setText(MyUtilities.getValidDigit(String.valueOf(sum / count)));
-						else {
+						if (count > 0) {
+
+							String valueMain = MyUtilities.changeNumberLocaleString(String.format("%.2f",(sum / count)));
+
+							txtFormulaUnit.setText(valueMain);
+						}else {
 							txtFormulaUnitTitle.setVisibility(View.GONE);
 							txtFormulaUnit.setText((String)G.context.getResources().getText(R.string.Msg_CountItemForCalculate));
 						}
@@ -2891,8 +2894,17 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							}
 						}
 
-						if (count > 1)
-							txtFormulaUnit.setText(MyUtilities.getValidDigit(String.valueOf(max - min)));
+						if (count > 1) {
+							String valueMain=MyUtilities.changeNumberLocaleString(String.format("%.2f",(max - min)));
+							if(valueMain.contains(".")){
+								int firstPoint=valueMain.indexOf(".");
+								int endPoint= valueMain.indexOf(".")+2;
+								if(valueMain.length()>endPoint) {
+									valueMain = valueMain.substring(0,firstPoint) +valueMain.substring(firstPoint+1, endPoint);
+								}
+							}
+							txtFormulaUnit.setText(valueMain);
+						}
 						else {
 							txtFormulaUnitTitle.setVisibility(View.GONE);
 							txtFormulaUnit.setText((String)G.context.getResources().getText(R.string.Msg_CountItemForCalculate));
@@ -2929,7 +2941,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								&& MyUtilities.isNumber(itemVal1.trim()) && MyUtilities.isNumber(itemVal2.trim())) {
 							Double digit1 = Double.valueOf(itemVal1.trim());
 							Double digit2 = Double.valueOf(itemVal2.trim());
-							txtFormulaUnit.setText(MyUtilities.getValidDigit(String.valueOf(digit1 - digit2)));
+							txtFormulaUnit.setText(MyUtilities.changeNumberLocaleString(String.format("%.2f",(digit1 - digit2))));
 						} else {
 							txtFormulaUnitTitle.setVisibility(View.GONE);
 							txtFormulaUnit.setText((String)G.context.getResources().getText(R.string.Msg_CountItemForCalculate));
@@ -2975,7 +2987,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									&& itemVal1 != null && itemVal1.trim().length() > 0 && MyUtilities.isNumber(itemVal1.trim())) {
 								Double digit1 = Double.valueOf(itemVal1.trim());
 								Double digit2 = Double.valueOf(itemVal2.trim());
-								txtFormulaUnit.setText(MyUtilities.getValidDigit(String.valueOf(digit1 - digit2)));
+								txtFormulaUnit.setText(MyUtilities.changeNumberLocaleString(String.format("%.2f",(digit1 - digit2))));
 							} else {
 								txtFormulaUnit.setText((String)G.context.getResources().getText(R.string.Msg_NoDataInLastCor));
 							}
@@ -3036,7 +3048,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								for (Double s : tafazolList) {
 									sum += s;
 								}
-								txtFormulaUnit.setText(MyUtilities.getValidDigit(String.valueOf(sum)));
+								txtFormulaUnit.setText(MyUtilities.changeNumberLocaleString(String.format("%.2f",sum)));
 							} else {
 								txtFormulaUnit.setText((String)G.context.getResources().getText(R.string.Msg_NoDataInLastCor));
 							}
@@ -3074,7 +3086,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							}
 						}
 						if (count > 0)
-							txtFormulaUnit.setText(MyUtilities.changeNumberLocaleString(String.valueOf(sum)));
+							txtFormulaUnit.setText(MyUtilities.changeNumberLocaleString(String.format("%.2f",sum)));
 						else {
 							txtFormulaUnitTitle.setVisibility(View.GONE);
 							txtFormulaUnit.setText((String)G.context.getResources().getText(R.string.Msg_CountItemForCalculate));
@@ -3143,7 +3155,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								&& MyUtilities.isNumber(itemVal1.trim()) && MyUtilities.isNumber(itemVal2.trim())) {
 							Double digit1 = Double.valueOf(itemVal1.trim());
 							Double digit2 = Double.valueOf(itemVal2.trim());
-							txtFormulaUnit.setText(MyUtilities.getValidDigit(String.valueOf(digit1 * digit2)));
+							txtFormulaUnit.setText(MyUtilities.changeNumberLocaleString(String.format("%.2f",(digit1 * digit2))));
 						} else {
 							txtFormulaUnitTitle.setVisibility(View.GONE);
 							txtFormulaUnit.setText((String)G.context.getResources().getText(R.string.Msg_CountItemForCalculate));
@@ -3181,7 +3193,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							Double digit1 = Double.valueOf(itemVal1.trim());
 							Double digit2 = Double.valueOf(itemVal2.trim());
 							if (digit2 != 0) {
-								txtFormulaUnit.setText(MyUtilities.getValidDigit(String.valueOf(digit1 / digit2)));
+								txtFormulaUnit.setText(MyUtilities.changeNumberLocaleString(String.format("%.2f",(digit1 / digit2))));
 							} else {
 								txtFormulaUnit.setText((String)G.context.getResources().getText(R.string.Msg_DivForConstNumber));
 							}
@@ -3219,7 +3231,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									&& MyUtilities.isNumber(TabFragmentItem.dicItemValues.get(itemId).ItemVal)) {
 								Double digit = Double.valueOf(TabFragmentItem.dicItemValues.get(itemId).ItemVal);
 								if (itemFormulas.constantNumber != 0) {
-									txtFormulaUnit.setText(MyUtilities.getValidDigit(String.valueOf(digit / itemFormulas.constantNumber)));
+									txtFormulaUnit.setText(MyUtilities.changeNumberLocaleString(String.format("%.2f",(digit / itemFormulas.constantNumber))));
 								} else {
 									txtFormulaUnit.setText((String) G.context.getResources().getText(R.string.Msg_DivForConstNumber));
 								}
@@ -3443,7 +3455,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						}
 					}
 					if (count > 0) {
-						TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.getValidDigit(String.valueOf(sum / count));
+						TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.changeNumberLocaleString(String.valueOf(sum / count));
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 						if (State == 1) {
@@ -3486,7 +3498,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						}
 					}
 					if(count>1) {
-						TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.getValidDigit(String.valueOf(max - min));
+						TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.changeNumberLocaleString(String.valueOf(max - min));
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime(); //Tarikh.getCurrentShamsidateWithoutSlash();
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 
@@ -3517,7 +3529,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							&& MyUtilities.isNumber(itemVal1.trim()) && MyUtilities.isNumber(itemVal2.trim())){
 						Double digit1 = Double.valueOf(itemVal1.trim());
 						Double digit2 = Double.valueOf(itemVal2.trim());
-						TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.getValidDigit(String.valueOf(digit1-digit2));
+						TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.changeNumberLocaleString(String.valueOf(digit1-digit2));
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 						if (State == 1) {
@@ -3559,7 +3571,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								&& itemVal1!=null && itemVal1.trim().length()>0 && MyUtilities.isNumber(itemVal1)){
 							Double digit1 = Double.valueOf(itemVal1.trim());
 							Double digit2 = Double.valueOf(itemVal2.trim());
-							TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.getValidDigit(String.valueOf(digit1-digit2));
+							TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.changeNumberLocaleString(String.valueOf(digit1-digit2));
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 							if (State == 1) {
@@ -3616,7 +3628,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							for(Double s :tafazolList){
 								sum+=s;
 							}
-							TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.getValidDigit(String.valueOf(sum));
+							TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.changeNumberLocaleString(String.valueOf(sum));
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 							if (State == 1) {
@@ -3655,7 +3667,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						}
 					}
 					if(count>0) {
-						TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.getValidDigit(String.valueOf(sum));
+						TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.changeNumberLocaleString(String.valueOf(sum));
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 						if (State == 1) {
@@ -3719,7 +3731,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							&& MyUtilities.isNumber(itemVal1.trim()) && MyUtilities.isNumber(itemVal2.trim())){
 						Double digit1 = Double.valueOf(itemVal1.trim());
 						Double digit2 = Double.valueOf(itemVal2.trim());
-						TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.getValidDigit(String.valueOf(digit1*digit2));
+						TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.changeNumberLocaleString(String.valueOf(digit1*digit2));
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 						if (State == 1) {
@@ -3756,7 +3768,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						Double digit1 = Double.valueOf(itemVal1.trim());
 						Double digit2 = Double.valueOf(itemVal2.trim());
 						if(digit2!=0){
-							TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.getValidDigit(String.valueOf(digit1/digit2));
+							TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.changeNumberLocaleString(String.valueOf(digit1/digit2));
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 							if (State == 1) {
@@ -3791,7 +3803,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							&& MyUtilities.isNumber(TabFragmentItem.dicItemValues.get(itemId).ItemVal.trim())){
 						Double digit = Double.valueOf(TabFragmentItem.dicItemValues.get(itemId).ItemVal.trim());
 						if(itemFormulas.constantNumber!=0){
-							TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.getValidDigit(String.valueOf(digit/itemFormulas.constantNumber));
+							TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = MyUtilities.changeNumberLocaleString(String.valueOf(digit/itemFormulas.constantNumber));
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate =Tarikh.getCurrentMiladidatetime(); //Tarikh.getCurrentShamsidateWithoutSlash();
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 							if (State == 1) {
@@ -3867,7 +3879,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 				.addBodyText(String.format((String) G.context.getResources().getText(R.string.MinWitParam), item.MinAmount3==null?"-":item.MinAmount3),FontSize)
 				.addBodyText(String.format((String) G.context.getResources().getText(R.string.MaxWithParam), item.MaxAmount3==null?"-":item.MaxAmount3),FontSize)
 				.setContentSplitter()
-				.addBodyText(String.format((String) G.context.getResources().getText(R.string.ZaribWithParam), MyUtilities.getValidDigit(item.Zarib.toString())),FontSize)
+				.addBodyText(String.format((String) G.context.getResources().getText(R.string.ZaribWithParam), MyUtilities.changeNumberLocaleString(item.Zarib.toString())),FontSize)
 				.addButton((String) G.context.getResources().getText(R.string.Close), new OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -3886,7 +3898,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 			ArrayList<dtoItemValues> lastValuesInDevice = G.DB.getItemValuesByItemInfoId(itemInfoId);
 			if(lastValuesInDevice.size()>0) {
 				if(G.RTL) {
-					lastval = MyUtilities.getValidDigit(lastValuesInDevice.get(lastValuesInDevice.size() - 1).ItemVal.trim());
+					lastval = MyUtilities.changeNumberLocaleString(lastValuesInDevice.get(lastValuesInDevice.size() - 1).ItemVal.trim());
 
 				}else{
 					lastval=lastValuesInDevice.get(lastValuesInDevice.size() - 1).ItemVal.trim();
@@ -3896,7 +3908,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 				dtoMaxItemVal lastValueFromServer = G.DB.getLastValueByItemInfoId(itemInfoId);
 				if(lastValueFromServer!=null)
 				{
-					lastval = MyUtilities.getValidDigit(lastValueFromServer.ItemVal.trim());
+					lastval = MyUtilities.changeNumberLocaleString(lastValueFromServer.ItemVal.trim());
 //					if(lastValueFromServer.ItemValTyp.equals("=")){
 //						lastval=lastValueFromServer.ItemVal.trim();
 //					}

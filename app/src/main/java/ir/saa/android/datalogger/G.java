@@ -217,6 +217,8 @@ public class G extends Application {
     public static String PREF_KEY_LAST_UPDATE_PACKUSER = "updatePackUserKey";
     public static String PREF_KEY_LAST_UPDATE_PACKITEMS = "updatePackItemsKey";
     public static String PREF_KEY_LAST_UPDATE_MAXITEMVAL = "updateMaxItemValKey";
+	public static String PREF_KEY_LAST_SEND_DATA = "updateSendDataKey";
+
     public final static String PREF_KEY_WEB_SERVICE = "pref_ws_address";
     public final static String PREF_KEY_USB_PORT = "pref_usb_port";
     public final static String PREF_KEY_LAST_VERSION = "lastVersion";
@@ -575,9 +577,10 @@ public class G extends Application {
 //                connectionWay+=2;;
 //            }
 //        }
-        NetworkInfo mWifi = check.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		NetworkInfo mWifi = check.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		NetworkInfo mMob = check.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-        if (mWifi.isConnected()) {
+        if (mWifi.isConnected() || mMob.isConnected()) {
         	connectionWay+=2;
         }
         

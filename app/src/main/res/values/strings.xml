@@ -180,7 +180,7 @@
     <string name="SendFail">ارسال با مشکل مواجه شد</string>
     <string name="SendWithError">ارسال با خطا در سمت سرور متوقف شد</string>
     <string name="Msg_ConfirmSendData">ارسال با موفقیت انجام شد ، آیا داده های ثبت شده در دستگاه حذف شود؟</string>
-    <string name="Msg_SendData">ارسال با موفقیت انجام ش </string>
+    <string name="Msg_SendData">ارسال با موفقیت انجام شد </string>
     <string name="DeleteSucessfully">حذف با موفقیت انجام شد</string>
     <string name="ErrorInSend">ارسال با اشکال در برخی آیتم ها پایان یافت</string>
     <string name="ConnectionWithError">ارتباط با اشکال مواجه شد</string>
@@ -207,7 +207,7 @@
     <string name="ItemRegisterNotRegister">آیتم های قابل ثبت و غیرقابل ثبت</string>
     <string name="DeleteFilter">حذف فیلتر</string>
     <string name="Filter">فیلتر کن</string>
-    <string name="Msg_ForceFilterField">برای ثبت باید هر دو مقدار تاریخ و زمان بدرستی وارد شود</string>
+    <string name="Msg_ForceFilterField">برای جستجو می بایست فرمت تاریخ و زمان بدرستی درج گردد</string>
     <string name="MinValue">کمترین مقدار</string>
     <string name="MaxValue">بیشترین مقدار</string>
     <string name="CheckAddressConnect">عملیات بررسی آدرس ارتباطی در حال انجام است</string>

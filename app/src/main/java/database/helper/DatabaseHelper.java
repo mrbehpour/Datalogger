@@ -959,7 +959,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Object[] args = new Object[]{
                 Tarikh.getCurrentDateToMinute(),
-                G.currentUser.UsrID,
                 G.selectedVahedId,
                 G.selectedLogshitId,
                 selectedEquipId,
@@ -969,7 +968,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 selectedEquipId,
                 selectedSubEquipId,
         };
-
+        String strWhereUserId="tbl_ItemValues.UsrID="+G.currentUser.UsrID.toString()+" AND ";
+        if(G.currentUser.UserGroupId==2 || G.currentUser.IsManager==1){
+            strWhereUserId="";
+        }
         String strQuery = String.format("SELECT tbl_Items.*,ItemCount FROM tbl_Items LEFT JOIN \n" +
                 "(\n" +
                 "SELECT tbl.ItemInfID,count(*) ItemCount FROM\n" +
@@ -983,7 +985,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "from tbl_ItemValues \n" +
                 "inner join tbl_Items on tbl_ItemValues.ItemInfID = tbl_Items.ItemInfID  \n" +
                 "inner join tbl_ItemRanges on tbl_ItemRanges.ItemInfID = tbl_ItemValues.ItemInfID \n" +
-                "WHERE tbl_ItemValues.UsrID=%s AND tbl_Items.PostID=%s AND tbl_Items.LogshitInfID=%s AND tbl_Items.EquipInfID=%s AND tbl_Items.SubEquipID=%s \n" +
+                "WHERE "+strWhereUserId+" tbl_Items.PostID=%s AND tbl_Items.LogshitInfID=%s AND tbl_Items.EquipInfID=%s AND tbl_Items.SubEquipID=%s \n" +
                 ") tbl where SaveRanges <= RangeTime AND CurRanges<=RangeTime GROUP BY tbl.ItemInfID\n" +
                 ") tbl2  \n" +
                 "ON tbl_Items.ItemInfID=tbl2.ItemInfID \n" +
@@ -1038,7 +1040,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 item.Desc = cur.getString(cur.getColumnIndex(Tbl_Items.Desc));
                 item.LocateRowNo = cur.getInt(cur.getColumnIndex(Tbl_Items.LocateRowNo));
                 item.LogshitRowNo = cur.getInt(cur.getColumnIndex(Tbl_Items.LogshitRowNo));
-                item.HasValueInRange = cur.getString(cur.getColumnIndex("ItemCount"))!=null ? true : false;
+                item.HasValueInRange = cur.getInt(cur.getColumnIndex("ItemCount"))!=0 ? true : false;
 
                 lstItems.add(item);
             } while (cur.moveToNext());
@@ -1731,14 +1733,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Object[] args = new Object[]{
                 Tbl_ItemValues.TableName,
                 Tbl_ItemValues.UsrID,
-                UsrId,
-                Tbl_ItemValues.IsSend,
-                0
+                UsrId
+
         };
 
-        String strQuery = String.format("select itemValues.* from %s itemValues  where itemValues.%s = %s AND itemValues.%s = %s  ", args);
+        String strQuery = String.format("select itemValues.* from %s itemValues  where itemValues.%s = %s   ", args);
         if (G.currentUser.IsManager == 1 || G.currentUser.UserGroupId==2) {
-            strQuery = "select itemValues.* from tbl_ItemValues itemValues where itemValues.IsSend = 0 ";
+
+            //strQuery = "select itemValues.* from tbl_ItemValues itemValues where itemValues.IsSend = 0 ";
+            //قرار داد فی ما بین محمدی و خانم رضایی شرط isend برداشته شود
+            strQuery = "select itemValues.* from tbl_ItemValues itemValues ";
         }
         Cursor cur = sd.rawQuery(strQuery, null);
 

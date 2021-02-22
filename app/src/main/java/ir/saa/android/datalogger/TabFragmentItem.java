@@ -685,7 +685,7 @@ public class TabFragmentItem extends Fragment {
 		}
 		String strDateTime="";
 
-		strDateTime = MyUtilities.changeNumberLocale(Tarikh.getCurrentMiladidatetimewithoutSlash());
+		strDateTime = MyUtilities.changeNumberLocaleString(Tarikh.getCurrentMiladidatetimewithoutSlash());
 
 		Long longCurrentDateTime = Long.parseLong(strDateTime);
 		Long periodSum = 0l;

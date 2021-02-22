@@ -469,8 +469,8 @@ public class ActivityDrawer extends NfcReaderActivity implements
 //       //llSpace1.setLayoutParams(paramsTextView);
         //----------------------
 //        txtMenuSend.setTypeface(tf);
-//        txtMenuLastSend.setTypeface(tf);
-//        txtMenuLastSendDate.setTypeface(tf);
+        txtMenuLastSend.setTypeface(tf);
+          txtMenuLastSendDate.setTypeface(tf);
 //        txtMenuGetBaseInfo.setTypeface(tf);
 //        txtMenuLastGetBaseInfo.setTypeface(tf);
 //        txtMenuLastGetBaseInfoDate.setTypeface(tf);
@@ -1679,6 +1679,9 @@ public class ActivityDrawer extends NfcReaderActivity implements
 
     private String getJsonStringFromUrl(String strUrl) throws Exception {
         String strJson = "";
+        if(!G.WEB_SERVICE.contains("PDLWeb.svc")){
+            G.WEB_SERVICE+="/PDLWeb.svc";
+        }
         URL json = new URL(G.WEB_SERVICE + strUrl); //+Build.SERIAL
         URLConnection jc = json.openConnection();
 
@@ -1843,33 +1846,41 @@ public class ActivityDrawer extends NfcReaderActivity implements
                                 @Override
                                 public void run() {
                                     pb05.setVisibility(View.GONE);
-                                    if (G.RTL) {
-                                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ActivityDrawer.this);
-                                        alertDialogBuilder.setMessage((String) G.context.getResources().getText(R.string.Msg_ConfirmSendData))
-                                                .setCancelable(false)
-                                                .setPositiveButton((String) G.context.getResources().getText(R.string.yes),
-                                                        new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int id) {
-                                                                gotoHomeFragment();
-                                                                UpdateUiViews();
-                                                                G.DB.TruncateItemValues();
-                                                                MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.DeleteSucessfully), Toast.LENGTH_LONG);
-                                                                gotoHomeFragment();
-                                                                UpdateUiViews();
-                                                            }
-                                                        });
-                                        alertDialogBuilder.setNegativeButton((String) G.context.getResources().getText(R.string.no),
-                                                new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int id) {
+                                    //--------------PREF SAVE-----------
+                                    String currentDateTime = Tarikh.getCurrentShamsidatetime();
+                                    G.prefEditor = G.myPref.edit();
+                                    G.prefEditor.putString(G.PREF_KEY_LAST_SEND_DATA, currentDateTime);
+                                    G.prefEditor.commit();
+                                    txtMenuLastSendDate.setText(currentDateTime);
+//                                    if (G.RTL) {
+//                                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ActivityDrawer.this);
+//                                        alertDialogBuilder.setMessage((String) G.context.getResources().getText(R.string.Msg_ConfirmSendData))
+//                                                .setCancelable(false)
+//                                                .setPositiveButton((String) G.context.getResources().getText(R.string.yes),
+//                                                        new DialogInterface.OnClickListener() {
+//                                                            public void onClick(DialogInterface dialog, int id) {
+//                                                                gotoHomeFragment();
+//                                                                UpdateUiViews();
+//                                                                G.DB.TruncateItemValues();
+//                                                                MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.DeleteSucessfully), Toast.LENGTH_LONG);
+//                                                                gotoHomeFragment();
+//                                                                UpdateUiViews();
+//                                                            }
+//                                                        });
+//                                        alertDialogBuilder.setNegativeButton((String) G.context.getResources().getText(R.string.no),
+//                                                new DialogInterface.OnClickListener() {
+//                                                    public void onClick(DialogInterface dialog, int id) {
+//
+//                                                        dialog.cancel();
+//                                                        dialog.dismiss();
+//                                                    }
+//                                                });
+//                                        AlertDialog alert = alertDialogBuilder.create();
+//                                        alert.show();
+                                    //} else {
+                                        if (G.currentUser.IsManager == 1 || G.currentUser.UserGroupId==2)
+                                        {
 
-                                                        dialog.cancel();
-                                                        dialog.dismiss();
-                                                    }
-                                                });
-                                        AlertDialog alert = alertDialogBuilder.create();
-                                        alert.show();
-                                    } else {
-                                        if (G.currentUser.IsManager == 1) {
 //                                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ActivityDrawer.this);
 //                                            alertDialogBuilder.setMessage((String) G.context.getResources().getText(R.string.Msg_ConfirmSendData))
 //                                                    .setCancelable(false)
@@ -1894,30 +1905,54 @@ public class ActivityDrawer extends NfcReaderActivity implements
 //                                                    });
 //                                            AlertDialog alert = alertDialogBuilder.create();
 //                                            alert.show();
+                                           if(G.RTL){
+                                               MyDialog dialog=new MyDialog(ActivityDrawer.this);
+                                               dialog.addBodyText((String) G.context.getResources().getText(R.string.Msg_ConfirmSendData),20);
+                                               dialog .addButton((String) G.context.getResources().getText(R.string.yes), new OnClickListener() {
+                                                   @Override
+                                                   public void onClick(View v) {
+                                                       gotoHomeFragment();
+                                                       UpdateUiViews();
+                                                       G.DB.TruncateItemValues();
+                                                       MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.DeleteSucessfully), Toast.LENGTH_LONG);
+                                                       gotoHomeFragment();
+                                                       UpdateUiViews();
+                                                       dialog.dismiss();
+                                                   }
+                                               }).addButton((String) G.context.getResources().getText(R.string.no), new OnClickListener() {
+                                                   @Override
+                                                   public void onClick(View v) {
+                                                       dialog.dismiss();
+                                                   }
+                                               }).show();
+                                           }else{
+                                               MyDialog dialog=new MyDialog(ActivityDrawer.this);
+                                               dialog.addBodyText((String) G.context.getResources().getText(R.string.Msg_ConfirmSendData),10);
+                                               dialog .addButtonL((String) G.context.getResources().getText(R.string.yes), new OnClickListener() {
+                                                   @Override
+                                                   public void onClick(View v) {
+                                                       gotoHomeFragment();
+                                                       UpdateUiViews();
+                                                       G.DB.TruncateItemValues();
+                                                       MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.DeleteSucessfully), Toast.LENGTH_LONG);
+                                                       gotoHomeFragment();
+                                                       UpdateUiViews();
+                                                       dialog.dismiss();
+                                                   }
+                                               }).addButtonR((String) G.context.getResources().getText(R.string.no), new OnClickListener() {
+                                                   @Override
+                                                   public void onClick(View v) {
+                                                       dialog.dismiss();
+                                                   }
+                                               }).show();
+                                           }
 
-                                            MyDialog dialog=new MyDialog(ActivityDrawer.this);
-                                            dialog.addBodyText((String) G.context.getResources().getText(R.string.Msg_ConfirmSendData),10);
-                                            dialog .addButtonL((String) G.context.getResources().getText(R.string.yes), new OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                            gotoHomeFragment();
-                                                                    UpdateUiViews();
-                                                                    G.DB.TruncateItemValues();
-                                                                   MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.DeleteSucessfully), Toast.LENGTH_LONG);
-                                                                   gotoHomeFragment();
-                                                                    UpdateUiViews();
-                                                                    dialog.dismiss();
-                                                        }
-                                                    }).addButtonR((String) G.context.getResources().getText(R.string.no), new OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    dialog.dismiss();
-                                                }
-                                            }).show();
-                                        } else {
+                                        }
+                                        else {
+
                                             MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.Msg_SendData), Toast.LENGTH_LONG);
                                         }
-                                    }
+                                    //}
 
 
                                 }
@@ -1976,7 +2011,9 @@ public class ActivityDrawer extends NfcReaderActivity implements
         DataInputStream dis = null;
         byte[] buffer;
         String stringForSend = jsonStr;//"\\\""+ jsonStr.replace("\"", "\\\"")+"\\\"";
-
+        if(!G.WEB_SERVICE.contains("PDLWeb.svc")){
+            G.WEB_SERVICE+="/PDLWeb.svc";
+        }
         int bytesAvailable = stringForSend.getBytes().length;
         String upLoadServerUri = String.format("%s/SaveItemValues/%s/%s", G.WEB_SERVICE, G.serialNumberOfDevice, strGet); //G.currentUser.UsrID
 
@@ -2081,6 +2118,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
         String strLastUpadtePackItemsDate = G.myPref.getString(G.PREF_KEY_LAST_UPDATE_PACKITEMS, "");
         String strLastUpadtePackUserDate = G.myPref.getString(G.PREF_KEY_LAST_UPDATE_PACKUSER, "");
         String strLastUpadteMaxItemValDate = G.myPref.getString(G.PREF_KEY_LAST_UPDATE_MAXITEMVAL, "");
+        String strLastUpadteSendItemValDate = G.myPref.getString(G.PREF_KEY_LAST_SEND_DATA, "");
 //		String strLastUpadteDate = G.myPref.getString(G.PREF_KEY_LAST_UPDATE_SETTING, "");
 //		String strLastGetBaseInfoDate = G.myPref.getString(G.PREF_KEY_LAST_GET_BASE_INFO, "");
 //		String strLastSendViewsDate = G.myPref.getString(G.PREF_KEY_LAST_SEND_EYBS, "");
@@ -2089,7 +2127,8 @@ public class ActivityDrawer extends NfcReaderActivity implements
         txtMenuLastUpdateDate02.setText(strLastUpadtePackItemsDate);
         txtMenuLastUpdateDate03.setText(strLastUpadtePackUserDate);
         txtMenuLastUpdateDate04.setText(strLastUpadteMaxItemValDate);
-//		txtMenuLastSendDate.setText(strLastSendViewsDate);
+        txtMenuLastSendDate.setText(strLastUpadteSendItemValDate);
+	//	txtMenuLastSendDate.setText(strLastSendViewsDate);
 
     }
 

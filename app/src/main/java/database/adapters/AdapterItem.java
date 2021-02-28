@@ -135,7 +135,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 			tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/bfd.ttf");
 			lengthDate=8;
 			lengthTime=6;
-			FontSize=15;
+			FontSize=12;
 		}
 
 

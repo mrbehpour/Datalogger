@@ -37,7 +37,7 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
     public AdapterItemReport(ArrayList<dtoItems> array) {
         super(G.context, R.layout.custom_item, array);
     }
-
+	int FontSize;
     private static class ViewHolder {
         public ViewGroup layoutRoot;
         public TextView  txtItem;
@@ -56,8 +56,10 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
             txtItemDesc = (TextView) view.findViewById(R.id.txtItemDesc);
 			layoutRoot1 = (ViewGroup) view.findViewById(R.id.layoutRootItem1);
             if(G.RTL){
+
 				tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/byekan.ttf");
 			}else{
+
 				tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/bfd.ttf");
 			}
 			drwGreen = G.context.getResources().getDrawable(R.drawable.list_item_green_gradient);
@@ -220,35 +222,41 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
 		}
 
         private void showJozeeatDialog(dtoItems item){
+			int FontSize;
+        	if(G.RTL){
+				FontSize=20;
+			}else{
+        		FontSize=14;
+			}
 			final MyDialog myDialog =  new MyDialog(G.currentActivity, R.style.DialogAnimFromBottom);
 			myDialog.setTitle((String)G.context.getResources().getText(R.string.Detail))
 			.setBackgroundAlpha(0.95f)
 			.setBodyMargin(30, 0, 30, 0)
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.UnitWithParam), G.selectedVahed),20)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.UnitWithParam), G.selectedVahed),FontSize)
 			.setContentSplitter()
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.LogshitwithParam), G.selectedLogshit),20)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.LogshitwithParam), G.selectedLogshit),FontSize)
 			.setContentSplitter()
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.EquipWithParam), G.selectedTajhiz),20)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.EquipWithParam), G.selectedTajhiz),FontSize)
 			.setContentSplitter()
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.SubEquipWithParam), G.selectedZirTajhiz),20)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.SubEquipWithParam), G.selectedZirTajhiz),FontSize)
 			.setContentSplitter()
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.UnitmeasurementWithParam), item.MeasureUnitName),20)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.UnitmeasurementWithParam), item.MeasureUnitName),FontSize)
 			.setContentSplitter()
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.CountDataWithParam),String.valueOf(G.DB.getItemValuesByItemInfoId(item.ItemInfID).size())),20)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.CountDataWithParam),String.valueOf(G.DB.getItemValuesByItemInfoId(item.ItemInfID).size())),FontSize)
 			.setContentSplitter()
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.AllowNumberWithParam), item.MaxSampleNo),20)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.AllowNumberWithParam), item.MaxSampleNo),FontSize)
 			.setContentSplitter()
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.CodeItemWithParam), item.ItemInfID),20)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.CodeItemWithParam), item.ItemInfID),FontSize)
 			.setContentSplitter()
-			.addBodyText((String)G.context.getResources().getText(R.string.Secondlimitation),20)
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.MinWitParam), item.MinAmount2),18)
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.MaxWithParam), item.MaxAmount2),18)
+			.addBodyText((String)G.context.getResources().getText(R.string.Secondlimitation),FontSize)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.MinWitParam), item.MinAmount2),FontSize-2)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.MaxWithParam), item.MaxAmount2),FontSize-2)
 			.setContentSplitter()
-			.addBodyText((String)G.context.getResources().getText(R.string.Thirdlimitation),20)
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.MinWitParam), item.MinAmount3),18)
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.MaxWithParam), item.MaxAmount3),18)
+			.addBodyText((String)G.context.getResources().getText(R.string.Thirdlimitation),FontSize)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.MinWitParam), item.MinAmount3),FontSize-2)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.MaxWithParam), item.MaxAmount3),FontSize-2)
 			.setContentSplitter()
-			.addBodyText(String.format((String)G.context.getResources().getText(R.string.ZaribWithParam), getValidDigit(item.Zarib.toString())),20)
+			.addBodyText(String.format((String)G.context.getResources().getText(R.string.ZaribWithParam), getValidDigit(item.Zarib.toString())),FontSize)
 			.addButton((String)G.context.getResources().getText(R.string.Close), new OnClickListener() {
 				@Override
 				public void onClick(View v) {

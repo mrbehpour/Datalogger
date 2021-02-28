@@ -29,6 +29,7 @@ public class FragmentAbout extends Fragment {
 		getActivity().getBaseContext().getResources().updateConfiguration(configuration, metrics);
 
 	}
+	Typeface tf;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 		View rootView = inflater
@@ -36,6 +37,10 @@ public class FragmentAbout extends Fragment {
 
 		if(G.RTL==false){
 			adjustFontScale(getResources().getConfiguration(),(float)0.85);
+
+			tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/bfd.ttf");
+		}else{
+			 tf= Typeface.createFromAsset(G.context.getAssets(), "fonts/byekan.ttf");
 		}
 		
 		return rootView;
@@ -62,7 +67,7 @@ public class FragmentAbout extends Fragment {
 		TextView txtDeviceIMEI = (TextView) view.findViewById(R.id.txtDeviceIMEI);
 		TextView txtIMEINumber = (TextView) view.findViewById(R.id.txtIMEINumber);
 
-		Typeface tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/byekan.ttf");
+
 		txtApp.setTypeface(tf);
 		txtAppName.setTypeface(tf);
 		txtAppVersion.setTypeface(tf);

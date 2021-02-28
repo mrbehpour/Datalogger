@@ -302,9 +302,10 @@ public class AdapterItemHistory extends ArrayAdapter<dtoItemValues> {
 			}
 			Long theDateTime ;
 			if(fromDate.trim().length()==0 || toDate.trim().length()==0){
-				theDateTime = Long.parseLong(thePtime);
+				theDateTime = Long.parseLong(thePtime.replace(":","").trim());
 			}else{
-				theDateTime = Long.parseLong(thePdate+thePtime);
+				theDateTime = Long.parseLong(thePdate.replace("-","")
+						.trim()+thePtime.replace(":","").trim());
 			}
 			if (theDateTime>= fromDateTime && theDateTime <= toDateTime )
 			{

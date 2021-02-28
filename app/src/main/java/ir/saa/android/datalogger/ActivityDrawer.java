@@ -1849,7 +1849,8 @@ public class ActivityDrawer extends NfcReaderActivity implements
                                     //--------------PREF SAVE-----------
                                     String currentDateTime = Tarikh.getCurrentShamsidatetime();
                                     G.prefEditor = G.myPref.edit();
-                                    G.prefEditor.putString(G.PREF_KEY_LAST_SEND_DATA, currentDateTime);
+                                    G.prefEditor.putString(G.PREF_KEY_LAST_SEND_DATA + G.currentUser.UsrID.toString(),
+                                            currentDateTime);
                                     G.prefEditor.commit();
                                     txtMenuLastSendDate.setText(currentDateTime);
 //                                    if (G.RTL) {
@@ -2118,7 +2119,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
         String strLastUpadtePackItemsDate = G.myPref.getString(G.PREF_KEY_LAST_UPDATE_PACKITEMS, "");
         String strLastUpadtePackUserDate = G.myPref.getString(G.PREF_KEY_LAST_UPDATE_PACKUSER, "");
         String strLastUpadteMaxItemValDate = G.myPref.getString(G.PREF_KEY_LAST_UPDATE_MAXITEMVAL, "");
-        String strLastUpadteSendItemValDate = G.myPref.getString(G.PREF_KEY_LAST_SEND_DATA, "");
+        String strLastUpadteSendItemValDate = G.myPref.getString(G.PREF_KEY_LAST_SEND_DATA+G.currentUser.UsrID.toString(), "");
 //		String strLastUpadteDate = G.myPref.getString(G.PREF_KEY_LAST_UPDATE_SETTING, "");
 //		String strLastGetBaseInfoDate = G.myPref.getString(G.PREF_KEY_LAST_GET_BASE_INFO, "");
 //		String strLastSendViewsDate = G.myPref.getString(G.PREF_KEY_LAST_SEND_EYBS, "");

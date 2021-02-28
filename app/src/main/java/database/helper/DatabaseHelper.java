@@ -2091,6 +2091,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         };
         SQLiteDatabase sd = getReadableDatabase();
         Cursor cur = sd.query(Tbl_Users.TableName, cols, "LOWER(" + Tbl_Users.UserName + ")=? and " + Tbl_Users.pass + "=?", args, null, null, null);
+        //Cursor cur = sd.query(Tbl_Users.TableName, cols, "LOWER(" + Tbl_Users.UserName + ")=? and " + Tbl_Users.pass + "=?", args, null, null, null);
         if (cur.getCount() > 0) {
             res = true;
         }
@@ -2382,7 +2383,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cv.put(Tbl_ItemValues.ImagePath, itemValues.ImagePath);
             cv.put(Tbl_ItemValues.VoicePath, itemValues.VoicePath);
         }
-        cv.put(Tbl_ItemValues.BaseRange, Tarikh.persianStartDayToMinute(itemValues.PDate.substring(0,10)));
+        cv.put(Tbl_ItemValues.BaseRange, Tarikh.persianStartDayToMinute(itemValues.PDate.length()>=10?
+                itemValues.PDate.substring(0,10) : itemValues.PDate));
         cv.put(Tbl_ItemValues.SaveDateTimeToMin, Tarikh.persianDateTimeToMinute(itemValues.PDate,itemValues.PTime));
         int count = (int) sd.insert(Tbl_ItemValues.TableName, null, cv);
         //sd.close();

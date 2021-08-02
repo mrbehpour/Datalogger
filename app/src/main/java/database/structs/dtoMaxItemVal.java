@@ -8,6 +8,7 @@ public class dtoMaxItemVal  implements Cloneable{
 	public String 		ItemVal;
 	public String 		RemAns;
 	public String		ItemValTyp;
+	public String		RemValues;
 	public  String 		VoicePath="";
 	public  String 		ImagePath="";
 	public  String 		VideoPath="";

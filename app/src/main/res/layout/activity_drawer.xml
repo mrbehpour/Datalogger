@@ -468,7 +468,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
-                            android:layout_marginRight="30dp"
+                            android:layout_marginRight="15dp"
                             android:text=""
                             android:textSize="@dimen/menu_description_font_size" />
 
@@ -555,7 +555,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
-                            android:layout_marginRight="30dp"
+                            android:layout_marginRight="15dp"
                             android:text=""
                             android:textSize="@dimen/menu_description_font_size" />
 

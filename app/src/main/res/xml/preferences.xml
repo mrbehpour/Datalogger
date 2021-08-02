@@ -10,6 +10,7 @@
                 android:dialogMessage="@string/Msg_pref_ws_address"
                 android:dialogTitle="@string/pref_ws_address"
                 android:defaultValue="@string/ws_default_address"
+                android:layoutDirection="ltr"
                 android:positiveButtonText="@string/Register"
                 android:negativeButtonText="@string/Cancel"/>
         </PreferenceCategory>

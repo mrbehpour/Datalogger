@@ -5,7 +5,13 @@
     android:layout_gravity="center"
     android:gravity="right|center_vertical"
     android:orientation="vertical" >
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
     <LinearLayout
         android:id="@+id/llDialogTitle"
         android:layout_width="match_parent"
@@ -119,5 +125,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
+</LinearLayout>
+    </ScrollView>
 </LinearLayout>

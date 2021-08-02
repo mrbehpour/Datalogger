@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,6 +99,7 @@ public class FragmentItemReport extends Fragment {
 		listItem = (ListView) view.findViewById(R.id.lstItem);
 		llSaveItem =  view.findViewById(R.id.llSaveItem);
 		edtSearch = (EditText) view.findViewById(R.id.edtSearchItem);
+		edtSearch.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		searchSpinner = (Spinner) view.findViewById(R.id.searchSpinnerItem);
 
 		llDateTimeForItems.setVisibility(View.GONE);
@@ -232,9 +234,13 @@ public class FragmentItemReport extends Fragment {
 						Fragment currentFragment = G.fragmentManager.findFragmentById(R.id.frame_container);
 						if (currentFragment != null) {
 							G.fragmentStack.push(currentFragment);
-							G.navigationStackTitle.push(((TextView)G.actionBar.getCustomView().findViewById(R.id.txtTitle)).getText().toString());
+							TextView txtTitle=((TextView)G.actionBar.getCustomView().findViewById(R.id.txtTitle));
+							txtTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
+							G.navigationStackTitle.push(txtTitle.getText().toString());
+
 						}
 						TextView txtTitle = (TextView) G.actionBar.getCustomView().findViewById(R.id.txtTitle);
+						txtTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 						txtTitle.setText(item.ItemName);
 						G.selectedMenuItemType = G.MenuItemTypes.ITEMHISTORY;
 						Bundle bundle = new Bundle();

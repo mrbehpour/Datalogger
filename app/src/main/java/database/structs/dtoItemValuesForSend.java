@@ -13,7 +13,7 @@ public class dtoItemValuesForSend implements Cloneable {
 
     public Integer		Id;
     public Integer 		IsSend = 0;
-
+    public String   	RemValues = "";
     @Override
     public dtoItemValuesForSend clone() throws CloneNotSupportedException {
         return (dtoItemValuesForSend)super.clone();

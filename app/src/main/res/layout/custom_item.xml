@@ -17,13 +17,7 @@
 
 
 
-        <ImageView
-            android:id="@+id/imgImage"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="10dp"
-            android:visibility="gone"
-            android:src="@drawable/camera" />
+
 
         <ImageView
             android:id="@+id/imgVideo"
@@ -84,7 +78,14 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:src="@drawable/nfc"
-            android:visibility="gone" />
+            android:visibility="gone"
+            />
+        <ImageView
+            android:id="@+id/imgEdit"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:src="@drawable/edit"
+            />
         <ImageView
             android:id="@+id/imgItemInfo"
             android:layout_width="45dp"

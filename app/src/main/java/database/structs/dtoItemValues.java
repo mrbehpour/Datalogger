@@ -19,6 +19,7 @@ public class dtoItemValues  implements Cloneable{
 	public  String VoicePath="";
 	public  String ImagePath="";
 	public  String VideoPath="";
+	public String RemValues="";
 
 
 	

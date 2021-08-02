@@ -149,6 +149,13 @@ public class FragmentSettings extends PreferenceFragment implements OnSharedPref
 							MyToast.Show(G.context, String.format("%s", getText(R.string.NotValidationAddress)), Toast.LENGTH_LONG);
 						}
 					});
+				}else{
+					G.handler.post(new Runnable() {
+						@Override
+						public void run() {
+							MyToast.Show(G.context, String.format("%s", getText(R.string.NotValidationAddress)), Toast.LENGTH_LONG);
+						}
+					});
 				}
 			;
         		threadCheckWs= null;

@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class AdapterItemHistory extends ArrayAdapter<dtoItemValues> {
 		public TextView  txtDateTextHistory;
 		public TextView  txtTimeTextHistory;
 		public TextView txtValueTextHistory;
+		int TextSize;
 		Typeface tf ;
     	MyDialog dialog ;
 
@@ -49,18 +51,27 @@ public class AdapterItemHistory extends ArrayAdapter<dtoItemValues> {
 			dialog = new MyDialog(G.currentActivity);
             layoutRoot = (ViewGroup) view.findViewById(R.id.layoutRootItemHistory);
 			txtRowNumberTextHistory = (TextView) view.findViewById(R.id.txtRowNumberTextHistory);
+			txtRowNumberTextHistory.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			txtDateTextHistory = (TextView) view.findViewById(R.id.txtDateTextHistory);
+			txtDateTextHistory.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			txtTimeTextHistory = (TextView) view.findViewById(R.id.txtTimeTextHistory);
+			txtTimeTextHistory.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			txtValueTextHistory = (TextView) view.findViewById(R.id.txtValueTextHistory);
+			txtValueTextHistory.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
+			TextSize=(int)G.fontSize;
 			if(G.RTL){
 				tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/byekan.ttf");
+				//TextSize=15;
 			}else{
 				tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/bfd.ttf");
 			}
 			txtRowNumberTextHistory.setTypeface(tf);
 			txtDateTextHistory.setTypeface(tf);
+			txtDateTextHistory.setTextSize(TextSize);
 			txtTimeTextHistory.setTypeface(tf);
+			txtTimeTextHistory.setTextSize(TextSize);
 			txtValueTextHistory.setTypeface(tf);
+			txtValueTextHistory.setTextSize(TextSize);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -131,9 +142,13 @@ public class AdapterItemHistory extends ArrayAdapter<dtoItemValues> {
 					myRemarkcheckList.setSelectionByValue(getRemarkIdsFromString(item.ItemVal));
 				}
 
-			}else if (oItem.AmountTypID == ItemValueType.Mamooli) {
-				if(item.ItemVal.trim().contains(",") || item.ItemVal.compareTo("REM")==0){
-					txtValueTextHistory.setText(G.context.getResources().getText(R.string.DisplayRemark));
+			}
+			else if (oItem.AmountTypID == ItemValueType.Mamooli) {
+				if(item.ItemVal.equals("")==false) {
+					txtValueTextHistory.setText(item.ItemVal);
+					if(item.RemValues.contains(",")) {
+						txtValueTextHistory.setText(item.ItemVal +"\n"+ G.context.getResources().getText(R.string.DisplayRemark));
+					}
 					dialog.clearAllPanel();
 					final ArrayList<dtoRemarks> remarks = G.DB.getRemarksByRemarkGroupId(oItem.RemGroupID);
 					final MyCheckList myRemarkcheckList = new MyCheckList(G.context, new MyCheckListItem("", "",false),new MyCheckListItem("", "",false));
@@ -152,7 +167,9 @@ public class AdapterItemHistory extends ArrayAdapter<dtoItemValues> {
 						OnClickListener ocl = new OnClickListener() {
 							@Override
 							public void onClick(View v) {
-								dialog.show();
+								if(!item.RemValues.equals("")) {
+									dialog.show();
+								}
 							}
 						};
 						layoutRoot.setOnClickListener(ocl);
@@ -174,14 +191,10 @@ public class AdapterItemHistory extends ArrayAdapter<dtoItemValues> {
 						}
 					});
 					//Load if has value
-					if(item.ItemVal != null && item.ItemVal.trim().length()>0){
-						myRemarkcheckList.setSelectionByValue(getRemarkIdsFromString(item.ItemVal));
+					if(item.RemValues != null && item.ItemVal.trim().length()>0){
+						myRemarkcheckList.setSelectionByValue(getRemarkIdsFromString(item.RemValues));
 					}
-				}else{
-					txtValueTextHistory.setText(item.ItemVal);
 				}
-			}else{
-				txtValueTextHistory.setText(item.ItemVal);
 			}
 
 

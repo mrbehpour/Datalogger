@@ -37,6 +37,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatButton;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -44,7 +45,9 @@ import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
+import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -124,18 +127,19 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 		super(G.context, LayoutPage, array);
 		PageLayout=LayoutPage;
 
+		FontSize=(int)G.fontSize;
 		selectedDateLayout=R.layout.body_item_date;
 		selectedTimeLayout=R.layout.body_item_time;
 		if(G.RTL){
 			tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/byekan.ttf");
 			lengthDate=8;
 			lengthTime=6;
-			FontSize=22;
+			//FontSize=17;
 		}else{
 			tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/bfd.ttf");
 			lengthDate=8;
 			lengthTime=6;
-			FontSize=12;
+			//FontSize=12;
 		}
 
 
@@ -171,13 +175,17 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 //			return false;
 
 		Double value = Double.valueOf(MyUtilities.changeNumberLocaleString(strValue.trim()));
-		if(G.Setting.Range1==1){
+
 			if(item.MinAmount1!=null && item.MinAmount1.trim().length()>0 && item.MaxAmount1!=null && item.MaxAmount1.trim().length()>0)
 			{
 				Double minRange = Double.valueOf(item.MinAmount1);
 				Double maxRange = Double.valueOf(item.MaxAmount1);
 				if(value<minRange || value>maxRange){
-					canSubmit = false;
+					if(G.Setting.Range1==1) {
+						canSubmit = false;
+					}else{
+						canSubmit = true;
+					}
 					strErrorMessage = (String) G.context.getResources().getText(R.string.OutOfRange1) + "\n";
 					strErrorMessage += G.Setting.Dsc1 + "\n";
 				}
@@ -189,15 +197,19 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 //				}
 //				return canSubmit;
 			}
-		}
 
-		if(G.Setting.Range2==1){
+
+
 			if(item.MinAmount2!=null && item.MinAmount2.trim().length()>0 && item.MaxAmount2!=null && item.MaxAmount2.trim().length()>0 )
 			{
 				Double minRange = Double.valueOf(item.MinAmount2);
 				Double maxRange = Double.valueOf(item.MaxAmount2);
 				if(value<minRange || value>maxRange){
-					canSubmit = false;
+					if(G.Setting.Range2==1) {
+						canSubmit = false;
+					}else{
+						canSubmit = true;
+					}
 					strErrorMessage = (String) G.context.getResources().getText(R.string.OutOfRange2) + "\n";
 					strErrorMessage += G.Setting.Dsc2 + "\n";
 				}
@@ -209,14 +221,19 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 //				}
 //				return canSubmit;
 			}
-		}
-		if(G.Setting.Range3==1){
+
+
 			if(item.MinAmount3!=null && item.MinAmount3.trim().length()>0 && item.MaxAmount3!=null && item.MaxAmount3.trim().length()>0 )
 			{
 				Double minRange = Double.valueOf(item.MinAmount3);
 				Double maxRange = Double.valueOf(item.MaxAmount3);
 				if(value<minRange || value>maxRange){
-					canSubmit = false;
+					if(G.Setting.Range3==1) {
+						canSubmit = false;
+					}else{
+						canSubmit = true;
+					}
+
 					strErrorMessage = (String) G.context.getResources().getText(R.string.OutOfRange3) + "\n";
 					strErrorMessage += G.Setting.Dsc3 + "\n";
 				}
@@ -228,7 +245,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 //				}
 //				return canSubmit;
 			}
-		}
+
 		if(strErrorMessage.trim().length()>0){
 			MyToast.Show(G.context, strErrorMessage, Toast.LENGTH_LONG);
 		}
@@ -271,9 +288,17 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 				((ActivityDrawer) G.currentActivity).ShowNfcDialog();
 			}
 			return;
-		}
+		}else if(G.Setting.ContorolTime.compareTo("2") != 0
+				|| TabFragmentItem.IsValidForSubmitWitoutCheckSetting(item)!=ValidForSubmitType.OutOfRange ) {
+			if(G.Setting.ContorolTime.compareTo("1") == 0
+					&& TabFragmentItem.IsValidForSubmitWitoutCheckSetting(item)==ValidForSubmitType.OutOfRange){
+				item.IsInTimeRange = false;
+				MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+				AdapterItem.this.notifyDataSetChanged();
+			}
 
-		showDialog2(item,pos);
+			showDialog2(item, pos);
+		}
 	}
 
 
@@ -293,12 +318,19 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						}
 					});
 			TextView txtMeghdariMinTitle = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMinTitle);
+			txtMeghdariMinTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtMeghdariMin = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMin);
+			txtMeghdariMin.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtMeghdariMaxTitle = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMaxTitle);
+			txtMeghdariMaxTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtMeghdariMax = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMax);
+			txtMeghdariMax.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtMeghdariUnitTitle = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariUnitTitle);
+			txtMeghdariUnitTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtMeghdariUnit = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariUnit);
+			txtMeghdariUnit.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemMeghdari = (EditText) dialog.getDialog().findViewById(R.id.edtItemMeghdari);
+			edtItemMeghdari.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemMeghdari.setTypeface(tf);
 			//edtItemMeghdari.setFilters(new InputFilter[] { filter });
 
@@ -316,7 +348,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 						if(IsValidForSubmit == ValidForSubmitType.OutOfRange){
 							item.IsInTimeRange = false;
-							MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+							//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 							AdapterItem.this.notifyDataSetChanged();
 						}else if(IsValidForSubmit==ValidForSubmitType.InRangeButHasOtherValue){
 							item.IsInTimeRange = false;
@@ -344,10 +376,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 							item.HasValueInRange=true;
-							if(G.isSave){
+							if(G.isEdit){
+								dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+								dtoItemValues.ItemVal=itemval;
+								G.DB.UpdateItemValues(dtoItemValues);
+							}
+							if(G.isSave) {
 								if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 									G.isSave = true;
 									G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 								}
 							}
 
@@ -358,8 +396,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							dialog.dismiss();
 
 						}else{
-							itemDirection = ItemDirection.Right;
-							showDialog(TabFragmentItem.arrListItemFiltered.get(pos+1), pos+1);
+							if(!G.isEdit) {
+								itemDirection = ItemDirection.Right;
+								showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+							}else{
+								dialog.dismiss();
+							}
 						}
 					}
 				})
@@ -378,7 +420,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if(IsValidForSubmit == ValidForSubmitType.OutOfRange){
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								}else if(IsValidForSubmit==ValidForSubmitType.InRangeButHasOtherValue){
 									item.IsInTimeRange = false;
@@ -421,8 +463,13 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if(pos == 0){
 									dialog.dismiss();
 								}else{
-									itemDirection = ItemDirection.Left;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos-1), pos-1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Left;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									}else{
+										dialog.dismiss();
+									}
+
 								}
 							}
 						})
@@ -499,7 +546,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 						if(IsValidForSubmit == ValidForSubmitType.OutOfRange){
 							item.IsInTimeRange = false;
-							MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+							//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 							AdapterItem.this.notifyDataSetChanged();
 						}else if(IsValidForSubmit==ValidForSubmitType.InRangeButHasOtherValue){
 							item.IsInTimeRange = false;
@@ -539,8 +586,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						if(pos == 0){
 							dialog.dismiss();
 						}else{
-							itemDirection = ItemDirection.Left;
-							showDialog(TabFragmentItem.arrListItemFiltered.get(pos-1), pos-1);
+							if(!G.isEdit) {
+								itemDirection = ItemDirection.Left;
+								showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							}else{
+								dialog.dismiss();
+							}
 						}
 					}
 				})
@@ -551,7 +602,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if(IsValidForSubmit == ValidForSubmitType.OutOfRange){
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								}else if(IsValidForSubmit==ValidForSubmitType.InRangeButHasOtherValue){
 									item.IsInTimeRange = false;
@@ -578,10 +629,18 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 									TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 									item.HasValueInRange=true;
+									if(G.isEdit){
+										dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+										dtoItemValues.ItemVal=itemval;
+										G.DB.UpdateItemValues(dtoItemValues);
+										//G.DB.UpdateItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+									}
 									if(G.isSave){
 										if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
+
 											G.isSave = true;
 											G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 										}
 									}
 									AdapterItem.this.notifyDataSetChanged();
@@ -591,8 +650,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									TabFragmentItem.imgSaveItem.requestFocus();
 									dialog.dismiss();
 								}else{
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos+1), pos+1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -632,8 +695,11 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 			}
 
 			txtMeghdariMin.setText(MyUtilities.changeNumberLocaleString(item.MinAmount1));
+			txtMeghdariMin.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			txtMeghdariMax.setText(MyUtilities.changeNumberLocaleString(item.MaxAmount1));
+			txtMeghdariMax.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			txtMeghdariUnit.setText(item.MeasureUnitName.toString());
+			txtMeghdariUnit.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 
 			//--------Load if has value--------
 			edtItemMeghdari.setHint(getLastItemValByItemInfoId(item.ItemInfID));
@@ -656,9 +722,13 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						}
 					});
 			TextView txtItemDate = (TextView) dialog.getDialog().findViewById(R.id.txtItemDate);
+			txtItemDate.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtItemTime = (TextView) dialog.getDialog().findViewById(R.id.txtItemTime);
+			txtItemTime.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemDate = (EditText) dialog.getDialog().findViewById(R.id.edtItemDate);
+			edtItemDate.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemTime = (EditText) dialog.getDialog().findViewById(R.id.edtItemTime);
+			edtItemTime.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemDate.setInputType(InputType.TYPE_CLASS_NUMBER);
 			edtItemTime.setInputType(InputType.TYPE_CLASS_NUMBER);
 			txtItemDate.setTypeface(tf);
@@ -674,7 +744,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 						if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 							item.IsInTimeRange = false;
-							MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+							//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 							AdapterItem.this.notifyDataSetChanged();
 						} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 							item.IsInTimeRange = false;
@@ -682,31 +752,39 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							AdapterItem.this.notifyDataSetChanged();
 						}
 						if (IsValidForSubmit == ValidForSubmitType.InRange || G.Setting.ContorolTime.compareTo("2") != 0) {
-							if ((edtItemDate.getText().toString().replaceAll("/", "").trim().length() == 0 && edtItemTime.getText().toString().replaceAll(":", "").trim().length() == 0) ||
-									(edtItemDate.getText().toString().replaceAll("/", "").trim().length() == lengthDate && edtItemTime.getText().toString().replaceAll(":", "").trim().length() == lengthTime)) {
-								if (edtItemDate.getText().toString().replaceAll("/", "").trim().length() > 0 && !Tarikh.isDateValid(edtItemDate.getText().toString())) {
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.Msg_CheckDate), Toast.LENGTH_LONG);
+							if (G.RTL) {
+								DateAndTime = Tarikh.getMiladiDate(edtItemDate.getText().toString()) + " " + MyUtilities.changeNumberLocaleString(edtItemTime.getText().toString());
+							} else {
+								DateAndTime = edtItemDate.getText().toString() + " " + edtItemTime.getText().toString();
+							}
+							if (DateAndTime.replaceAll("/", "").replaceAll(":", "").trim().length() == 0  ||
+									DateAndTime.replaceAll("-", "").replaceAll(":", "").trim().length() == (lengthDate +lengthTime+1)) {
+								if (DateAndTime.replaceAll("/", "").replaceAll(":", "").trim().length() == 0  ) {
+									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.Msg_CheckDateTime), Toast.LENGTH_LONG);
 									return;
+								}else {
+									if( !Tarikh.isDateValid(edtItemDate.getText().toString()) || !Tarikh.isTimeValid(edtItemTime.getText().toString())){
+										MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.Msg_CheckDateTime), Toast.LENGTH_LONG);
+										return;
+									}
 								}
-								if (edtItemTime.getText().toString().replaceAll(":", "").trim().length() > 0 && !Tarikh.isTimeValid(edtItemTime.getText().toString())) {
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.Msg_CheckTime), Toast.LENGTH_LONG);
-									return;
-								}
-								if (G.RTL) {
 
-									DateAndTime = Tarikh.getMiladiDate(edtItemDate.getText().toString()) + " " + edtItemTime.getText().toString();
 
-								} else {
-									DateAndTime = edtItemDate.getText().toString() + " " + edtItemTime.getText().toString();
-								}
+
 								TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = DateAndTime;//edtItemTime.getText().toString().replaceAll(":", "").trim() + edtItemDate.getText().toString().replaceAll("/", "").trim();
 								TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 								TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 								item.HasValueInRange=true;
+								if(G.isEdit){
+									dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+									dtoItemValues.ItemVal=DateAndTime;
+									G.DB.UpdateItemValues(dtoItemValues);
+								}
 								if(G.isSave){
 									if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 										G.isSave = true;
 										G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 									}
 								}
 
@@ -721,8 +799,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						if (pos == (TabFragmentItem.arrListItemFiltered.size() - 1)) {
 							dialog.dismiss();
 						} else {
-							itemDirection = ItemDirection.Right;
-							showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+							if(!G.isEdit) {
+								itemDirection = ItemDirection.Right;
+								showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+							}else{
+								dialog.dismiss();
+							}
 						}
 					}
 				})
@@ -740,7 +822,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -785,8 +867,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == 0) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Left;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Left;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						});
@@ -842,7 +928,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 						if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 							item.IsInTimeRange = false;
-							MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+							//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 							AdapterItem.this.notifyDataSetChanged();
 						} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 							item.IsInTimeRange = false;
@@ -887,8 +973,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						if (pos == 0) {
 							dialog.dismiss();
 						} else {
-							itemDirection = ItemDirection.Left;
-							showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							if(!G.isEdit) {
+								itemDirection = ItemDirection.Left;
+								showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							}else{
+								dialog.dismiss();
+							}
 						}
 					}
 				})
@@ -901,7 +991,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -930,10 +1020,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 										item.HasValueInRange=true;
+										if(G.isEdit){
+											dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+											dtoItemValues.ItemVal=DateAndTime;
+											G.DB.UpdateItemValues(dtoItemValues);
+										}
 										if(G.isSave){
 											if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 												G.isSave = true;
 												G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 											}
 										}
 									} else {
@@ -948,8 +1044,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									TabFragmentItem.imgSaveItem.requestFocus();
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -1027,7 +1127,9 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						}
 					});
 			TextView txtItemTimeOnly = (TextView) dialog.getDialog().findViewById(R.id.txtItemTime);
+			txtItemTimeOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemTimeOnly = (EditText) dialog.getDialog().findViewById(R.id.edtItemTime);
+			edtItemTimeOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemTimeOnly.setInputType(InputType.TYPE_CLASS_NUMBER);
 			txtItemTimeOnly.setTypeface(tf);
 			edtItemTimeOnly.setTypeface(tf);
@@ -1040,7 +1142,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -1049,14 +1151,24 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								}
 								if (IsValidForSubmit == ValidForSubmitType.InRange || G.Setting.ContorolTime.compareTo("2") != 0) {
 									if ((edtItemTimeOnly.getText().toString().replaceAll(":", "").trim().length() == 0) || (edtItemTimeOnly.getText().toString().replaceAll(":", "").trim().length() == lengthTime)) {
-										if ((edtItemTimeOnly.getText().toString().replaceAll(":", "").trim().length() > 0) && !Tarikh.isTimeValid(edtItemTimeOnly.getText().toString())) {
-											MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.Msg_CheckTime), Toast.LENGTH_LONG);
+										if ((edtItemTimeOnly.getText().toString().replaceAll(":", "").trim().length() == 0) ) {
+											MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.Msg_CheckTime), Toast.LENGTH_SHORT);
 											return;
+										}else {
+											if(!Tarikh.isTimeValid(edtItemTimeOnly.getText().toString())){
+												MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.Msg_CheckTime), Toast.LENGTH_SHORT);
+												return;
+											}
+											TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = edtItemTimeOnly.getText().toString();//edtItemTimeOnly.getText().toString().replaceAll(":", "").trim();
+											TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
+											TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
+											item.HasValueInRange = true;
 										}
-										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = edtItemTimeOnly.getText().toString();//edtItemTimeOnly.getText().toString().replaceAll(":", "").trim();
-										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
-										TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
-										item.HasValueInRange=true;
+										if(G.isEdit){
+											dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+											dtoItemValues.ItemVal=edtItemTimeOnly.getText().toString();
+											G.DB.UpdateItemValues(dtoItemValues);
+										}
 										if(G.isSave){
 											if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 												G.isSave = true;
@@ -1075,8 +1187,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == (TabFragmentItem.arrListItemFiltered.size() - 1)) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -1094,7 +1210,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -1128,8 +1244,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == 0) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Left;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Left;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						});
@@ -1172,7 +1292,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 						if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 							item.IsInTimeRange = false;
-							MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+							//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 							AdapterItem.this.notifyDataSetChanged();
 						} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 							item.IsInTimeRange = false;
@@ -1206,8 +1326,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						if (pos == 0) {
 							dialog.dismiss();
 						} else {
-							itemDirection = ItemDirection.Left;
-							showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							if(!G.isEdit) {
+								itemDirection = ItemDirection.Left;
+								showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							}else{
+								dialog.dismiss();
+							}
 						}
 					}
 				})
@@ -1219,7 +1343,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -1236,10 +1360,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 										item.HasValueInRange=true;
+										if(G.isEdit){
+											dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+											dtoItemValues.ItemVal=edtItemTimeOnly.getText().toString();
+											G.DB.UpdateItemValues(dtoItemValues);
+										}
 										if(G.isSave){
 											if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 												G.isSave = true;
 												G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 											}
 										}
 									} else {
@@ -1254,8 +1384,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									TabFragmentItem.imgSaveItem.requestFocus();
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -1311,7 +1445,9 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						}
 					});
 			TextView txtItemDateOnly = (TextView) dialog.getDialog().findViewById(R.id.txtItemDate);
+			txtItemDateOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemDateOnly = (EditText) dialog.getDialog().findViewById(R.id.edtItemDate);
+			edtItemDateOnly.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemDateOnly.setInputType(InputType.TYPE_CLASS_NUMBER);
 			txtItemDateOnly.setTypeface(tf);
 			edtItemDateOnly.setTypeface(tf);
@@ -1326,7 +1462,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -1335,9 +1471,14 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								}
 								if (IsValidForSubmit == ValidForSubmitType.InRange || G.Setting.ContorolTime.compareTo("2") != 0) {
 									if ((edtItemDateOnly.getText().toString().replaceAll("/", "").trim().length() == 0) || (edtItemDateOnly.getText().toString().replaceAll("/", "").trim().length() == lengthDate)) {
-										if ((edtItemDateOnly.getText().toString().replaceAll("/", "").trim().length() > 0) && !Tarikh.isDateValid(edtItemDateOnly.getText().toString())) {
+										if ((edtItemDateOnly.getText().toString().replaceAll("/", "").trim().length() == 0) ) {
 											MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.Msg_CheckDate), Toast.LENGTH_LONG);
 											return;
+										}else{
+											if(!Tarikh.isDateValid(edtItemDateOnly.getText().toString())){
+												MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.Msg_CheckDate), Toast.LENGTH_LONG);
+												return;
+											}
 										}
 										if (G.RTL) {
 
@@ -1350,10 +1491,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 										item.HasValueInRange=true;
+										if(G.isEdit){
+											dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+											dtoItemValues.ItemVal=ItemValDate;
+											G.DB.UpdateItemValues(dtoItemValues);
+										}
 										if(G.isSave){
 											if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 												G.isSave = true;
 												G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 											}
 										}
 
@@ -1368,8 +1515,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == (TabFragmentItem.arrListItemFiltered.size() - 1)) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -1388,7 +1539,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -1429,8 +1580,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == 0) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Left;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Left;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						});
@@ -1474,7 +1629,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 						if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 							item.IsInTimeRange = false;
-							MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+							//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 							AdapterItem.this.notifyDataSetChanged();
 						} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 							item.IsInTimeRange = false;
@@ -1515,8 +1670,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						if (pos == 0) {
 							dialog.dismiss();
 						} else {
-							itemDirection = ItemDirection.Left;
-							showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							if(!G.isEdit) {
+								itemDirection = ItemDirection.Left;
+								showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							}else{
+								dialog.dismiss();
+							}
 						}
 					}
 				})
@@ -1528,7 +1687,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -1552,10 +1711,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 										item.HasValueInRange=true;
+										if(G.isEdit){
+											dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+											dtoItemValues.ItemVal=ItemValDate;
+											G.DB.UpdateItemValues(dtoItemValues);
+										}
 										if(G.isSave){
 											if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 												G.isSave = true;
 												G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 											}
 										}
 									} else {
@@ -1570,8 +1735,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									TabFragmentItem.imgSaveItem.requestFocus();
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -1667,6 +1836,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							}
 						});
 				TextView txtBodyMessage = (TextView) dialog.getDialog().findViewById(R.id.txtBodymessage);
+				txtBodyMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 				txtBodyMessage.setText((String) G.context.getResources().getText(R.string.NoDataLogical));
 				txtBodyMessage.setTypeface(tf);
 			}
@@ -1680,7 +1850,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -1693,21 +1863,30 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 											MyCheckListItem checkedItem = mycheckList.getSelectedCheckListItems().get(0);
 											TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = checkedItem.Value.toString();
 											TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();
+
 											;//Tarikh.getCurrentShamsidateWithoutSlash();
 											TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 											item.HasValueInRange=true;
 
 										} else {
+											TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();
 											TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = "";
 										}
 									} else {
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = "";
+										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();
 									}
-
+									if(G.isEdit){
+										MyCheckListItem checkedItem = mycheckList.getSelectedCheckListItems().get(0);
+										dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+										dtoItemValues.ItemVal=checkedItem.Value.toString();
+										G.DB.UpdateItemValues(dtoItemValues);
+									}
 									if(G.isSave){
 										if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 											G.isSave = true;
 											G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 										}
 									}
 									AdapterItem.this.notifyDataSetChanged();
@@ -1716,8 +1895,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == (TabFragmentItem.arrListItemFiltered.size() - 1)) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -1735,7 +1918,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -1769,8 +1952,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == 0) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Left;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Left;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						});
@@ -1800,7 +1987,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 						if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 							item.IsInTimeRange = false;
-							MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+							//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 							AdapterItem.this.notifyDataSetChanged();
 						} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 							item.IsInTimeRange = false;
@@ -1833,8 +2020,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						if (pos == 0) {
 							dialog.dismiss();
 						} else {
-							itemDirection = ItemDirection.Left;
-							showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							if(!G.isEdit) {
+								itemDirection = ItemDirection.Left;
+								showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							}else{
+								dialog.dismiss();
+							}
 						}
 					}
 				})
@@ -1845,7 +2036,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -1867,11 +2058,17 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									} else {
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = "";
 									}
-
+									if(G.isEdit){
+										MyCheckListItem checkedItem = mycheckList.getSelectedCheckListItems().get(0);
+										dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+										dtoItemValues.ItemVal=checkedItem.Value.toString();
+										G.DB.UpdateItemValues(dtoItemValues);
+									}
 									if(G.isSave){
 										if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 											G.isSave = true;
 											G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 										}
 									}
 									AdapterItem.this.notifyDataSetChanged();
@@ -1882,8 +2079,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									dialog.dismiss();
 
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -1937,7 +2138,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 					myRemarkcheckList.addCheckItem(new MyCheckListItem(remarks.get(i).RemName,remarks.get(i).RemID.toString(),false));
 				}
 
-				myRemarkcheckList.setCheckListOrientation(LinearLayout.VERTICAL).setCheckItemsHeight(50);
+				myRemarkcheckList.setCheckListOrientation(LinearLayout.VERTICAL).setCheckItemsHeight(70);
 
 				if(item.RemTyp==0)
 					myRemarkcheckList.setSelectionMode(MyCheckListMode.MultiSelection);
@@ -1974,6 +2175,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							}
 						});
 				TextView txtBodyMessage = (TextView) dialog.getDialog().findViewById(R.id.txtBodymessage);
+				txtBodyMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 				txtBodyMessage.setText((String)G.context.getResources().getText(R.string.NoDataRemark));
 				txtBodyMessage.setTypeface(tf);
 			}
@@ -1987,7 +2189,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -2006,11 +2208,26 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									} else {
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = "";
 									}
+									if(G.isEdit){
+										dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+										dtoItemValues.ItemVal=TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal;
+										dtoItemValues.ItemVal=getStringFromRemarks(myRemarkcheckList.getSelectedCheckListItems());
 
+										G.DB.UpdateItemValues(dtoItemValues);
+									}
 									if(G.isSave){
 										if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 											G.isSave = true;
-											G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+											if(TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate!=null) {
+												G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
+											}else{
+												G.isSave = false;
+												//itemDirection = ItemDirection.Right;
+												item.HasValueInRange=false;
+												//showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+
+											}
 										}
 									}
 									AdapterItem.this.notifyDataSetChanged();
@@ -2019,8 +2236,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == (TabFragmentItem.arrListItemFiltered.size() - 1)) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -2038,7 +2259,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -2068,8 +2289,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == 0) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Left;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Left;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						});
@@ -2099,7 +2324,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 						if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 							item.IsInTimeRange = false;
-							MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+							//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 							AdapterItem.this.notifyDataSetChanged();
 						} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 							item.IsInTimeRange = false;
@@ -2128,8 +2353,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						if (pos == 0) {
 							dialog.dismiss();
 						} else {
-							itemDirection = ItemDirection.Left;
-							showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							if(!G.isEdit) {
+								itemDirection = ItemDirection.Left;
+								showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							}else{
+								dialog.dismiss();
+							}
 						}
 					}
 				})
@@ -2141,7 +2370,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
@@ -2160,11 +2389,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									} else {
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = "";
 									}
-
+									if(G.isEdit){
+										dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+										dtoItemValues.ItemVal=getStringFromRemarks(myRemarkcheckList.getSelectedCheckListItems());;
+										G.DB.UpdateItemValues(dtoItemValues);
+									}
 									if(G.isSave){
 										if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 											G.isSave = true;
 											G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 										}
 									}
 									AdapterItem.this.notifyDataSetChanged();
@@ -2175,8 +2409,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									dialog.dismiss();
 
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -2227,13 +2465,29 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							showJozeeatDialog(item);
 						}
 					});
+			AppCompatButton buttonRemark=new AppCompatButton(G.context);
+			buttonRemark.setLayoutParams(
+					new ViewGroup.LayoutParams(
+							// or ViewGroup.LayoutParams.WRAP_CONTENT
+							ViewGroup.LayoutParams.MATCH_PARENT,
+							// or ViewGroup.LayoutParams.WRAP_CONTENT,
+							ViewGroup.LayoutParams.MATCH_PARENT ) );
+			buttonRemark.setText("REM");
+			buttonRemark.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtMamooliMinTitle = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMinTitle);
+			txtMamooliMinTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtMamooliMin = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMin);
+			txtMamooliMin.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtMamooliMaxTitle = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMaxTitle);
+			txtMamooliMaxTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtMamooliMax = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMax);
+			txtMamooliMax.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtMamooliUnitTitle = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariUnitTitle);
+			txtMamooliUnitTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtMamooliUnit = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariUnit);
+			txtMamooliUnit.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemMamooli = (EditText) dialog.getDialog().findViewById(R.id.edtItemMeghdari);
+			edtItemMamooli.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemMamooli.setTypeface(tf);
 			//edtItemMamooli.setFilters(new InputFilter[] { filter });
 			txtMamooliMinTitle.setTypeface(tf);
@@ -2244,7 +2498,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 			txtMamooliUnit.setTypeface(tf);
 			final MyCheckListItem checkListItemOut = new MyCheckListItem("OUT", "OUT",false);
 			final MyCheckListItem checkListItemReserve = new MyCheckListItem("RES", "RES",false);
-			final MyCheckListItem checkListItemRemark = new MyCheckListItem("REM", "REM",false);
+			//final MyCheckListItem checkListItemRemark = new MyCheckListItem("REM", "REM",false);
 			final MyCheckList myCheckList1 = new MyCheckList(G.context,checkListItemOut,checkListItemReserve);
 
 
@@ -2253,56 +2507,40 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 			final MyCheckList myRemarkcheckList2 =
 					new MyCheckList(G.context, new MyCheckListItem("", "",false),new MyCheckListItem("", "",false));
 
-			edtItemMamooli.addTextChangedListener(new TextWatcher() {
-				@Override
-				public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-				}
 
-				@Override
-				public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+			//myCheckList1.addCheckItem(checkListItemRemark)
+				//	.setCheckListOrientation(LinearLayout.HORIZONTAL)
+					//.setSelectionMode(MyCheckListMode.MultiSelection)
+					//.setCheckItemsHeight(50);
 
-				}
-
-				@Override
-				public void afterTextChanged(Editable editable) {
-					if(editable.toString().equals("")==false) {
-						myCheckList1.setSelectionByValue(-1);
-						myRemarkcheckList2.setSelectionByValue(-1);
-					}
-				}
-			});
-
-			myCheckList1.addCheckItem(checkListItemRemark)
-					.setCheckListOrientation(LinearLayout.HORIZONTAL)
-					.setSelectionMode(MyCheckListMode.SingleSelection)
-					.setCheckItemsHeight(50);
 			myCheckList1.setOnCheckListItemClickListener(new OnCheckListItemClickListener() {
 				@Override
 				public void onCheckListItemClick(MyCheckListItem selectedCheckListItem, Boolean isChecked) {
 					if(isChecked) {
-						if (myCheckList1.getSelectedCheckListItems().size() > 0) {
-							edtItemMamooli.setText("");
-							edtItemMamooli.setEnabled(false);
-							edtItemMamooli.setBackgroundDrawable(G.context.getResources().getDrawable(drawable.edittext_dark));
-							myRemarkcheckList2.setVisibility(View.GONE);
-						} else {
-							edtItemMamooli.setEnabled(true);
-							edtItemMamooli.setVisibility(View.VISIBLE);
-							edtItemMamooli.setBackgroundDrawable(G.context.getResources().getDrawable(drawable.edittext_light));
-							myRemarkcheckList2.setVisibility(View.GONE);
-						}
-						if (selectedCheckListItem.Text == "REM") {
-							myRemarkcheckList2.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-						} else if (isChecked) {
-							myRemarkcheckList2.setVisibility(View.GONE);
-						}
+						edtItemMamooli.setText("");
+						edtItemMamooli.setEnabled(false);
+						edtItemMamooli.setBackgroundDrawable(G.context.getResources().getDrawable(drawable.edittext_dark));
+
+					}else{
+						edtItemMamooli.setEnabled(true);
+						edtItemMamooli.setVisibility(View.VISIBLE);
+						edtItemMamooli.setBackgroundDrawable(G.context.getResources().getDrawable(drawable.edittext_light));
+						myRemarkcheckList2.setVisibility(View.GONE);
 					}
 				}
 			});
 			dialog.setVerticalMargin(8);
 			dialog.addContentView(myCheckList1);
+			dialog.addContentView(buttonRemark);
 			dialog.setVerticalMargin(8);
+
+			buttonRemark.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					myRemarkcheckList2.setVisibility(View.VISIBLE);
+				}
+			});
 
 			if(remarks2.size()>0){
 				myRemarkcheckList2.removeAllCkeckItems();
@@ -2336,7 +2574,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -2345,47 +2583,55 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								}
 
 								if (IsValidForSubmit == ValidForSubmitType.InRange || G.Setting.ContorolTime.compareTo("2") != 0) {
-									if (myCheckList1.getSelectedCheckListItems().size() > 0) {
-										if (myCheckList1.getSelectedCheckListItems().get(0).Text == "REM") {
+
+										if (!edtItemMamooli.getText().toString().equals("")) {
+											String itemval;
+											if(edtItemMamooli.getText().toString().trim().equals("")){
+												if(edtItemMamooli.getHint().toString().equals("")){
+													MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForValidText), Toast.LENGTH_SHORT);
+													return;
+												}else{
+													itemval=edtItemMamooli.getHint().toString().trim();
+												}
+											}else{
+												itemval=edtItemMamooli.getText().toString().trim();
+											}
+											if (!checkValidations(item,itemval))
+												return;
+											TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = itemval;
 											if (myRemarkcheckList2.getSelectedCheckListItems().size() > 0) {
-												TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems());
+
+												TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues = getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems());
+											} else {
+												TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues = "";
+											}
 												TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 												TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 
-											} else {
-												TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = "";
-											}
-										} else// if(myCheckList1.getSelectedCheckListItems().get(0).Text=="OUT" || myCheckList1.getSelectedCheckListItems().get(0).Text=="RESERVE")
+
+										}
+										else// if(myCheckList1.getSelectedCheckListItems().get(0).Text=="OUT" || myCheckList1.getSelectedCheckListItems().get(0).Text=="RESERVE")
 										{
-											TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = myCheckList1.getSelectedCheckListItems().get(0).Value.toString();
+											if(myCheckList1.getSelectedCheckListItems().size()>0) {
+												TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = myCheckList1.getSelectedCheckListItems().get(0).Value.toString();
+											}
+											TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues =getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems());
 											TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 											TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 										}
-									} else {
-										String itemval;
-										if(edtItemMamooli.getText().toString().trim().equals("")){
-											if(edtItemMamooli.getHint().toString().equals("")){
-												MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForValidText), Toast.LENGTH_SHORT);
-												return;
-											}else{
-												itemval=edtItemMamooli.getHint().toString().trim();
-											}
-										}else{
-											itemval=edtItemMamooli.getText().toString().trim();
-										}
-										if (!checkValidations(item,itemval))
-											return;
 
-
-										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal =  itemval;
-										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
-										TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
-									}
 									item.HasValueInRange=true;
+									if(G.isEdit){
+										dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+										dtoItemValues.ItemVal=TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal;
+										dtoItemValues.RemValues=getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems());
+										G.DB.UpdateItemValues(dtoItemValues);
+									}
 									if(G.isSave){
 										if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 											G.isSave = true;
 											G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 										}
 									}
 									AdapterItem.this.notifyDataSetChanged();
@@ -2394,8 +2640,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == (TabFragmentItem.arrListItemFiltered.size() - 1)) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 
 
@@ -2419,7 +2669,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -2427,23 +2677,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									AdapterItem.this.notifyDataSetChanged();
 								}
 								if (IsValidForSubmit == ValidForSubmitType.InRange || G.Setting.ContorolTime.compareTo("2") != 0) {
-									if (myCheckList1.getSelectedCheckListItems().size() > 0) {
-										if (myCheckList1.getSelectedCheckListItems().get(0).Text == "REM") {
-											if (myRemarkcheckList2.getSelectedCheckListItems().size() > 0) {
-												TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems());
-												TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime(); //Tarikh.getCurrentShamsidateWithoutSlash();
-												TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
-											} else {
-												TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = "";
-											}
-										} else// if(myCheckList1.getSelectedCheckListItems().get(0).Text=="OUT" || myCheckList1.getSelectedCheckListItems().get(0).Text=="RESERVE")
-										{
-											TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = myCheckList1.getSelectedCheckListItems().get(0).Value.toString();
-											TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
-											TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
-										}
-									} else {
-
+									if (!edtItemMamooli.getText().toString().equals("")) {
 										String itemval;
 										if(edtItemMamooli.getText().toString().trim().equals("")){
 											if(edtItemMamooli.getHint().toString().equals("")){
@@ -2455,11 +2689,24 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 										}else{
 											itemval=edtItemMamooli.getText().toString().trim();
 										}
-										if (!checkValidations(item, itemval))
+										if (!checkValidations(item,itemval))
 											return;
-
-
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = itemval;
+										if (myRemarkcheckList2.getSelectedCheckListItems().size() > 0) {
+
+											TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues =getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems()); getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems());
+										} else {
+											TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues = "";
+										}
+										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
+										TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
+
+
+									}
+									else// if(myCheckList1.getSelectedCheckListItems().get(0).Text=="OUT" || myCheckList1.getSelectedCheckListItems().get(0).Text=="RESERVE")
+									{
+										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = myCheckList1.getSelectedCheckListItems().get(0).Value.toString();
+										TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues =getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems()); myCheckList1.getSelectedCheckListItems().get(0).Value.toString();
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 									}
@@ -2476,8 +2723,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == 0) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Left;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Left;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 								if (edtItemMamooli.getText().toString().equals("") == false) {
 									myCheckList1.setSelectionByValue(null);
@@ -2549,7 +2800,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 						if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 							item.IsInTimeRange = false;
-							MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+							//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 							AdapterItem.this.notifyDataSetChanged();
 						} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 							item.IsInTimeRange = false;
@@ -2557,22 +2808,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							AdapterItem.this.notifyDataSetChanged();
 						}
 						if (IsValidForSubmit == ValidForSubmitType.InRange || G.Setting.ContorolTime.compareTo("2") != 0) {
-							if (myCheckList1.getSelectedCheckListItems().size() > 0) {
-								if (myCheckList1.getSelectedCheckListItems().get(0).Text == "REM") {
-									if (myRemarkcheckList2.getSelectedCheckListItems().size() > 0) {
-										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems());
-										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime(); //Tarikh.getCurrentShamsidateWithoutSlash();
-										TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
-									} else {
-										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = "";
-									}
-								} else// if(myCheckList1.getSelectedCheckListItems().get(0).Text=="OUT" || myCheckList1.getSelectedCheckListItems().get(0).Text=="RESERVE")
-								{
-									TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = myCheckList1.getSelectedCheckListItems().get(0).Value.toString();
-									TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
-									TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
-								}
-							} else {
+							if (!edtItemMamooli.getText().toString().equals("")) {
 								String itemval;
 								if(edtItemMamooli.getText().toString().trim().equals("")){
 									if(edtItemMamooli.getHint().toString().equals("")){
@@ -2584,11 +2820,24 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								}else{
 									itemval=edtItemMamooli.getText().toString().trim();
 								}
-
-								if (!checkValidations(item, itemval))
+								if (!checkValidations(item,itemval))
 									return;
-
 								TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = itemval;
+								if (myRemarkcheckList2.getSelectedCheckListItems().size() > 0) {
+
+									TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues =getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems()); getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems());
+								} else {
+									TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues = "";
+								}
+								TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
+								TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
+
+
+							}
+							else// if(myCheckList1.getSelectedCheckListItems().get(0).Text=="OUT" || myCheckList1.getSelectedCheckListItems().get(0).Text=="RESERVE")
+							{
+								TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = myCheckList1.getSelectedCheckListItems().get(0).Value.toString();
+								TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues =getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems()); myCheckList1.getSelectedCheckListItems().get(0).Value.toString();
 								TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 								TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 							}
@@ -2604,8 +2853,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						if (pos == 0) {
 							dialog.dismiss();
 						} else {
-							itemDirection = ItemDirection.Left;
-							showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							if(!G.isEdit) {
+								itemDirection = ItemDirection.Left;
+								showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							}else{
+								dialog.dismiss();
+							}
 						}
 						if (edtItemMamooli.getText().toString().equals("") == false) {
 							myCheckList1.setSelectionByValue(null);
@@ -2621,7 +2874,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -2629,22 +2882,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									AdapterItem.this.notifyDataSetChanged();
 								}
 								if (IsValidForSubmit == ValidForSubmitType.InRange || G.Setting.ContorolTime.compareTo("2") != 0) {
-									if (myCheckList1.getSelectedCheckListItems().size() > 0) {
-										if (myCheckList1.getSelectedCheckListItems().get(0).Text == "REM") {
-											if (myRemarkcheckList2.getSelectedCheckListItems().size() > 0) {
-												TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems());
-												TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
-												TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
-											} else {
-												TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = "";
-											}
-										} else// if(myCheckList1.getSelectedCheckListItems().get(0).Text=="OUT" || myCheckList1.getSelectedCheckListItems().get(0).Text=="RESERVE")
-										{
-											TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = myCheckList1.getSelectedCheckListItems().get(0).Value.toString();
-											TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
-											TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
-										}
-									} else {
+									if (!edtItemMamooli.getText().toString().equals("")) {
 										String itemval;
 										if(edtItemMamooli.getText().toString().trim().equals("")){
 											if(edtItemMamooli.getHint().toString().equals("")){
@@ -2656,19 +2894,39 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 										}else{
 											itemval=edtItemMamooli.getText().toString().trim();
 										}
-
-										if (!checkValidations(item, itemval))
+										if (!checkValidations(item,itemval))
 											return;
-
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = itemval;
+										if (myRemarkcheckList2.getSelectedCheckListItems().size() > 0) {
+
+											TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues =getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems()); getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems());
+										} else {
+											TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues = "";
+										}
+										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
+										TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
+
+
+									}
+									else// if(myCheckList1.getSelectedCheckListItems().get(0).Text=="OUT" || myCheckList1.getSelectedCheckListItems().get(0).Text=="RESERVE")
+									{
+										TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal = myCheckList1.getSelectedCheckListItems().get(0).Value.toString();
+										TabFragmentItem.dicItemValues.get(item.ItemInfID).RemValues =getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems()); myCheckList1.getSelectedCheckListItems().get(0).Value.toString();
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 										TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 									}
 									item.HasValueInRange=true;
+									if(G.isEdit){
+										dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+										dtoItemValues.ItemVal=TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal;
+										dtoItemValues.RemValues=getStringFromRemarks(myRemarkcheckList2.getSelectedCheckListItems());
+										G.DB.UpdateItemValues(dtoItemValues);
+									}
 									if(G.isSave){
 										if(TabFragmentItem.dicItemValues.get(item.ItemInfID)!=null) {
 											G.isSave = true;
 											G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 										}
 									}
 									AdapterItem.this.notifyDataSetChanged();
@@ -2679,8 +2937,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									dialog.dismiss();
 
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 
 
@@ -2718,15 +2980,18 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 				dialog.show();
 			}
 
+			txtMamooliMin.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			txtMamooliMin.setText(MyUtilities.changeNumberLocaleString(item.MinAmount1));
+			txtMamooliMax.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			txtMamooliMax.setText(MyUtilities.changeNumberLocaleString(item.MaxAmount1));
+			txtMamooliUnit.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			txtMamooliUnit.setText(item.MeasureUnitName.toString());
 
 			//Load if has value
 			//edtItemMamooli.setHint(getLastItemValByItemInfoId(item.ItemInfID));
            //ArrayList<dtoItemValues> dtoItemValues= G.DB.getItemValuesByItemInfoId(item.ItemInfID);
            String ItemValues= getLastItemValByItemInfoId(item.ItemInfID);
-
+           String RemValues=getLastItemRemarkValueByItemInfoId(item.ItemInfID);
 			   if (ItemValues !=null  || ItemValues.equals("")==false) {
 
 				   //dtoItemValues lastItemValue = new dtoItemValues();
@@ -2734,28 +2999,35 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 				   if (ItemValues.trim().equals(checkListItemOut.Value.toString())) {
 					   myCheckList1.setSelectionByValue(checkListItemOut.Value);
-					   //edtItemMamooli.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.edittext_dark));
-					   //edtItemMamooli.setEnabled(false);
+					   edtItemMamooli.setText("");
+					   edtItemMamooli.setEnabled(false);
+					   edtItemMamooli.setBackgroundDrawable(G.context.getResources().getDrawable(drawable.edittext_dark));
 					   myRemarkcheckList2.setVisibility(View.GONE);
+					   if(RemValues!=null || ItemValues.equals("")==false){
+						   myRemarkcheckList2.setVisibility(View.VISIBLE);
+						   myRemarkcheckList2.setSelectionByValue(getRemarkIdsFromString(RemValues));
+					   }
 				   }
 				   else if (ItemValues.trim().equals(checkListItemReserve.Value.toString())) {
 					   myCheckList1.setSelectionByValue(checkListItemReserve.Value);
-					   //edtItemMamooli.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.edittext_dark));
-					   //edtItemMamooli.setEnabled(false);
+					   edtItemMamooli.setText("");
+					   edtItemMamooli.setEnabled(false);
+					   edtItemMamooli.setBackgroundDrawable(G.context.getResources().getDrawable(drawable.edittext_dark));
 					   myRemarkcheckList2.setVisibility(View.GONE);
-				   }
-				   else if (ItemValues.trim().contains(",")) {
-					   myRemarkcheckList2.setVisibility(View.VISIBLE);
-					   myCheckList1.setSelectionByValue(checkListItemRemark.Value);
-					   myRemarkcheckList2.setSelectionByValue(getRemarkIdsFromString(ItemValues));
-					   //edtItemMamooli.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.edittext_dark));
-					   //edtItemMamooli.setEnabled(false);
+					   if(RemValues!=null || ItemValues.equals("")==false){
+						   myRemarkcheckList2.setVisibility(View.VISIBLE);
+						   myRemarkcheckList2.setSelectionByValue(getRemarkIdsFromString(RemValues));
+					   }
 				   }
 				   else {
 					   edtItemMamooli.setHint(ItemValues.trim());
 					   edtItemMamooli.setBackgroundDrawable(G.context.getResources().getDrawable(drawable.edittext_light));
 					   edtItemMamooli.setEnabled(true);
 					   myRemarkcheckList2.setVisibility(View.GONE);
+					   if(RemValues!=null || ItemValues.equals("")==false){
+						   myRemarkcheckList2.setVisibility(View.VISIBLE);
+						   myRemarkcheckList2.setSelectionByValue(getRemarkIdsFromString(RemValues));
+					   }
 				   }
 			   }
 			   if (TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal != null && TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal.trim().length() > 0) {
@@ -2771,7 +3043,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 					   myRemarkcheckList2.setVisibility(View.GONE);
 				   } else if (TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal.trim().contains(",")) {
 					   myRemarkcheckList2.setVisibility(View.VISIBLE);
-					   myCheckList1.setSelectionByValue(checkListItemRemark.Value);
+					   //myCheckList1.setSelectionByValue(checkListItemRemark.Value);
 					   myRemarkcheckList2.setSelectionByValue(getRemarkIdsFromString(TabFragmentItem.dicItemValues.get(item.ItemInfID).ItemVal));
 					   edtItemMamooli.setBackgroundDrawable(G.context.getResources().getDrawable(drawable.edittext_dark));
 					   edtItemMamooli.setEnabled(false);
@@ -2801,12 +3073,19 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 			LinearLayout llMinValue = (LinearLayout) dialog.getDialog().findViewById(R.id.llMinValue);
 			LinearLayout llUnit = (LinearLayout) dialog.getDialog().findViewById(R.id.llUnit);
 			TextView txtFormulaMinTitle = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMinTitle);
+			txtFormulaMinTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtFormulaMin = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMin);
+			txtFormulaMin.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtFormulaMaxTitle = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMaxTitle);
+			txtFormulaMaxTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtFormulaMax = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariMax);
+			txtFormulaMax.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtFormulaUnitTitle = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariUnitTitle);
+			txtFormulaUnitTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			TextView txtFormulaUnit = (TextView) dialog.getDialog().findViewById(R.id.txtMeghdariUnit);
+			txtFormulaUnit.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			final EditText edtItemFormula = (EditText) dialog.getDialog().findViewById(R.id.edtItemMeghdari);
+			edtItemFormula.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			edtItemFormula.setTypeface(tf);
 			txtFormulaMinTitle.setTypeface(tf);
 			txtFormulaMin.setTypeface(tf);
@@ -3263,8 +3542,8 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime)
-											, Toast.LENGTH_SHORT);
+//									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime)
+//											, Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -3278,8 +3557,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == (TabFragmentItem.arrListItemFiltered.size() - 1)) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -3297,7 +3580,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -3313,8 +3596,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								if (pos == 0) {
 									dialog.dismiss();
 								} else {
-									itemDirection = ItemDirection.Left;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Left;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -3345,7 +3632,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 						if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 							item.IsInTimeRange = false;
-							MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+							//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 							AdapterItem.this.notifyDataSetChanged();
 						} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 							item.IsInTimeRange = false;
@@ -3359,8 +3646,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						if (pos == 0) {
 							dialog.dismiss();
 						} else {
-							itemDirection = ItemDirection.Left;
-							showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							if(!G.isEdit) {
+								itemDirection = ItemDirection.Left;
+								showDialog(TabFragmentItem.arrListItemFiltered.get(pos - 1), pos - 1);
+							}else{
+								dialog.dismiss();
+							}
 						}
 					}
 				})
@@ -3371,8 +3662,8 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 								Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 								if (IsValidForSubmit == ValidForSubmitType.OutOfRange) {
 									item.IsInTimeRange = false;
-									MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime)
-											, Toast.LENGTH_SHORT);
+									//MyToast.Show(G.context, (String) G.context.getResources().getText(R.string.MessageForSettingTime)
+											//, Toast.LENGTH_SHORT);
 									AdapterItem.this.notifyDataSetChanged();
 								} else if (IsValidForSubmit == ValidForSubmitType.InRangeButHasOtherValue) {
 									item.IsInTimeRange = false;
@@ -3388,8 +3679,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 									dialog.dismiss();
 
 								} else {
-									itemDirection = ItemDirection.Right;
-									showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									if(!G.isEdit) {
+										itemDirection = ItemDirection.Right;
+										showDialog(TabFragmentItem.arrListItemFiltered.get(pos + 1), pos + 1);
+									}else{
+										dialog.dismiss();
+									}
 								}
 							}
 						})
@@ -3435,12 +3730,13 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 		//for(dtoItems item:TabFragmentItem.arrListItem) {
 			dtoItemFormulas itemFormulas = G.DB.getItemFormula(item.ItemInfID);
-			item.HasValueInRange=true;
+			//
 			if(itemFormulas==null || item.IsFullOfMaxData ) {
 				//continue;
 				return;
 			}
 			if(itemFormulas.FormulaID == FormulaType.MIANGIN) {
+				item.HasValueInRange=true;
 				if (itemFormulas.ItemSelect.trim().length() > 0) {
 					int count = 0;
 					Double sum = 0.;
@@ -3459,10 +3755,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 						if (State == 1) {
+							if(G.isEdit){
+								dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+								dtoItemValues.ItemVal= MyUtilities.changeNumberLocaleString(String.valueOf(sum / count));
+								G.DB.UpdateItemValues(dtoItemValues);
+							}
 							if (G.isSave) {
 								if (TabFragmentItem.dicItemValues.get(item.ItemInfID) != null) {
 									G.isSave = true;
 									G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 								}
 							}
 						}
@@ -3477,6 +3779,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 			}
 			else if(itemFormulas.FormulaID == FormulaType.EKHTELAF_MIN_MAX){
+				item.HasValueInRange=true;
 				if(itemFormulas!=null && itemFormulas.ItemSelect.trim().length()>0){
 					Double min = null;
 					Double max = null;
@@ -3503,10 +3806,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 
 						if (State == 1) {
+							if(G.isEdit){
+								dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+								dtoItemValues.ItemVal=MyUtilities.changeNumberLocaleString(String.valueOf(max - min));
+								G.DB.UpdateItemValues(dtoItemValues);
+							}
 							if (G.isSave) {
 								if (TabFragmentItem.dicItemValues.get(item.ItemInfID) != null) {
 									G.isSave = true;
 									G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 								}
 							}
 						}
@@ -3519,6 +3828,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 			}
 			else if(itemFormulas.FormulaID == FormulaType.TAFAZOL_2_ITEM){
+				item.HasValueInRange=true;
 				if(itemFormulas!=null && itemFormulas.ItemSelect.trim().length()>0){
 					Integer itemId1 = Integer.valueOf(itemFormulas.ItemSelect.trim().split(",")[0]);
 					Integer itemId2 = Integer.valueOf(itemFormulas.ItemSelect.trim().split(",")[1]);
@@ -3533,10 +3843,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 						if (State == 1) {
+							if(G.isEdit){
+								dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+								dtoItemValues.ItemVal=MyUtilities.changeNumberLocaleString(String.valueOf(digit1-digit2));
+								G.DB.UpdateItemValues(dtoItemValues);
+							}
 							if (G.isSave) {
 								if (TabFragmentItem.dicItemValues.get(item.ItemInfID) != null) {
 									G.isSave = true;
 									G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 								}
 							}
 						}
@@ -3551,6 +3867,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 			}
 			else if(itemFormulas.FormulaID == FormulaType.TAFAZOL_SAATI){
+				item.HasValueInRange=true;
 				if(itemFormulas!=null && itemFormulas.ItemSelect.trim().length()>0){
 					Integer itemId1 = 0;
 					if(itemFormulas.ItemSelect.contains(",")){
@@ -3575,10 +3892,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 							if (State == 1) {
+								if(G.isEdit){
+									dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+									dtoItemValues.ItemVal=MyUtilities.changeNumberLocaleString(String.valueOf(digit1-digit2));
+									G.DB.UpdateItemValues(dtoItemValues);
+								}
 								if (G.isSave) {
 									if (TabFragmentItem.dicItemValues.get(item.ItemInfID) != null) {
 										G.isSave = true;
 										G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 									}
 								}
 							}
@@ -3596,6 +3919,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 			}
 			else if(itemFormulas.FormulaID == FormulaType.MAJMOO_TAFAZOL_SAATI){
+				item.HasValueInRange=true;
 				if(itemFormulas!=null && itemFormulas.ItemSelect.trim().length()>0){
 					Integer itemId1 = 0;
 					if(itemFormulas.ItemSelect.contains(",")){
@@ -3632,10 +3956,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 							if (State == 1) {
+								if(G.isEdit){
+									dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+									dtoItemValues.ItemVal=MyUtilities.changeNumberLocaleString(String.valueOf(sum));
+									G.DB.UpdateItemValues(dtoItemValues);
+								}
 								if (G.isSave) {
 									if (TabFragmentItem.dicItemValues.get(item.ItemInfID) != null) {
 										G.isSave = true;
 										G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 									}
 								}
 							}
@@ -3653,6 +3983,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 			}
 			else if(itemFormulas.FormulaID == FormulaType.MAJMOO){
+				item.HasValueInRange=true;
 				if(itemFormulas.ItemSelect.trim().length()>0){
 					int count = 0;
 					Double sum = 0.;
@@ -3671,10 +4002,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 						if (State == 1) {
+							if(G.isEdit){
+								dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+								dtoItemValues.ItemVal=MyUtilities.changeNumberLocaleString(String.valueOf(sum));
+								G.DB.UpdateItemValues(dtoItemValues);
+							}
 							if (G.isSave) {
 								if (TabFragmentItem.dicItemValues.get(item.ItemInfID) != null) {
 									G.isSave = true;
 									G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 								}
 							}
 						}
@@ -3688,6 +4025,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 			}
 			else if(itemFormulas.FormulaID == FormulaType.COPY){
+				item.HasValueInRange=true;
 				if(itemFormulas!=null && itemFormulas.ItemSelect.trim().length()>0) {
 					Integer itemId = 0;
 					if (itemFormulas.ItemSelect.contains(",")) {
@@ -3701,10 +4039,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 							if (State == 1) {
+								if(G.isEdit){
+									dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+									dtoItemValues.ItemVal=TabFragmentItem.dicItemValues.get(itemId).ItemVal;
+									G.DB.UpdateItemValues(dtoItemValues);
+								}
 								if (G.isSave) {
 									if (TabFragmentItem.dicItemValues.get(item.ItemInfID) != null) {
 										G.isSave = true;
 										G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 									}
 								}
 							}
@@ -3721,6 +4065,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 			}
 			else if(itemFormulas.FormulaID == FormulaType.ZARB){
+				item.HasValueInRange=true;
 				if(itemFormulas!=null && itemFormulas.ItemSelect.trim().length()>0){
 					Integer itemId1 = Integer.valueOf(itemFormulas.ItemSelect.trim().split(",")[0]);
 					Integer itemId2 = Integer.valueOf(itemFormulas.ItemSelect.trim().split(",")[1]);
@@ -3735,10 +4080,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 						TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 						if (State == 1) {
+							if(G.isEdit){
+								dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+								dtoItemValues.ItemVal=MyUtilities.changeNumberLocaleString(String.valueOf(digit1*digit2));
+								G.DB.UpdateItemValues(dtoItemValues);
+							}
 							if (G.isSave) {
 								if (TabFragmentItem.dicItemValues.get(item.ItemInfID) != null) {
 									G.isSave = true;
 									G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 								}
 							}
 						}
@@ -3751,6 +4102,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 			}
 			else if(itemFormulas.FormulaID == FormulaType.TAGHSIM){
+				item.HasValueInRange=true;
 				if(itemFormulas!=null && itemFormulas.ItemSelect.trim().length()>0){
 					Integer itemId1 = Integer.valueOf(itemFormulas.ItemSelect.trim().split(",")[0]);
 					Integer itemId2 = Integer.valueOf(itemFormulas.ItemSelect.trim().split(",")[1]);
@@ -3772,10 +4124,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate = Tarikh.getCurrentMiladidatetime();//Tarikh.getCurrentShamsidateWithoutSlash();
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 							if (State == 1) {
+								if(G.isEdit){
+									G.DB.UpdateItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+									dtoItemValues.ItemVal=MyUtilities.changeNumberLocaleString(String.valueOf(digit1/digit2));
+									G.DB.UpdateItemValues(dtoItemValues);
+								}
 								if (G.isSave) {
 									if (TabFragmentItem.dicItemValues.get(item.ItemInfID) != null) {
 										G.isSave = true;
 										G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 									}
 								}
 							}
@@ -3792,6 +4150,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 			}
 			else if(itemFormulas.FormulaID == FormulaType.TAGHSIM_BAR_SABET){
+				item.HasValueInRange=true;
 				if(itemFormulas!=null && itemFormulas.ItemSelect.trim().length()>0){
 					Integer itemId = 0;
 					if(itemFormulas.ItemSelect.contains(",")){
@@ -3807,10 +4166,16 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PDate =Tarikh.getCurrentMiladidatetime(); //Tarikh.getCurrentShamsidateWithoutSlash();
 							TabFragmentItem.dicItemValues.get(item.ItemInfID).PTime = Tarikh.getTimeWithoutColon();
 							if (State == 1) {
+								if(G.isEdit){
+									G.DB.UpdateItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));dtoItemValues dtoItemValues= G.DB.getLastItemValue(item.ItemInfID);
+									dtoItemValues.ItemVal=MyUtilities.changeNumberLocaleString(String.valueOf(digit/itemFormulas.constantNumber));
+									G.DB.UpdateItemValues(dtoItemValues);
+								}
 								if (G.isSave) {
 									if (TabFragmentItem.dicItemValues.get(item.ItemInfID) != null) {
 										G.isSave = true;
 										G.DB.InsertItemValues(TabFragmentItem.dicItemValues.get(item.ItemInfID));
+
 									}
 								}
 							}
@@ -3880,6 +4245,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 				.addBodyText(String.format((String) G.context.getResources().getText(R.string.MaxWithParam), item.MaxAmount3==null?"-":item.MaxAmount3),FontSize)
 				.setContentSplitter()
 				.addBodyText(String.format((String) G.context.getResources().getText(R.string.ZaribWithParam), MyUtilities.changeNumberLocaleString(item.Zarib.toString())),FontSize)
+
 				.addButton((String) G.context.getResources().getText(R.string.Close), new OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -3902,6 +4268,51 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
 				}else{
 					lastval=lastValuesInDevice.get(lastValuesInDevice.size() - 1).ItemVal.trim();
+					lastval=lastval.substring(0,lastval.length()-1);
+				}
+			}else{
+				if(G.isEdit){
+					return "";
+				}
+				dtoMaxItemVal lastValueFromServer = G.DB.getLastValueByItemInfoId(itemInfoId);
+				if(lastValueFromServer!=null)
+				{
+					lastval = MyUtilities.changeNumberLocaleString(lastValueFromServer.ItemVal.trim());
+//					if(lastValueFromServer.ItemValTyp.equals("=")){
+//						lastval=lastValueFromServer.ItemVal.trim();
+//					}
+					if(lastValueFromServer.ItemValTyp.equals("6")){
+						lastval=lastValueFromServer.ItemVal.trim();
+					}
+					if(lastValueFromServer.ItemValTyp.equals("3")){
+						if(lastValueFromServer.ItemVal.contains(",")) {
+							lastval = lastValueFromServer.ItemVal.trim()
+									.substring(0, lastValueFromServer.ItemVal.trim().length() - 1);
+						}else{
+							lastval = lastValueFromServer.ItemVal.trim();
+						}
+					}
+					if(lastval.equals("")){
+						lastval=lastValueFromServer.ItemVal.trim();
+					}
+					if(lastValueFromServer.ItemValTyp.equals("4")){
+						lastval=lastValueFromServer.RemAns.trim();
+					}
+				}
+			}
+		}
+		return lastval;
+	}
+	private String getLastItemRemarkValueByItemInfoId(Integer itemInfoId) {
+		String lastval = "";
+		if(G.Setting.ShowLastData == 1) {
+			ArrayList<dtoItemValues> lastValuesInDevice = G.DB.getItemValuesByItemInfoId(itemInfoId);
+			if(lastValuesInDevice.size()>0) {
+				if(G.RTL) {
+					lastval = MyUtilities.changeNumberLocaleString(lastValuesInDevice.get(lastValuesInDevice.size() - 1).RemValues.trim());
+
+				}else{
+					lastval=lastValuesInDevice.get(lastValuesInDevice.size() - 1).RemValues.trim();
 					lastval=lastval.substring(0,lastval.length()-1);
 				}
 			}else{
@@ -3936,7 +4347,6 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 	}
 
 
-
 	public  class ViewHolder {
 
 		public   TextView  txtItemDesc;
@@ -3944,6 +4354,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 		public   ViewGroup layoutRoot;
 		public   ViewGroup layoutRoot1;
 		public  ImageView imgItemInfo;
+		public 	ImageView imgEdit;
 		public  TextView  txtItem;
     	
         public ViewHolder(View view) {
@@ -3951,9 +4362,13 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 
             layoutRoot1 = (ViewGroup) view.findViewById(R.id.layoutRootItem1);
             imgItemInfo = (ImageView) view.findViewById(R.id.imgItemInfo);
+			imgEdit=(ImageView)view.findViewById(R.id.imgEdit);
+
 			imgTajhizNfcItem = (ImageView) view.findViewById(R.id.imgTajhizNfcItem);
             txtItem = (TextView) view.findViewById(R.id.txtItemName);
+            txtItem.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
             txtItemDesc = (TextView) view.findViewById(R.id.txtItemDesc);
+            txtItemDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
             drwGreen = G.context.getResources().getDrawable(drawable.list_item_green_gradient);
             drwWhite = G.context.getResources().getDrawable(drawable.list_item_gradient);
             drwGray =  G.context.getResources().getDrawable(drawable.list_item_gray_gradient);
@@ -3973,7 +4388,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 					Integer IsValidForSubmit = TabFragmentItem.IsValidForSubmit(item);
 					if(IsValidForSubmit == ValidForSubmitType.OutOfRange){
 						item.IsInTimeRange = false;
-						MyToast.Show(G.context, (String)G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+						//MyToast.Show(G.context, (String)G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 						setBackgroundColorDependsOnItemVal(item);
 						AdapterItem.this.notifyDataSetChanged();
 					}else if(IsValidForSubmit==ValidForSubmitType.InRangeButHasOtherValue){
@@ -3991,7 +4406,7 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 			else{
 				if(TabFragmentItem.IsValidForSubmit(item)==ValidForSubmitType.OutOfRange){
 					item.IsInTimeRange = false;
-					MyToast.Show(G.context, (String)G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
+					//MyToast.Show(G.context, (String)G.context.getResources().getText(R.string.MessageForSettingTime), Toast.LENGTH_SHORT);
 					setBackgroundColorDependsOnItemVal(item);
 					if(G.Setting.ContorolTime.compareTo("2") != 0)
 					{
@@ -4013,7 +4428,12 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 		}
         @RequiresApi(api = Build.VERSION_CODES.N)
 		public void fill(final ArrayAdapter<dtoItems> adapter, final dtoItems item, final int position) {
-            txtItem.setText(item.ItemName);
+			if(G.RTL) {
+				if(item.ItemName.length()>30){
+					item.ItemName=item.ItemName.substring(0,30) +"\n"+item.ItemName.substring(30);
+				}
+			}
+        	txtItem.setText(item.ItemName);
             if(item.Desc.equals("")==false) {
 				txtItemDesc.setText(item.Desc);
 			}
@@ -4034,7 +4454,9 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 					}
 				});
 			}else
-				imgTajhizNfcItem.setVisibility(View.GONE);
+				if(G.RTL) {
+					imgTajhizNfcItem.setVisibility(View.GONE);
+				}
 
 			imgItemInfo.setOnClickListener(new OnClickListener() {
 				@Override
@@ -4053,26 +4475,41 @@ public class AdapterItem extends ArrayAdapter<dtoItems> {
 			setBackgroundColorDependsOnItemVal(item);
 
 
+			imgEdit.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					G.isEdit=true;
+					if(!getLastItemValByItemInfoId(item.ItemInfID).equals("")) {
+						G.isSave=false;
+						ActionCommand(item, position);
+					}
+				}
+			});
 //            updateMohasebatiItems();
 
 			txtItem.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					G.isEdit=false;
 					ActionCommand(item,position);
 				}
 			});
 			layoutRoot.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					G.isEdit=false;
 					ActionCommand(item,position);
 				}
 			});
 			layoutRoot1.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					G.isEdit=false;
 					ActionCommand(item,position);
 				}
 			});
+
+
         }
 
 
@@ -4177,7 +4614,9 @@ private void setBackgroundColorDependsOnItemVal(dtoItems item)
 
 	if(item.HasValueInRange) {
 		layoutRoot.setBackgroundDrawable(drwGreen);
+
 	}else{
+
 		layoutRoot.setBackgroundDrawable(drwWhite);
 	}
 	if(!item.IsInTimeRange && G.Setting.ContorolTime.compareTo("2")==0){

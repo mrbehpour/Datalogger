@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,7 @@ public class FragmentItemHistory extends FragmentEnhanced {
 
 	MyLabel lblMinValue ;
 	MyLabel lblMaxValue;
+
 	int layoutFilter;
 	@Override
 	public void onResume() {
@@ -82,6 +84,8 @@ public class FragmentItemHistory extends FragmentEnhanced {
 		if(G.RTL){
 			llMinMaxReport = rootView.findViewById(R.id.llMinMaxReport);
 			tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/byekan.ttf");
+
+
 		}else{
 			adjustFontScale(getResources().getConfiguration(),(float)0.85);
 			tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/bfd.ttf");
@@ -115,19 +119,26 @@ public class FragmentItemHistory extends FragmentEnhanced {
 		G.mDrawerLayout.setEnabled(false);
 
 		TextView txtRowNumberTitleReport = (TextView) view.findViewById(R.id.txtRowNumberTitleReport);
+		txtRowNumberTitleReport.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		TextView txtDateTitleReport = (TextView) view.findViewById(R.id.txtDateTitleReport);
+		txtDateTitleReport.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		TextView txtTimeTitleReport = (TextView) view.findViewById(R.id.txtTimeTitleReport);
+		txtTimeTitleReport.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		TextView txtValueTitleReport = (TextView) view.findViewById(R.id.txtValueTitleReport);
+		txtValueTitleReport.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		listItem = (ListView) view.findViewById(R.id.lstItemHistory);
 		edtSearch = (EditText) view.findViewById(R.id.edtSearchItemHistory);
-
+		edtSearch.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		ImageView imgFilterHistory = (ImageView) view.findViewById(R.id.imgFilterHistory);
 		TextView txtFilterHistory = (TextView) view.findViewById(R.id.txtFilterHistory);
+		//txtFilterHistory
 		LinearLayout llFilterHistory = (LinearLayout) view.findViewById(R.id.llFilterHistory);
 
 		txtRowNumberTitleReport.setTypeface(tf);
 		txtDateTitleReport.setTypeface(tf);
+
 		txtTimeTitleReport.setTypeface(tf);
+
 		txtValueTitleReport.setTypeface(tf);
 		txtFilterHistory.setTypeface(tf);
 		edtSearch.setTypeface(tf);
@@ -145,13 +156,21 @@ public class FragmentItemHistory extends FragmentEnhanced {
 
 
 		final MaskedEditText edtItemFromDate = (MaskedEditText) filterDialog.getDialog().findViewById(R.id.edtItemFromDate);
+		edtItemFromDate.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		final MaskedEditText edtItemToDate = (MaskedEditText) filterDialog.getDialog().findViewById(R.id.edtItemToDate);
+		edtItemToDate.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		final MaskedEditText edtItemFromTime = (MaskedEditText) filterDialog.getDialog().findViewById(R.id.edtItemFromTime);
+		edtItemFromTime.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		final MaskedEditText edtItemToTime = (MaskedEditText) filterDialog.getDialog().findViewById(R.id.edtItemToTime);
+		edtItemToTime.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		TextView txtItemFromDate = (TextView) filterDialog.getDialog().findViewById(R.id.txtItemFromDate);
+		txtItemFromDate.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		TextView txtItemToDate = (TextView) filterDialog.getDialog().findViewById(R.id.txtItemToDate);
+		txtItemToDate.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		TextView txtItemFromTime = (TextView) filterDialog.getDialog().findViewById(R.id.txtItemFromTime);
+		txtItemFromTime.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		TextView txtItemToTime = (TextView) filterDialog.getDialog().findViewById(R.id.txtItemToTime);
+		txtItemToTime.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 
 		edtItemFromDate.setInputType(InputType.TYPE_CLASS_NUMBER);
 		edtItemToDate.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -276,14 +295,14 @@ if(G.RTL) {
 		populateFromDatabase();
 //		populateFakeData();
 		if(G.RTL) {
-			lblMinValue = new MyLabel(G.context, (String) G.context.getText(R.string.MinValue),"-", 22, 40);
-			lblMaxValue = new MyLabel(G.context,  (String) G.context.getText(R.string.MaxValue),"-", 22, 40);
+			lblMinValue = new MyLabel(G.context, (String) G.context.getText(R.string.MinValue),"-", (int)(G.fontSize-5), (int)(G.fontSize-5));
+			lblMaxValue = new MyLabel(G.context,  (String) G.context.getText(R.string.MaxValue),"-", (int)(G.fontSize-5), (int)(G.fontSize-5));
 			lblMinValue.setPadding(0,0,20,0);
 			lblMaxValue.setPadding(0,0,20,0);
 
 		}else{
-			lblMinValue = new MyLabel(G.context, "-", (String) G.context.getText(R.string.MinValue), 15, 15);
-			lblMaxValue = new MyLabel(G.context, "-", (String) G.context.getText(R.string.MaxValue), 15, 15);
+			lblMinValue = new MyLabel(G.context, "-", (String) G.context.getText(R.string.MinValue), (int)(G.fontSize-5), (int)(G.fontSize-5));
+			lblMaxValue = new MyLabel(G.context, "-", (String) G.context.getText(R.string.MaxValue), (int)(G.fontSize-5), (int)(G.fontSize-5));
 		}
 
 

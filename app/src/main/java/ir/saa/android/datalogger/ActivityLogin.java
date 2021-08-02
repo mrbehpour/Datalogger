@@ -32,6 +32,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -123,7 +124,7 @@ public class ActivityLogin extends Activity {
             llLogin.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             imgLoginLogo.setImageDrawable(getResources().getDrawable(R.drawable.title1_en));
             tfByekan = Typeface.createFromAsset(G.context.getAssets(), "fonts/bfd.ttf");
-            adjustFontScale(getResources().getConfiguration(),(float)1.5);
+            adjustFontScale(getResources().getConfiguration(),(float)0.75);
 
 
         }
@@ -186,14 +187,14 @@ public class ActivityLogin extends Activity {
         //------------------
 
         Button btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnLogin.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
        // Button btnSettingInLogin = (Button) findViewById(R.id.btnSettingInLogin);
         final MyEditText edtPassword = (MyEditText) findViewById(R.id.edtPassword);
-
+        edtPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
         final TextView txtVersionLogin = (TextView) findViewById(R.id.txtVersionLogin);
         final TextView txtUserCode = (TextView) findViewById(R.id.txtUserCode);
-
+        txtUserCode.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
         spnUsers = (Spinner) findViewById(R.id.spnUsername);
-
         final Spinner spnShifts = (Spinner) findViewById(R.id.spnShift);
 
 
@@ -410,6 +411,7 @@ public class ActivityLogin extends Activity {
         permissionDialog.show();
 
         TextView txt1 = permissionDialog.getDialog().findViewById(R.id.txtBodymessage);
+        txt1.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
         txt1.setText(getText(R.string.AllPermesion));
         txt1.setTypeface(tfByekan);
     }

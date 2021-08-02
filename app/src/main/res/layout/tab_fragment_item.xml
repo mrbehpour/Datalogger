@@ -52,7 +52,7 @@
             android:layout_weight="1"
             android:background="@drawable/edittext_light"
             android:ems="10"
-            android:gravity="left"
+            android:gravity="right"
             android:hint="@string/Search"
             android:inputType="text"
             android:textSize="18sp" />

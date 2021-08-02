@@ -48,12 +48,14 @@ public class MyCheckList extends LinearLayout {
 	public MyCheckList(Context context, MyCheckListItem myCheckListItem1, MyCheckListItem myCheckListItem2) {
 		super(context);
 		_context =context;
+		DEFAULT_TEXT_SIZE = (int)G.fontSize;
 		if(G.RTL){
 			tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/byekan.ttf");
-			DEFAULT_TEXT_SIZE = 15;
+
+
 		}else{
 			tf= Typeface.createFromAsset(G.context.getAssets(), "fonts/bfd.ttf");
-			DEFAULT_TEXT_SIZE = 14;
+			//DEFAULT_TEXT_SIZE = 14;
 		}
 		//_checkListItemArray = new ArrayList<MyCheckListItem>();
 		//_checkListItemArray.add(myCheckListItem1);

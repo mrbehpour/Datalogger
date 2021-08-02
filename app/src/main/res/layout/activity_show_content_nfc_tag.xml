@@ -18,6 +18,8 @@
         android:text="@string/Msg_layout_NfcTag1"
         android:textSize="18sp"
         android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginBottom="30dp"/>
 
     <TextView

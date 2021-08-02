@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 
 import android.icu.math.BigDecimal;
 import android.icu.text.DecimalFormat;
+
 import android.icu.text.NumberFormat;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -18,6 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 
 
 import java.text.ParseException;
@@ -49,14 +51,14 @@ public class MyUtilities {
 					if(Integer.valueOf(strDigit.trim().split(",")[1].substring(0, 2))==0){
 						res = strDigit.trim().split(",")[0].trim();
 					}else{
-						DecimalFormat decimalforamt = new DecimalFormat("#0.00");
+					java.text.DecimalFormat decimalforamt = new java.text.DecimalFormat("#0.00");
 						res = decimalforamt.format(Double.valueOf(strDigit.replace(",", ".").trim()));
 					}
 				}else{
 					if(Integer.valueOf(strDigit.trim().split(",")[1])==0){
 						res = strDigit.trim().split(",")[0].trim();
 					}else{
-						DecimalFormat decimalforamt = new DecimalFormat("#0.00");
+						java.text.DecimalFormat decimalforamt = new java.text.DecimalFormat("#0.00");
 						res = decimalforamt.format(Double.valueOf(strDigit.replace(",", ".").trim()));
 					}
 				}
@@ -87,9 +89,8 @@ public class MyUtilities {
 	public static String changeNumberLocale(Object selVal){
 		String val=null;
 		if(selVal != null ){
-			DecimalFormat df;
-			df = (DecimalFormat)
-					NumberFormat.getInstance(Locale.ENGLISH);
+			DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
+
 			df.setParseBigDecimal(true);
 			try {
 				BigDecimal bd = (BigDecimal) df.parseObject(String.valueOf(selVal));

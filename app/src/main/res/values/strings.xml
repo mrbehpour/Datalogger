@@ -241,7 +241,7 @@
     <string name="Title_Panjshanbe">پنج شنبه</string>
     <string name="Title_Gomeh">جمعه</string>
     <string name="VersionApp">نسخه 11.0.0</string>
-    <string name="Msg_layout_NfcTag1">برای دیدن محتوای تگ NFC، آنرا به پشت دستگاه نزدیک کنید</string>
+    <string name="Msg_layout_NfcTag1">برای مشاهده شماره تگ NFC، تگ را به پشت دستگاه نزدیک نمایید</string>
     <string name="Date"> تاریخ : </string>
     <string name="FromDate"> از تاریخ : </string>
     <string name="FromTime">از ساعت : </string>

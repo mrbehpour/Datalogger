@@ -13,6 +13,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,6 +46,7 @@ public class AdapterTajhizat1 extends ArrayAdapter<dtoTajhiz> {
             layoutRoot = (ViewGroup) view.findViewById(R.id.layoutRoot1);
 
             txtNameTajhiz = (TextView) view.findViewById(R.id.txtTajhiz1);
+            txtNameTajhiz.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
             imgTajhizInfo1 = (ImageView) view.findViewById(R.id.imgTajhizInfo1);
 			imgTajhizNfc = (ImageView) view.findViewById(R.id.imgTajhizNfc);
             Typeface tf = Typeface.createFromAsset(G.context.getAssets(), "fonts/byekan.ttf");

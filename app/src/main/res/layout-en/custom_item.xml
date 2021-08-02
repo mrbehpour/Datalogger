@@ -44,13 +44,7 @@
             android:layout_margin="10dp"
             android:visibility="gone"
             android:src="@drawable/camera" />
-        <ImageView
-            android:id="@+id/imgVideo"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="10dp"
-            android:visibility="gone"
-            android:src="@drawable/video" />
+
         <ImageView
             android:id="@+id/imgSound"
             android:layout_width="45dp"
@@ -58,12 +52,7 @@
             android:layout_height="45dp"
             android:layout_margin="10dp"
             android:src="@drawable/microphone" />
-        <ImageView
-            android:id="@+id/imgTajhizNfcItem"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/nfc"
-            android:visibility="gone" />
+
 
 
         <LinearLayout
@@ -111,6 +100,13 @@
        </LinearLayout>-->
 
         </LinearLayout>
+        <ImageView
+            android:id="@+id/imgVideo"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="10dp"
+
+            android:src="@drawable/video" />
     </LinearLayout>
 
 

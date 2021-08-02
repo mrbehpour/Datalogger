@@ -115,7 +115,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp">
-        <android.support.v7.widget.CardView
+        <CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -202,7 +202,7 @@
                         android:scaleType="centerCrop"/>
                 </LinearLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </CardView>
     </LinearLayout>
 
     <!-- voice -->
@@ -214,7 +214,7 @@
         android:orientation="vertical"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp">
-        <android.support.v7.widget.CardView
+        <CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -325,7 +325,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+        </CardView>
 
     </LinearLayout>
 

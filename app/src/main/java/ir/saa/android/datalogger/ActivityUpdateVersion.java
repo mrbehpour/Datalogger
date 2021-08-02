@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -63,8 +64,11 @@ public class ActivityUpdateVersion extends Activity {
 
 
 		TextView txtVersion1 = (TextView) findViewById(R.id.txtVersion1);
+		txtVersion1.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		TextView txtVersion2 = (TextView) findViewById(R.id.txtVersion2);
+		txtVersion2.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		txtVersion3 = (TextView) findViewById(R.id.txtVersion3);
+		txtVersion3.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		imgUpVersion = (ImageView) findViewById(R.id.imgUpVersion);
 		pbVer = (ProgressBar) findViewById(R.id.pbVer);
 		

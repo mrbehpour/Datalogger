@@ -44,6 +44,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -64,8 +65,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -77,8 +81,11 @@ public class G extends Application {
 
 
 	public static boolean RTL=true;
+	public static float fontSize=0;
+	public static boolean isEdit=false;
+	private double screenInches;
 	public static String appLang="fa_IR";
-	public static boolean isMultiMedia=true;
+	public static boolean isMultiMedia=false;
 	public static Handler handler;
 	Thread threadCheckVersion = null;
 //usb key connection
@@ -230,12 +237,38 @@ public class G extends Application {
 	public static MyLocationListener mylistener;
 	public static TelephonyManager telephonyManager;
 	public static Vibrator vibrator = null;
+	private void getScreenSizeOfDevice() {
+		DisplayMetrics dm = getResources().getDisplayMetrics();
+		int width=dm.widthPixels;
+		int height=dm.heightPixels;
+		double x = Math.pow(width,2);
+		double y = Math.pow(height,2);
+		double diagonal = Math.sqrt(x+y);
 
+		int dens=dm.densityDpi;
+		screenInches = diagonal/(double)dens;
+		//Log.d(TAG,"The screenInches "+screenInches);
+	}
+	private float getSize(){
+		WindowManager wm = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		//Display display = getWindowManager().getDefaultDisplay();
+		Rect size = new Rect();
+		display.getRectSize(size);
+		int screenWidth = size.width();
+		float fontscale = getResources().getConfiguration().fontScale;
+		int sInch=(int)screenInches;
+
+		float textSize = (sInch/ fontscale)+(10+sInch);
+		return textSize;
+		//CustomToast.create_toast(String.format("SCREEN DENSITY:  %s",txtDensity),2500, CustomToast.State.Information);
+	}
     @Override
     public void onCreate() {
 
     	
         super.onCreate();
+
 //        try {
 //			URL u = new URL("http://192.168.3.196:8012/Service1.svc");
 //			Log.i("wsss", u.getPath());
@@ -243,6 +276,7 @@ public class G extends Application {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+
 		handler= new Handler();
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         myPref = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -354,6 +388,8 @@ public class G extends Application {
 		}catch (Exception ex){
 			Log.i("tag",ex.getMessage());
 		}
+		getScreenSizeOfDevice();
+		fontSize=getSize();
     }
 
     public static boolean isGpsEnabled(){

@@ -85,6 +85,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -347,6 +348,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
 
         imgNFC.setImageDrawable(G.context.getResources().getDrawable(R.drawable.nfc_green));
         TextView txt1 = nfcDialog.getDialog().findViewById(R.id.txtBodymessage);
+        txt1.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
         if (txt1 != null) {
             txt1.setText(G.context.getResources().getText(R.string.Msg_NfcTag4));
             txt1.setTextColor(Color.parseColor("#007700"));
@@ -370,6 +372,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
 
         imgNFC.setImageDrawable(G.context.getResources().getDrawable(R.drawable.nfc_red));
         TextView txt1 = nfcDialog.getDialog().findViewById(R.id.txtBodymessage);
+        txt1.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
         txt1.setText(G.context.getResources().getText(string.Msg_NfcTag5));
         txt1.setTextColor(Color.parseColor("#990000"));
         txt1.setTypeface(tf);
@@ -393,6 +396,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
 
 
         TextView txtTitle = (TextView) G.actionBar.getCustomView().findViewById(R.id.txtTitle);
+        txtTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 //        TextView txtNav1 = (TextView) G.actionBar.getCustomView().findViewById(R.id.txtNav1);
 //        TextView txtNav2 = (TextView) G.actionBar.getCustomView().findViewById(R.id.txtNav2);
 
@@ -541,7 +545,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
                     gotoHomeFragment();
                     UpdateUiViews();
                     MyToast.Show(G.context, String.format("%s\n%s", G.context.getResources().getText(string.UpdateSetting),
-                            G.context.getResources().getText(string.PleaseWait)), 500);
+                            G.context.getResources().getText(string.PleaseWait)), 1000);
                     pb01.setProgress(0);
                     pb01.setVisibility(View.VISIBLE);
                     threadGetSetting = new Thread(new TaskGetSetting());
@@ -1678,6 +1682,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
     BufferedReader reader;
 
     private String getJsonStringFromUrl(String strUrl) throws Exception {
+        Thread.sleep(2000);
         String strJson = "";
         if(!G.WEB_SERVICE.contains("PDLWeb.svc")){
             G.WEB_SERVICE+="/PDLWeb.svc";
@@ -1741,6 +1746,7 @@ public class ActivityDrawer extends NfcReaderActivity implements
                     valuesForSend.RegisterDateTime = DateEng;
                     valuesForSend.ShiftID = values.ShiftID;
                     valuesForSend.UsrID = values.UsrID;
+                    valuesForSend.RemValues=values.RemValues;
                     itemValues.add(valuesForSend);
 
                 }

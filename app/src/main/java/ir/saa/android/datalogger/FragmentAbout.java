@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,6 +62,7 @@ public class FragmentAbout extends Fragment {
 //------------------------
         TextView txtApp = (TextView) view.findViewById(R.id.txtApp);
         TextView txtAppName = (TextView) view.findViewById(R.id.txtAppName);
+
         TextView txtAppVersion = (TextView) view.findViewById(R.id.txtAppVersion);
 		TextView txtPublishBy = (TextView) view.findViewById(R.id.txtPublishBy);
 		TextView txtPublisher = (TextView) view.findViewById(R.id.txtPublisher);

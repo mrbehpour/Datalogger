@@ -389,6 +389,7 @@ public class CreateTable {
 								"	'%s' TEXT," +
 								"	'%s' TEXT," +
 								"   '%s' INTEGER," +
+								"	'%s' TEXT, "+
 								"   '%s' NUMERIC)"
 								,Tbl_ItemValues.TableName
 								,Tbl_ItemValues.Id
@@ -404,6 +405,7 @@ public class CreateTable {
 								,Tbl_ItemValues.ImagePath
 								,Tbl_ItemValues.VoicePath
 								,Tbl_ItemValues.BaseRange
+								,Tbl_ItemValues.RemValues
 								,Tbl_ItemValues.SaveDateTimeToMin
 								);
 		Log.i("db", "onCreate TableItemValuesCreate");

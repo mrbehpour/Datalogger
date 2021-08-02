@@ -37,6 +37,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -173,6 +174,7 @@ public class TabFragmentItem extends Fragment {
 		listItem = (ListView) view.findViewById(R.id.lstItem);
 		imgSaveItem = (ImageView) view.findViewById(R.id.imgSaveItem);
 		edtSearch = (EditText) view.findViewById(R.id.edtSearchItem);
+		edtSearch.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 		searchSpinner = (Spinner) view.findViewById(R.id.searchSpinnerItem);
 		txtDateTimeForItems.setTypeface(tf);
 		startTimer();
@@ -270,12 +272,14 @@ public class TabFragmentItem extends Fragment {
 									@Override
 									public void onClick(View v) {
 										if(G.isSave==false) {
-											for (dtoItems item : arrListItem) {
-												if (!(dicItemValues.get(item.ItemInfID).ItemVal == null || dicItemValues.get(item.ItemInfID).ItemVal.replaceAll("/", "").replaceAll(":", "").replaceAll(",", "").trim().length() == 0))
-													G.DB.InsertItemValues(dicItemValues.get(item.ItemInfID));
-												deleteFileFromSdCard(OldVideoPath);
-												deleteFileFromSdCard(OldVoicePath);
-												deleteFileFromSdCard(OldImagePath);
+											if(!G.isEdit) {
+												for (dtoItems item : arrListItem) {
+													if (!(dicItemValues.get(item.ItemInfID).ItemVal == null || dicItemValues.get(item.ItemInfID).ItemVal.replaceAll("/", "").replaceAll(":", "").replaceAll(",", "").trim().length() == 0))
+														G.DB.InsertItemValues(dicItemValues.get(item.ItemInfID));
+													deleteFileFromSdCard(OldVideoPath);
+													deleteFileFromSdCard(OldVoicePath);
+													deleteFileFromSdCard(OldImagePath);
+												}
 											}
 										}
 										populateFromDatabase();
@@ -288,7 +292,9 @@ public class TabFragmentItem extends Fragment {
 										//--------Request from Ms Rezaei -> EDIT: One BackPress Simulation for back to One Layer Back--------
 										TextView txtTitle = (TextView) G.actionBar.getCustomView().findViewById(R.id.txtTitle);
 										String prevTxtTitle = txtTitle.getText().toString();
-										getActivity().onBackPressed();
+										if(getActivity()!=null) {
+											getActivity().onBackPressed();
+										}
 										//getActivity().onBackPressed();
 
 										//MyToast.Show(G.context, String.format("اطلاعات آیتم های %s با موفقیت ثبت شد",prevTxtTitle), Toast.LENGTH_LONG);
@@ -364,12 +370,17 @@ public class TabFragmentItem extends Fragment {
 					}
 
 					TextView txtBodyMessage = (TextView) mydialog.getDialog().findViewById(R.id.txtBodymessage);
+					txtBodyMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize-5);
 					txtBodyMessage.setText((String) G.context.getText(R.string.Msg_SaveItem));
 					txtBodyMessage.setTypeface(tf);
 					TextView txtSaveAmar1 = (TextView) mydialog.getDialog().findViewById(R.id.txtSaveAmar1);
+					txtSaveAmar1.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize-5);
 					TextView txtSaveAmar2 = (TextView) mydialog.getDialog().findViewById(R.id.txtSaveAmar2);
+					txtSaveAmar2.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize-5);
 					TextView txtSaveAmar3 = (TextView) mydialog.getDialog().findViewById(R.id.txtSaveAmar3);
+					txtSaveAmar3.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize-5);
 					Button btnSaveAmar = (Button) mydialog.getDialog().findViewById(R.id.btnSaveAmar);
+					btnSaveAmar.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize-5);
 					txtSaveAmar1.setTypeface(tf);
 					txtSaveAmar2.setTypeface(tf);
 					txtSaveAmar3.setTypeface(tf);
@@ -466,7 +477,7 @@ public class TabFragmentItem extends Fragment {
 				item.HasTag = true;
 			}
         	if(G.Setting.ContorolTime.compareTo("0") != 0)
-        		item.IsInTimeRange = IsValidForSubmit(item)==ValidForSubmitType.InRange?true:false;
+        		item.IsInTimeRange = IsValidForSubmitWitoutCheckSetting(item)==ValidForSubmitType.InRange?true:false;
 
 			arrListItem.add(item);
 			dtoItemValues itemValues = new dtoItemValues();

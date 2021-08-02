@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -42,7 +43,8 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
         public ViewGroup layoutRoot;
         public TextView  txtItem;
         public TextView  txtItemDesc;
-        public ImageView imgItemInfo;
+		public ImageView imgItemInfo;
+		public ImageView imgEdit;
 		public   ViewGroup layoutRoot1;
     	Typeface tf;
     	Drawable drwGreen;
@@ -52,8 +54,12 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
         public ViewHolder(View view) {
             layoutRoot = (ViewGroup) view.findViewById(R.id.layoutRootItem);
             imgItemInfo = (ImageView) view.findViewById(R.id.imgItemInfo);
+			imgEdit = (ImageView) view.findViewById(R.id.imgEdit);
+			imgEdit.setVisibility(View.GONE);
             txtItem = (TextView) view.findViewById(R.id.txtItemName);
+            txtItem.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
             txtItemDesc = (TextView) view.findViewById(R.id.txtItemDesc);
+            txtItemDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 			layoutRoot1 = (ViewGroup) view.findViewById(R.id.layoutRootItem1);
             if(G.RTL){
 
@@ -107,6 +113,7 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
 						G.navigationStackTitle.push(((TextView)G.actionBar.getCustomView().findViewById(R.id.txtTitle)).getText().toString());
 					}
 					TextView txtTitle = (TextView) G.actionBar.getCustomView().findViewById(R.id.txtTitle);
+					txtTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 					txtTitle.setText(item.ItemName);
 					G.selectedMenuItemType = G.MenuItemTypes.ITEMHISTORY;
 					Bundle bundle = new Bundle();
@@ -129,6 +136,7 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
 						G.navigationStackTitle.push(((TextView)G.actionBar.getCustomView().findViewById(R.id.txtTitle)).getText().toString());
 					}
 					TextView txtTitle = (TextView) G.actionBar.getCustomView().findViewById(R.id.txtTitle);
+					txtTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 					txtTitle.setText(item.ItemName);
 					G.selectedMenuItemType = G.MenuItemTypes.ITEMHISTORY;
 					Bundle bundle = new Bundle();
@@ -152,6 +160,7 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
 						G.navigationStackTitle.push(((TextView)G.actionBar.getCustomView().findViewById(R.id.txtTitle)).getText().toString());
 					}
 					TextView txtTitle = (TextView) G.actionBar.getCustomView().findViewById(R.id.txtTitle);
+					txtTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
 					txtTitle.setText(item.ItemName);
 					G.selectedMenuItemType = G.MenuItemTypes.ITEMHISTORY;
 					Bundle bundle = new Bundle();
@@ -191,8 +200,7 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
 					if (listdtoItemValues.size() > 0) {
 						layoutRoot.setBackgroundColor(Color.parseColor("#ceedd6"));
 						for (dtoItemValues itemValues : listdtoItemValues) {
-							if (TabFragmentItem.IsValidForSubmitWitoutCheckSetting(G.DB.GetItemByItemInfId(itemValues.ItemInfID)) == ValidForSubmitType.InRange ||
-									TabFragmentItem.IsValidForSubmitWitoutCheckSetting(G.DB.GetItemByItemInfId(itemValues.ItemInfID)) == ValidForSubmitType.OutOfRange) {
+							if (G.DB.getItemValuesByUserIdAndItemInfIdWithDate(G.currentUser.UsrID, itemValues.ItemInfID).size()==0) {
 								layoutRoot.setBackgroundColor(Color.WHITE);
 
 							}
@@ -222,12 +230,12 @@ public class AdapterItemReport extends ArrayAdapter<dtoItems> {
 		}
 
         private void showJozeeatDialog(dtoItems item){
-			int FontSize;
-        	if(G.RTL){
-				FontSize=20;
-			}else{
-        		FontSize=14;
-			}
+			int FontSize=(int)G.fontSize;
+//        	if(G.RTL){
+//				FontSize=20;
+//			}else{
+//        		FontSize=14;
+//			}
 			final MyDialog myDialog =  new MyDialog(G.currentActivity, R.style.DialogAnimFromBottom);
 			myDialog.setTitle((String)G.context.getResources().getText(R.string.Detail))
 			.setBackgroundAlpha(0.95f)

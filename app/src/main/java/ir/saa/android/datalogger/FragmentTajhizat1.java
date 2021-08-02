@@ -170,6 +170,11 @@ public class FragmentTajhizat1 extends FragmentEnhanced {
 				dtoTajhiz tajhiz = new dtoTajhiz();
 				tajhiz.ID = post.PostID;
 				tajhiz.Name = post.PostName;
+				if(G.RTL) {
+					if (post.PostName.length() > 30) {
+						tajhiz.Name = post.PostName.substring(0, 30) + "\n" + post.PostName.substring(30);
+					}
+				}
 				tajhiz.Description = post.Des;
 //				ArrayList<dtoItems> items = G.DB.getItemsByUserIdAndPostId(G.currentUser.UsrID, post.PostID);
 //				for (dtoItems item : items) {
@@ -204,12 +209,17 @@ public class FragmentTajhizat1 extends FragmentEnhanced {
 				dtoTajhiz tajhiz = new dtoTajhiz();
 				tajhiz.ID = logshit.LogshitInfID;
 				tajhiz.Name = logshit.LogshitName;
+				if(G.RTL) {
+					if (logshit.LogshitName.length() > 30) {
+						tajhiz.Name = logshit.LogshitName.substring(0, 30) + "\n" + logshit.LogshitName.substring(30);
+					}
+				}
 				tajhiz.Description = logshit.Des;
 				G.PostId=selectedId;
-				if(G.currentUser.IsManager!=1 && (logshit.TagID.trim().compareTo("NONE")!=0) && logshit.TagID !=null && logshit.TagID.trim().compareTo("null")!=0 && logshit.TagID.trim().length()>0 && G.selectedMenuItemMode == G.MenuItemMode.Sabt){
-					tajhiz.HasTag = true;
-					tajhiz.TagId = logshit.TagID;
-				}
+//				if(G.currentUser.IsManager!=1 && (logshit.TagID.trim().compareTo("NONE")!=0) && logshit.TagID !=null && logshit.TagID.trim().compareTo("null")!=0 && logshit.TagID.trim().length()>0 && G.selectedMenuItemMode == G.MenuItemMode.Sabt){
+//					tajhiz.HasTag = true;
+//					tajhiz.TagId = logshit.TagID;
+//				}
 				//				ArrayList<dtoItemValues> itemsValue=G.DB.getItemValuesByUserIdAndLogshit(G.currentUser.UsrID,logshit.LogshitInfID,selectedId);
 //				//dtoItems items=G.DB.GetItemBylogsheetId(logshit.PostID,logshit.LogshitInfID,G.currentUser.UsrID);
 //				for (dtoItemValues itemval:itemsValue) {
@@ -240,10 +250,15 @@ public class FragmentTajhizat1 extends FragmentEnhanced {
 			}
 		}
 		else if(G.selectedMenuItemType == G.MenuItemTypes.TAJHIZ){
-			for (dtoEquipments equip : G.DB.GetEquipmentListByLogshitInfId(selectedId,G.PostId)){
+			for (dtoEquipments equip : G.DB.GetEquipmentListByLogshitInfId(selectedId,G.PostId)) {
 				dtoTajhiz tajhiz = new dtoTajhiz();
 				tajhiz.ID = equip.EquipInfoID;
 				tajhiz.Name = equip.EquipName;
+				if(G.RTL) {
+				if (equip.EquipName.length() > 30) {
+					tajhiz.Name = equip.EquipName.substring(0, 30) + "\n" + equip.EquipName.substring(30);
+				}
+				}
 				tajhiz.Description = equip.Des;
 				//				ArrayList<dtoItemValues> itemsValue=G.DB.getItemValuesByUserIdAndTajhizId(G.currentUser.UsrID,equip.EquipInfoID,selectedId);
 //				for (dtoItemValues itemval:itemsValue) {
@@ -276,6 +291,11 @@ public class FragmentTajhizat1 extends FragmentEnhanced {
 				dtoTajhiz tajhiz = new dtoTajhiz();
 				tajhiz.ID = subEquip.SubEquipID;
 				tajhiz.Name = subEquip.SubEquipName;
+				if(G.RTL) {
+					if (subEquip.SubEquipName.length() > 30) {
+						tajhiz.Name = subEquip.SubEquipName.substring(0, 30) + "\n" + subEquip.SubEquipName.substring(30);
+					}
+				}
 				tajhiz.Description = subEquip.Des;
 				//				ArrayList<dtoItemValues> itemsValue=G.DB.getItemValuesByUserIdAndZirTajhizId(G.currentUser.UsrID,subEquip.SubEquipID,selectedId,G.selectedLogshitId);
 //

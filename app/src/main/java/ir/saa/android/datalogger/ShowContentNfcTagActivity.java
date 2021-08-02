@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -51,7 +52,8 @@ public class ShowContentNfcTagActivity extends NfcReaderActivity {
         imgNfcContent = (ImageView) findViewById(R.id.imgNfcContent);
         txtNfcContentInfo = (TextView) findViewById(R.id.txtNfcContentInfo);
         txtNfcContent = (TextView) findViewById(R.id.txtNfcContent);
-
+        txtNfcContentInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
+        txtNfcContent.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
         txtNfcContentInfo.setTypeface(tfByekan);
 
 

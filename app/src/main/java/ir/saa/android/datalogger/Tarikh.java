@@ -388,7 +388,7 @@ public class Tarikh {
 
         date.setTimeZone(TimeZone.getDefault());
 
-        localTime = date.format(currentLocalTime);
+        localTime = MyUtilities.changeNumberLocaleString(date.format(currentLocalTime));
         return localTime;
     }
     public static String getCurrentShamsidateWithoutSlash() {
@@ -421,20 +421,20 @@ public class Tarikh {
         ///PersianDateFormat pdformater = new PersianDateFormat();
         String strDateMiladi="";
         //pdformater.format(pdate);
-        if(ShamsiDateStr.length()==10) {
+        if(ShamsiDateStr.trim().length()==10) {
             int Ye = Integer.valueOf(ShamsiDateStr.substring(0, 4));
             int Mo = Integer.valueOf(ShamsiDateStr.substring(5, 7));
             int Da = Integer.valueOf(ShamsiDateStr.substring(8, 10));
             int[] g=new int[3];
             g= pdate.toGregorian(Ye,Mo,Da);
-            strDateMiladi=String.valueOf(g[0])+"-"+String.format( "%02d",g[1])+"-"+String.format( "%02d",g[2]);
-        }else if(ShamsiDateStr.length()==8){
+            strDateMiladi=String.valueOf(g[0])+"-"+ MyUtilities.changeNumberLocaleString( String.format( "%02d",g[1]))+"-"+MyUtilities.changeNumberLocaleString(String.format( "%02d",g[2]));
+        }else if(ShamsiDateStr.trim().length()==8){
             int Ye = Integer.valueOf(ShamsiDateStr.substring(0, 4));
             int Mo = Integer.valueOf(ShamsiDateStr.substring(4, 6));
             int Da = Integer.valueOf(ShamsiDateStr.substring(6, 8));
             int[] g=new int[3];
             g= pdate.toGregorian(Ye,Mo,Da);
-            strDateMiladi=String.valueOf(g[0])+"-"+String.format( "%02d",g[1])+"-"+String.format( "%02d",g[2]);
+            strDateMiladi=String.valueOf(g[0])+"-"+MyUtilities.changeNumberLocaleString(String.format( "%02d",g[1]))+"-"+MyUtilities.changeNumberLocaleString(String.format( "%02d",g[2]));
         }
         return strDateMiladi;
     }

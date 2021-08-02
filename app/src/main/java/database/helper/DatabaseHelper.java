@@ -582,7 +582,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //String PTime=Tarikh.getTimeWithoutColon().substring(0,2);
         //String strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s AND itemValues.%s = %s  ", args);
         String strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s  ", args);//+" and itemValues.PDate='"+PDate+"' and PTime like '"+PTime+"%'";;
-        if (G.currentUser.IsManager == 1 ) {
+        if (G.currentUser.IsManager == 1 || G.currentUser.UserGroupId==2) {
             strQuery = "select itemValues.* from Tbl_ItemValues itemValues where itemValues.ItemInfID ="+itemInfID;///+" and itemValues.PDate='"+PDate+"' and PTime like '"+PTime+"%'";;
         }
         Cursor cur = sd.rawQuery(strQuery, null);
@@ -600,6 +600,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 itemValue.UsrID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.UsrID));
                 itemValue.ShiftID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ShiftID));
                 itemValue.IsSend = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.IsSend));
+                itemValue.RemValues=cur.getString(cur.getColumnIndex(Tbl_ItemValues.RemValues));
                 lstItemValues.add(itemValue);
             } while (cur.moveToNext());
         }
@@ -1759,6 +1760,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 itemValue.UsrID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.UsrID));
                 itemValue.ShiftID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ShiftID));
                 itemValue.IsSend = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.IsSend));
+                itemValue.RemValues = cur.getString(cur.getColumnIndex(Tbl_ItemValues.RemValues));
                 lstItemValues.add(itemValue);
             } while (cur.moveToNext());
         }
@@ -1908,6 +1910,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 itemValue.UsrID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.UsrID));
                 itemValue.ShiftID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ShiftID));
                 itemValue.IsSend = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.IsSend));
+                itemValue.RemValues = cur.getString(cur.getColumnIndex(Tbl_ItemValues.RemValues));
                 lstItemValues.add(itemValue);
             } while (cur.moveToNext());
         }
@@ -1967,6 +1970,65 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return itemValue;
     }
 
+    public dtoItemValues getLastItemValue(Integer itemInfID) { // for collecting itemvalues for send in ActivityDrawer TaskSend
+        dtoItemValues itemValue = null;
+        try {
+
+
+            SQLiteDatabase sd = getReadableDatabase();
+            Object[] args = new Object[]{
+                    Tbl_ItemValues.TableName,
+                    Tbl_ItemValues.ItemInfID,
+                    itemInfID,
+                    Tbl_ItemValues.IsSend,
+                    0,
+                    Tbl_ItemValues.UsrID,
+                    G.currentUser.UsrID,
+                    Tbl_ItemValues.Id
+
+            };
+
+            String strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s AND itemValues.%s = %s ORDER BY %s DESC LIMIT 1; ", args);
+            if(G.currentUser.UserGroupId==2 || G.currentUser.IsManager ==1) {
+                 args = new Object[]{
+                         Tbl_ItemValues.TableName,
+                         Tbl_ItemValues.ItemInfID,
+                         itemInfID,
+                         Tbl_ItemValues.IsSend,
+                         0,
+                         Tbl_ItemValues.Id
+                 };
+                strQuery = String.format("select itemValues.* from %s itemValues where itemValues.%s = %s AND itemValues.%s = %s ORDER BY %s DESC LIMIT 1; ", args);
+            }
+            Cursor cur = sd.rawQuery(strQuery, null);
+
+            if (cur.getCount() > 0) {
+                cur.moveToFirst();
+                do {
+                    itemValue = new dtoItemValues();
+                    itemValue.Id = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.Id));
+                    itemValue.ItemInfID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ItemInfID));
+                    itemValue.ItemVal = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemVal));
+                    itemValue.ItemValTyp = cur.getString(cur.getColumnIndex(Tbl_ItemValues.ItemValTyp));
+                    itemValue.PDate = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PDate));
+                    itemValue.PTime = cur.getString(cur.getColumnIndex(Tbl_ItemValues.PTime));
+                    itemValue.UsrID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.UsrID));
+                    itemValue.ShiftID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ShiftID));
+                    itemValue.IsSend = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.IsSend));
+                    itemValue.VideoPath=cur.getString(cur.getColumnIndex(Tbl_ItemValues.VideoPath));
+                    itemValue.ImagePath=cur.getString(cur.getColumnIndex(Tbl_ItemValues.ImagePath));
+                    itemValue.VoicePath=cur.getString(cur.getColumnIndex(Tbl_ItemValues.VoicePath));
+                    itemValue.RemValues=cur.getString(cur.getColumnIndex(Tbl_ItemValues.RemValues));
+
+                    break;
+                } while (cur.moveToNext());
+            }
+            cur.close();
+        } catch (Exception ex) {
+            Log.i("tag", ex.getMessage());
+        }
+        return itemValue;
+    }
     public ArrayList<dtoItemValues> getItemValuesByItemInfoId(Integer itemInfoId) {
         ArrayList<dtoItemValues> lstItemValues = new ArrayList<dtoItemValues>();
 
@@ -1995,6 +2057,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 itemValue.UsrID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.UsrID));
                 itemValue.ShiftID = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.ShiftID));
                 itemValue.IsSend = cur.getInt(cur.getColumnIndex(Tbl_ItemValues.IsSend));
+                itemValue.RemValues = cur.getString(cur.getColumnIndex(Tbl_ItemValues.RemValues));
                 lstItemValues.add(itemValue);
             } while (cur.moveToNext());
         }
@@ -2378,22 +2441,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(Tbl_ItemValues.UsrID, itemValues.UsrID);
         cv.put(Tbl_ItemValues.ShiftID, itemValues.ShiftID);
         cv.put(Tbl_ItemValues.IsSend, itemValues.IsSend);
+        cv.put(Tbl_ItemValues.RemValues, itemValues.RemValues);
         if(G.RTL==false) {
             cv.put(Tbl_ItemValues.VideoPath, itemValues.VideoPath);
             cv.put(Tbl_ItemValues.ImagePath, itemValues.ImagePath);
             cv.put(Tbl_ItemValues.VoicePath, itemValues.VoicePath);
         }
-        cv.put(Tbl_ItemValues.BaseRange, Tarikh.persianStartDayToMinute(itemValues.PDate.length()>=10?
-                itemValues.PDate.substring(0,10) : itemValues.PDate));
-        cv.put(Tbl_ItemValues.SaveDateTimeToMin, Tarikh.persianDateTimeToMinute(itemValues.PDate,itemValues.PTime));
-        int count = (int) sd.insert(Tbl_ItemValues.TableName, null, cv);
+
+            cv.put(Tbl_ItemValues.BaseRange, Tarikh.persianStartDayToMinute(itemValues.PDate.length() >= 10 ?
+                    itemValues.PDate.substring(0, 10) : itemValues.PDate));
+            cv.put(Tbl_ItemValues.SaveDateTimeToMin, Tarikh.persianDateTimeToMinute(itemValues.PDate, itemValues.PTime));
+            if(!itemValues.ItemVal.trim().equals("")) {
+                int count = (int) sd.insert(Tbl_ItemValues.TableName, null, cv);
+                //sd.close();
+                if (count > 0) {
+                    res = true;
+                }
+            }
+        return res;
+    }
+
+    public boolean UpdateItemValues(dtoItemValues itemValues) {
+        boolean res = false;
+
+        SQLiteDatabase sd = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        //cv.put(Tbl_ItemValues.ItemInfID, itemValues.ItemInfID);
+        cv.put(Tbl_ItemValues.ItemVal, G.convertToEnglishDigits(itemValues.ItemVal,false));
+        //cv.put(Tbl_ItemValues.ItemValTyp, itemValues.ItemValTyp);
+        //cv.put(Tbl_ItemValues.PDate, itemValues.PDate);
+        //cv.put(Tbl_ItemValues.PTime, itemValues.PTime);
+        //cv.put(Tbl_ItemValues.UsrID, itemValues.UsrID);
+        //cv.put(Tbl_ItemValues.ShiftID, itemValues.ShiftID);
+        //cv.put(Tbl_ItemValues.IsSend, itemValues.IsSend);
+        cv.put(Tbl_ItemValues.RemValues, itemValues.RemValues);
+        if(G.RTL==false) {
+           // cv.put(Tbl_ItemValues.VideoPath, itemValues.VideoPath);
+           // cv.put(Tbl_ItemValues.ImagePath, itemValues.ImagePath);
+           // cv.put(Tbl_ItemValues.VoicePath, itemValues.VoicePath);
+        }
+
+        //cv.put(Tbl_ItemValues.BaseRange, Tarikh.persianStartDayToMinute(itemValues.PDate.length() >= 10 ?
+                //itemValues.PDate.substring(0, 10) : itemValues.PDate));
+        //cv.put(Tbl_ItemValues.SaveDateTimeToMin, Tarikh.persianDateTimeToMinute(itemValues.PDate, itemValues.PTime));
+        String[] strWhere=new String[]{itemValues.Id.toString()};
+        int count = (int) sd.update(Tbl_ItemValues.TableName,  cv,Tbl_ItemValues.Id + "=?",strWhere);
         //sd.close();
         if (count > 0) {
             res = true;
         }
         return res;
     }
-
     public boolean InsertPost(dtoPosts post) {
         boolean res = false;
 

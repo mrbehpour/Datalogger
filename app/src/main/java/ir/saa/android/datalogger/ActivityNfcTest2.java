@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
@@ -42,6 +43,7 @@ public class ActivityNfcTest2 extends AppCompatActivity {
             adjustFontScale(getResources().getConfiguration(),(float)1.5);
         }
         txtNfc2 = (TextView) findViewById(R.id.txtNfc2);
+        txtNfc2.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize);
         resolveIntent(getIntent());
     }
 

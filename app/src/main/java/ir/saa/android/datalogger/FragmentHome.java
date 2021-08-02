@@ -30,6 +30,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -127,12 +128,12 @@ public class FragmentHome extends FragmentEnhanced {
 			paramsTextView.gravity= Gravity.RIGHT;
 			tfByekan = Typeface.createFromAsset(G.context.getAssets(), "fonts/byekan.ttf");
 			paramsTextView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-			textLeftSize=40;
-			textRightSize=18;
-			lineChartTextSize=14;
+			textLeftSize=(int)G.fontSize;
+			textRightSize=(int)(G.fontSize-3);
+			lineChartTextSize=(int)(G.fontSize-4);
 			mLableWidth=40;
-			pieChartCenterText=35;
-			EnteryTextsize=14;
+			pieChartCenterText=(int)(G.fontSize-5);
+			EnteryTextsize=(int)(G.fontSize-4);
 		}
 		else {
 			lfHome.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
@@ -141,13 +142,13 @@ public class FragmentHome extends FragmentEnhanced {
 			paramsTextView.gravity=Gravity.LEFT;
 			tfByekan = Typeface.createFromAsset(G.context.getAssets(), "fonts/bfd.ttf");
 			paramsTextView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-			adjustFontScale(getResources().getConfiguration(),(float)1.5);
-			textLeftSize=15;
-			textRightSize=14;
+			adjustFontScale(getResources().getConfiguration(),(float)0.75 );
+			textLeftSize=(int)G.fontSize;
+			textRightSize=(int)(G.fontSize-1);
 			lineChartTextSize=8;
 			mLableWidth=35;
-			pieChartCenterText=16;
-			EnteryTextsize=15;
+			pieChartCenterText=(int)G.fontSize;
+			EnteryTextsize=(int)G.fontSize;
 		}
 		G.context.setTheme(R.style.AppTheme50dp);
 		return rootView;
@@ -318,9 +319,14 @@ public class FragmentHome extends FragmentEnhanced {
 		ImageView imgHomeSabt = (ImageView) view.findViewById(R.id.imgHomeSabt);
 
 		TextView txtHomeSetting = (TextView) view.findViewById(R.id.txtHomeSetting);
+		txtHomeSetting.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize-2);
 		TextView txtHomeGozareshat = (TextView) view.findViewById(R.id.txtHomeGozareshat);
+		txtHomeGozareshat.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize-2);
 		TextView txtHomeSabt = (TextView) view.findViewById(R.id.txtHomeSabt);
+		txtHomeSabt.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize-2);
+
 		txtHomeSetting.setTypeface(tfByekan);
+
 		txtHomeGozareshat.setTypeface(tfByekan);
 		txtHomeSabt.setTypeface(tfByekan);
 
@@ -463,24 +469,24 @@ public class FragmentHome extends FragmentEnhanced {
 			imgDashboard5_1 =  view.findViewById(R.id.imgDashboard5_1);
 			ImageView imgDashboard5_2 =  view.findViewById(R.id.imgDashboard5_2);
 
-			lblVahedCount = new MyLabel(G.context,"-", (String) G.context.getText(R.string.UnitCount),40,18);
+			lblVahedCount = new MyLabel(G.context,"-", (String) G.context.getText(R.string.UnitCount),textLeftSize,textRightSize);
 
 			lblVahedCount.setBackgroundColor(Color.parseColor("#009d81"));
-			lblLogshitCount = new MyLabel(G.context,"-",(String)G.context.getResources().getText(R.string.LogshitCount),40,18);
+			lblLogshitCount = new MyLabel(G.context,"-",(String)G.context.getResources().getText(R.string.LogshitCount),textLeftSize,textRightSize);
 			lblLogshitCount.setBackgroundColor(Color.parseColor("#f0991e"));
 
 			llDashboardRow2.addView(lblLogshitCount);
 			llDashboardRow1.addView(lblVahedCount);
 
-			lblTajhizCount = new MyLabel(G.context,"-",(String)G.context.getResources().getText(R.string.EquipCount),40,18);
+			lblTajhizCount = new MyLabel(G.context,"-",(String)G.context.getResources().getText(R.string.EquipCount),textLeftSize,textRightSize);
 			lblTajhizCount.setBackgroundColor(Color.parseColor("#1a3c55"));
-			lblZirTajhizCount = new MyLabel(G.context,"-",(String)G.context.getResources().getText(R.string.SubEquipCount),40,18);
+			lblZirTajhizCount = new MyLabel(G.context,"-",(String)G.context.getResources().getText(R.string.SubEquipCount),textLeftSize,textRightSize);
 			lblZirTajhizCount.setBackgroundColor(Color.parseColor("#0f7ab7"));
 
 			llDashboardRow4.addView(lblZirTajhizCount);
 			llDashboardRow3.addView(lblTajhizCount);
 
-			lblItemCount = new MyLabel(G.context,"-",(String)G.context.getResources().getText(R.string.ItemCount),40,18);
+			lblItemCount = new MyLabel(G.context,"-",(String)G.context.getResources().getText(R.string.ItemCount),textLeftSize,textRightSize);
 			lblItemCount.setBackgroundColor(Color.parseColor("#a20025"));
 
 			lllDashboardRow5.addView(lblItemCount);

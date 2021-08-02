@@ -14,17 +14,18 @@
         <TextView
             android:id="@+id/txtTajhiz1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:textAlignment="viewStart"
+            android:lines="2"
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#000000" />
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.1"
+
             android:orientation="vertical" >
 
         </LinearLayout>
@@ -40,7 +41,7 @@
             android:id="@+id/imgTajhizInfo1"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="15dp"
+            android:layout_margin="15dp"
             android:src="@drawable/info_icon" />
 
     </LinearLayout>

@@ -5,12 +5,15 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import ir.saa.android.datalogger.G;
 
 /**
  * Created by h.eskandari on 2/27/2018.
@@ -57,7 +60,7 @@ public class MenuDialogItem extends LinearLayout {
         _llSubFrame = MyUiCreator.createLinearLayout(context, frameSize, subFrameHeightSize,null,LinearLayout.VERTICAL, Gravity.CENTER, subFrameColor);
         _img = MyUiCreator.createImageView(context,imageSize,imageSize,imageDrawable,null);
         _txtMenuText = MyUiCreator.createTextView(_context,ViewGroup.LayoutParams.WRAP_CONTENT,textMenuHeightSize,menuText,textMenuFontSize,Gravity.CENTER,titleColor, View.TEXT_ALIGNMENT_CENTER, Typeface.NORMAL,tf);
-
+        _txtMenuText.setTextSize(TypedValue.COMPLEX_UNIT_SP, G.fontSize-10);
         _llFrame.addView(_img);
         _llFrame.addView(_txtMenuText);
         this.addView(_llFrame);
@@ -82,7 +85,7 @@ public class MenuDialogItem extends LinearLayout {
         _llSubFrame = MyUiCreator.createLinearLayout(context, frameSize, subFrameHeightSize,null,LinearLayout.VERTICAL, Gravity.CENTER, subFrameColor);
         _img = MyUiCreator.createImageView(context,imageSize,imageSize,imageDrawable,null);
         _txtMenuText = MyUiCreator.createTextView(_context,ViewGroup.LayoutParams.WRAP_CONTENT,textMenuHeightSize,menuText,textMenuFontSize,Gravity.CENTER,titleColor, View.TEXT_ALIGNMENT_CENTER, Typeface.NORMAL,tf);
-
+        _txtMenuText.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize-10);
         _llFrame.addView(_img);
         _llFrame.addView(_txtMenuText);
         this.addView(_llFrame);
@@ -97,7 +100,7 @@ public class MenuDialogItem extends LinearLayout {
         _llSubFrame = MyUiCreator.createLinearLayout(context, frameSize, subFrameHeightSize,null,LinearLayout.VERTICAL, Gravity.CENTER, subFrameColor);
         _img = MyUiCreator.createImageView(context,imageSize,imageSize,imageDrawable,null);
         _txtMenuText = MyUiCreator.createTextView(_context,ViewGroup.LayoutParams.WRAP_CONTENT,textMenuHeightSize,menuText,textMenuFontSize,Gravity.CENTER,titleColor, View.TEXT_ALIGNMENT_CENTER, Typeface.NORMAL,tf);
-
+        _txtMenuText.setTextSize(TypedValue.COMPLEX_UNIT_SP,G.fontSize-10);
         _llFrame.addView(_img);
         _llFrame.addView(_txtMenuText);
         this.addView(_llFrame);
